@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://uicdn.toast.com/calendar/latest/toastui-calendar.min.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/abd2ed3d51.js" crossorigin="anonymous"></script>
+    <script src="{% static 'js/list_schedule.js' %}"></script>  
+    <script src="https://uicdn.toast.com/calendar/latest/toastui-calendar.min.js"></script>
+
+    <title>Agendamentos</title>
+</head>
+<body>
+    {{ event_list|json_script:"data-el" }}
+    <nav class="navbar navbar-expand-lg bg-body-primary navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{% url 'index' %}">Logo</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Páginas
+                    </a>
+                    <ul class="dropdown-menu">
+                    {% if 'admin.add_logentry' in perms %}
+                    <li><a class="dropdown-item" target="_blank" href="/admin/">Painel de Administrador</a></li>
+                    {% endif %}
+                    <li><a class="dropdown-item" href="{% url 'list_person' %}">Clientes</a></li>
+                    <li><a class="dropdown-item" href="{% url 'list_invoice' %}">Despesa</a></li>
+                    <li><a class="dropdown-item" href="{% url 'list_sale' %}">Receita</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="{% url 'schedule_list' %}">Agenda</a></li>
+                    <li><a class="dropdown-item" href="{% url 'test' %}">Teste</a></li>
+                    </ul>
+                </li>
+                </ul>
+                <ul class="navbar-nav navbar-brand">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-danger" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            {% if username.first_name %} {{username.first_name}} {{username.last_name}} {% else %} {{username}} {% endif %}
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="{% url 'logout' %}">Log Out</a>  
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+
+      <div class="modal fade" id="creationModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="creationModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="creationModalLabel">Modal title</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <form id="modalForm" create-url="{% url 'new_schedule' %}" edit-url="{% url 'schedule_list' %}" action="{% url 'new_schedule' %}" method="post">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-md-3 form-group">
+                                    <label class="col-form-label" for="date">Data*</label>
+                                    <input class="form-control" type="date" required id="date" name="date">
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    <label class="col-form-label" for="start">Início*</label>
+                                    <input class="form-control" type="time" required  id="start" name="start" min="06:00" max="18:00" step="1800">
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    <label class="col-form-label" for="end">Fim*</label>
+                                    <input class="form-control" type="time" required  id="end" name="end" min="06:00" max="18:00" step="1800">
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    <label class="col-form-label" for="status">Status*</label>
+                                    <select class="form-select" required id="status" name="status">
+                                        <option value="" disabled selected>Selecione</option>
+                                        {% for status in status_list %}
+                                        <option value="{{status.pk}}">{{status.name}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 form-group">
+                                    <label class="col-form-label" for="client">Cliente*</label>
+                                    <select class="form-select" required id="client" name="client">
+                                        <option value="" disabled selected>Selecione</option>
+                                        {% for client in client_list %}
+                                        <option value="{{client.pk}}">{{client.name}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <label class="col-form-label" for="professional">Profissional*</label>
+                                    <select class="form-select" required id="professional" name="professional">
+                                        <option value="" disabled selected>Selecione</option>
+                                        {% for professional in professional_list %}
+                                        <option value="{{professional.pk}}">{{professional.name}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <label class="col-form-label" for="service">Serviço*</label>
+                                    <select class="form-select" required id="service" name="service">
+                                        <option value="" disabled selected>Selecione</option>
+                                        {% for service in service_list %}
+                                        <option value="{{service.pk}}">{{service.name}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2 form-group">
+                                    <label class="col-form-label" for="sessions">Qtd. Sessões</label>
+                                    <input class="form-control" type="number" id="sessions" name="sessions" min="0" value="0">
+                                </div>
+                                <div class="col-md-2 form-group">
+                                    <label class="col-form-label" for="room">Sala</label>
+                                    <input class="form-control" type="text" id="room" name="room">
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <label class="col-form-label" for="equipment">Equipamento</label>
+                                    <select class="form-select" id="equipment" name="equipment">
+                                        <option value="" disabled selected>Selecione</option>
+                                        {% for equipment in equipment_list %}
+                                        <option value="{{equipment.pk}}">{{equipment.name}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <label class="col-form-label" for="obs">Observações</label>
+                                    <input class="form-control" type="textarea" name="obs" id="obs">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer" id="primaryFooter">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-primary" id="submitCreation">Salvar</button>
+                </div>
+                <div class="modal-footer" id="secondaryFooter" hidden>
+                    <button type="button" class="btn btn-primary" id="editButton">Editar</button>
+                    <button type="button" class="btn btn-danger" id="deleteButton">Apagar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid py-2" >
+        <div class="row">
+            <div class="col-2">
+                <button type="button" class="btn btn-secondary" id="prev"><i class="fa-solid fa-arrow-left"></i></button>      
+                <button type="button" class="btn btn-secondary" id="today">Hoje</button>
+                <button type="button" class="btn btn-secondary" id="next"><i class="fa-solid fa-arrow-right"></i></button>
+            </div>
+            <div class="col-1">
+                
+            </div>
+            <div class="col-4 py-1"> 
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="viewRadio" id="viewRadio2" value="month">
+                    <label class="form-check-label" for="viewRadio2">
+                        Mensal
+                    </label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="viewRadio" id="viewRadio1" value="week" checked>
+                    <label class="form-check-label" for="viewRadio1">
+                        Semanal
+                    </label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="viewRadio" id="viewRadio3" disabled value="option3">
+                    <label class="form-check-label" for="viewRadio3">
+                        Funcionário
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="d-flex flex-column justify-content-center pl-5 py-1 bg-secondary" >
+        <div class="form-check form-check-inline mx-1">
+            <input class="form-check-input" type="checkbox" id="{{e.pk}}" value="{{e.pk}}">
+            <label class="form-check-label" for="{{e.pk}}">Teste</label>
+        </div>
+        {% for e in employee_list %}
+        <div class="form-check form-check-inline mx-1">
+            <input class="form-check-input" type="checkbox" id="{{e.pk}}" value="{{e.pk}}">
+            <label class="form-check-label" for="{{e.pk}}">{{e.name}}</label>
+        </div>
+        {% endfor %}
+    </div>
+    <div id="calendar" style="height: 770px;"></div>
+</body>
+
+</html>

@@ -1,0 +1,185 @@
+{% extends "./main.html" %}
+
+{% load static %}
+
+{% block title %}Vendas - Cadastro{% endblock %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    {% block scripts %}
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="{% static 'js/new_sale.js' %}"></script>
+    {% endblock %}
+</head>
+<body>
+    {% block body %}
+    <div class="container-fluid">
+        <form action="{% url 'new_sale' %}" method="post" class="box bg-primary"> 
+            {% csrf_token %}
+            <div class="col row">
+                <h1 class="col align-self-center">Venda (Cadastro)</h1>
+            </div>
+            <hr width="100" class="w-100">
+            <div class="col row py-2">
+                <div class="col-6  form-group">
+                    <label for="client">Cliente*</label>
+                    <select class="custom-select" required id="client" name="client">
+                        <option value="" selected hidden>Selecione</option>
+                        {% for client in client_list %}
+                        <option value="{{client.pk}}">{{client.name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-6  form-group">
+                    <label for="sale_type">Tipo de Venda*</label>
+                    <select class="custom-select" required name="sale_type" id="sale_type">
+                        <option value="" selected hidden>Selecione</option>
+                        {% for type in sale_type_list %}
+                        <option value="{{type.pk}}">Venda de {{type.name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="col row py-2">
+                <div class="col-6  form-group">
+                    <label for="seller">Vendedor*</label>
+                    <select class="custom-select" required id="seller" name="seller">
+                        <option value="" selected hidden>Selecione</option>
+                        {% for seller in seller_list %}
+                        <option value="{{seller.pk}}">{{seller.name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-3  form-group">
+                    <label for="status">Status*</label>
+                    <select class="custom-select" required name="status" id="status">
+                        <option value="" selected hidden>Selecione</option>
+                        {% for status in status_list %}
+                        <option value="{{status.pk}}">{{status.name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-3  form-group">
+                    <label for="sale_origin">Origem da Venda*</label>
+                    <select class="custom-select" required name="sale_origin" id="sale_origin">
+                        <option value="" selected hidden>Selecione</option>
+                        {% for o in origin_list %}
+                        <option value="{{o.pk}}">{{o.name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="col row py-2">
+                <div id="1" class="col-6 flex-column form-group">
+                    <label for="plan" id="plan_label">Plano*</label>
+                    <select class="custom-select" required id="plan" name="plan">
+                        <option value="" selected hidden>Selecione</option>
+                        {% for plan in plan_list %}
+                        <option data-price="{{plan.price}}" data-sessions="{{plan.sessions}}" id="{{plan.service_type.pk}}{{plan.pk}}" value="{{plan.pk}}">{{plan.name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div id="2" class="col-6 flex-column form-group" hidden>
+                    <label for="service" id="service_label">Serviço*</label>
+                    <select class="custom-select" id="service" name="service">
+                        <option value="" selected hidden>Selecione</option>
+                        {% for service in service_list %}
+                        <option data-price="{{service.price}}" data-sessions="{{service.sessions}}" id="{{service.service_type.pk}}{{service.pk}}" value="{{service.pk}}">{{service.name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div id="3" class="col-6 flex-column form-group" hidden>
+                    <label for="product" id="product_label">Produto*</label>
+                    <select class="custom-select" id="product" name="product">
+                        <option value="" selected hidden>Selecione</option>
+                        {% for product in product_list %}
+                        <option data-price="{{product.price}}" data-sessions="{{product.sessions}}" id="{{product.service_type.pk}}{{product.pk}}" value="{{product.pk}}">{{product.name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-3  form-group">
+                    <label for="price">Preço</label>
+                    <input class="form-control" readonly required placeholder="0.00" type="number" min="0.00" step="0.01" id="price" value="0.00">
+                </div>
+                <div class="col-3  form-group">
+                    <label id="sessions_label" for="sessions">Qtd. de Sessões*</label>
+                    <input class="form-control" required placeholder="0" type="number" min="0" name="sessions" id="sessions">
+                </div>
+            </div>
+            <div class="col row justify-content-lg-around justify-content-center py-2">
+                <div class="col-6  form-group">
+                    <label for="discount_type">Tipo de Desconto*</label>
+                    <select class="custom-select" value="1" id="discount_type" name="discount_type">
+                        <option value="real">Reais (R$)</option>
+                        <option value="percent">Porcentagem (%)</option>
+                    </select>
+                </div>
+                <div class="col-3  form-group">
+                    <label for="discount">Desconto*</label>
+                    <input class="form-control" required id="discount" name="discount" placeholder="0" value="0">
+                    <small id="discountTip"></small>
+                </div>
+                <div class="col-3 d-flex form-check flex-column form-group">
+                    <label for="mixed">Venda Mista?*</label>
+                    <select class="custom-select" disabled class="form-select"  id="mixed" name="mixed">
+                        <!-- <option value="" selected hidden>Selecione</option> -->
+                        <option value="True">Sim</option>  
+                        <option value="False" selected>Não</option> 
+                    </select>
+                </div>
+            </div>
+            <div class="col row py-2"> 
+                <div class="col-6 form-check form-group">
+                    <label for="payment_type">Forma de Pagamento*</label>
+                    <select class="custom-select" required id="payment_type" name="payment_type">
+                        <option value="" disabled hidden selected>Selecione...</option>
+                        {% for payment in payment_type_list %}
+                        <option data-tax="{{payment.has_tax}}" value="{{payment.pk}}">{{payment.name}}</option>
+                        {% endfor %} 
+                    </select>
+                </div>
+                <div id="taxDiv" class="col-6 form-check form-group" hidden>
+                    <label for="tax">Taxa*</label>
+                    <select class="custom-select" id="tax" name="tax">
+                        <option value="" disabled selected>Selecione...</option>
+                        {% for tax in tax_list %}
+                        <option data-id="{{tax.payment_type.pk}}" value="{{tax.pk}}">{{tax.name}}</option>
+                        {% endfor %} 
+                    </select>
+                </div>
+            </div>
+            <div class="col row py-2">
+                <div class="col-4  form-group">
+                    <label for="OBS">Observações</label>
+                    <textarea  class="form-control" name="obs" id="OBS" cols="20" rows="4"></textarea>
+                </div>
+                <div class="col-2  form-group">
+                    <label for="date">Data*</label>
+                    <input class="form-control" required id="date" name="date" type="date">
+                </div>
+                <div class="col-2"></div>
+                <div class="col-4  form-group">
+                    <label for="final_price">Preço Final</label>
+                    <input class="form-control" step="0.01" readonly id="final_price" name="final_price">
+                </div>
+            </div>
+            <hr width="100" class="w-100">
+            <div class="d-flex justify-content-end">
+                <div class="ml-auto p-2">
+                    <input type="submit" value="Confirmar" class="btn btn-success">
+                </div>
+                <div class="ml-auto p-2">
+                    <button type="button" url="" onclick="cancelEditing(event)" class="btn btn-danger" id="cancelButton">Cancelar</button>
+                </div>
+            </div>
+        </form>
+      </div>
+    {% endblock %}
+</body>
+</html>

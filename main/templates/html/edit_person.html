@@ -1,0 +1,111 @@
+{% extends "./main.html" %}
+
+{% load static %}
+
+{% block title %}Pessoas - Edição{% endblock %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    {% block scripts %}
+    <script src="{% static 'js/edit_person.js' %}"></script>
+    <!-- <script src="https://unpkg.com/imask"></script> -->
+    {% endblock %}
+</head>
+<body onbeforeunload="return confirmacao()">
+    {% block body %}
+    <div class="container-fluid">
+        <!-- para voltar, apague o "row" a seguir e os "cols" de suas divs-filho imediatas -->
+        <form action="{% url 'edit_person' person.pk %}" method="post" class="box bg-primary"> 
+            {% csrf_token %}
+            <input required value="{{person.pk}}" id="pk" name="pk" type="hidden">
+            <div class="col row">
+                <h1 class="col align-self-center">Cliente (Edição)</h1>
+            </div>
+            <hr width="100" class="w-100">
+            <div class="col row justify-content-lg-around justify-content-lg-between py-2">
+                <div class="form-group col-6 d-flex flex-column">
+                    <label for="Nome">Nome</label>
+                    <input class="form-control" required value="{{person.name}}" id="Nome" name="name" type="text" >
+                </div>
+                <div class="form-group col-6 d-flex flex-column">
+                    <label for="CPF">CPF</label>
+                    <input class="form-control" required value="{{person.cpf}}" id="CPF" name="cpf" type="text">
+                </div>
+            </div>
+            <div class="col row justify-content-lg-around justify-content-center py-2">
+                <div class="form-group col-6 d-flex flex-column">
+                    <label for="Nascimento">Data de Nasc.</label>
+                    <input class="form-control" required value={{person.birth_date|date:"Y-m-d"}} id="Nascimento" name="birth_date" type="date">
+                </div>
+                <div class="form-group col-6 d-flex flex-column">
+                    <label for="Sexo">Sexo</label>
+                    <select class="custom-select" required id="Sexo" name="gender" value="{{person.gender.pk}}">
+                        {% for gender in gender_list %}
+                            {% if gender.pk == person.gender.pk %}
+                            <option value="{{gender.pk}}" selected> {{gender.name}} </"option>
+                            {% else %}
+                            <option value="{{gender.pk}}">{{gender.name}}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="col row justify-content-lg-around justify-content-center py-2">
+                <div class="form-group col-6 d-flex flex-column">
+                    <label for="Celular">Celular</label>
+                    <!-- pattern="\([0-9]{2}\) [9]?[0-9]{4}-[0-9]{4}" -->
+                    <input class="form-control" required  value="{{person.cellphone}}" id="Celular" name="cellphone" type="tel">
+                    <small>Ex.: (00) 91234-5678</small>
+                </div>
+                <div class="form-group col-6 d-flex flex-column">
+                    <label for="Email">Email</label>
+                    <input class="form-control"  required  value="{{person.email}}" id="Email" name="email" type="email">
+                </div>  
+            </div>
+            <hr width="100" class="w-100">
+            <div class="col row justify-content-lg-around justify-content-center py-2">
+                <div class="form-group col-4 d-flex flex-column">
+                    <label for="CEP">CEP</label>
+                    <input class="form-control"  value="{{person.cep}}" id="CEP" name="cep" type="text">
+                </div>
+                <div class="form-group col-4 d-flex flex-column">
+                    <label for="Endereço">Endereço</label>
+                    <input class="form-control"  value="{{person.address}}" id="Endereço" name="address" type="text">
+                </div>
+                <div class="form-group col-4 d-flex flex-column">
+                    <label for="Cidade">Cidade</label>
+                    <input class="form-control"  value="{{person.city}}" id="Cidade" name="city" type="text">
+                </div>
+            </div>
+            <div class="col row justify-content-lg-around justify-content-center py-2">
+                <div class="form-group col-4 d-flex flex-column">
+                    <label for="Bairro">Bairro</label>
+                    <input class="form-control"  value="{{person.district}}" id="Bairro" name="district" type="text">
+                </div>
+                <div class="form-group col-4 d-flex flex-column">
+                    <label for="UF">UF</label>
+                    <input class="form-control"  value="{{person.UF}}" id="UF" name="UF" type="text">
+                </div>
+                <div class="form-group col-4 d-flex flex-column">
+                    <label for="Complemento">Complemento</label>
+                    <input class="form-control"  value="{{person.complement}}" id="Complemento" name="complement" type="text">
+                </div>
+            </div>
+            <hr width="100" class="w-100">
+            <div class="d-flex justify-content-end">
+                <div class="ml-auto p-2">
+                    <input type="submit" value="Confirmar" class="btn btn-success">
+                </div>
+                <div class="ml-auto p-2">
+                    <button type="button" onclick="cancelEdit(event)" class="btn btn-danger" id="cancelButton">Cancelar</button>
+                </div>
+            </div>
+        </form>
+      </div>
+    {% endblock %}
+</body>
+</html>

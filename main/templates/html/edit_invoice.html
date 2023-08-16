@@ -1,0 +1,111 @@
+{% extends "./main.html" %}
+
+{% load static %}
+
+{% block title %}Despesas - Edição{% endblock %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Despesa</title>
+    {% block scripts %}
+    <script src="{% static 'js/edit_invoice.js' %}"></script>
+    {% endblock %}
+</head>
+<body>
+    {% block body %}
+    <div class="container-fluid">
+        <form action="{% url 'edit_invoice' invoice.pk %}" method="post" class="box bg-primary"> 
+            {% csrf_token %}
+            <div class="col row">
+                <h1 class="col align-self-center">Despesa (Edição)</h1>
+            </div>
+            <hr width="100" class="w-100">
+            <div class="col row justify-content-lg-around justify-content-lg-between py-2">
+                <div class="col-6 d-flex flex-column form-group">
+                    <label for="TipoConta">Tipo*</label>
+                    <select class="custom-select" id="TipoConta" name="invoice_type">
+                        {% for type in invoice_type_list %}
+                        <option value="{{type.pk}}" {% if type.pk == invoice.invoice_type.pk %} selected {% endif %}>{{type.name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-6 d-flex flex-column form-group">
+                    <label for="Descrição">Descrição</label>
+                    <input class="form-control" value="{{invoice.description}}" id="Descrição" name="description" type="text">
+                </div>
+            </div>
+            <div class="col row justify-content-lg-around justify-content-center py-2">
+                <div class="col-3 d-flex flex-column form-group">
+                    <label for="Lançamento">Data de Lançamento*</label>
+                    <input class="form-control" value="{{invoice.release_date|date:'Y-m-d'}}" id="Lançamento" name="release_date" type="date">
+                </div>
+                <div class="col-3 d-flex flex-column form-group">
+                    <label for="Pagamento">Data de Pagamento*</label>
+                    <input class="form-control" value="{{invoice.payment_date|date:'Y-m-d'}}" id="Pagamento" name="payment_date" type="date">
+                </div>
+                <div class="col-3 d-flex flex-column form-group">
+                    <label for="Nascimento">Valor*</label>
+                    <input class="form-control" value="{{invoice.cost}}" id="Nascimento" name="cost" type="number">
+                </div>
+                <div class="col-3 d-flex flex-column form-group">
+                    <label for="paid">Pago?*</label>
+                    <select class="custom-select" class="form-select"  id="paid" value="{{invoice.recurring}}" name="paid">
+                        <option value="True" {% if invoice.paid %} selected {% endif %}>Sim</option>  
+                        <option value="False" {% if not invoice.paid %} selected {% endif %}>Não</option> 
+                    </select>
+                </div>
+            </div>
+            <div class="col row justify-content-lg-around justify-content-lg-between py-2">
+                <div class="col-6 d-flex flex-column form-group">
+                    <label for="supplier">Fornecedor*</label>
+                    <select class="custom-select"  id="supplier" name="supplier">
+                        {% for supplier in supplier_list %}
+                        <option value="{{supplier.pk}}" {% if supplier.pk == invoice.supplier.pk %} selected {% endif %}>{{supplier.name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-2 d-flex flex-column form-group">
+                    <label for="Recorrencia">Há recorrência?*</label>
+                    <select class="custom-select" class="form-select"  id="Recorrencia" value="{{invoice.recurring}}" name="recurring" onchange="changeView(event)">
+                        <option value="True" {% if invoice.recurring %} selected {% endif %}>Sim</option>  
+                        <option value="False" {% if not invoice.recurring %} selected {% endif %}>Não</option> 
+                    </select>
+                </div>
+                <div id="qtd_div" class="col-2 d-flex flex-column form-group" style="visibility: hidden">
+                    <label for="Qtd">Qtd. recorrência*</label>
+                    <input class="form-control" id="Qtd" name="recurring_qtd" type="number" value="{{invoice.recurring_qtd}}">
+                </div>  
+                <div id="rec_div" class="col-2 d-flex flex-column form-group" style="visibility: hidden">
+                    <label for="Prazo">Recorrência*</label>
+                    <select class="custom-select" class="form-select" id="Prazo" name="recurring_time">
+                        <option value="" disabled selected hidden>Selecione</option>
+                        <option value="7" {% if invoice.recurring_time == 7 %} selected {% endif %}>Semanal</option>  
+                        <option value="15" {% if invoice.recurring_time == 15 %} selected {% endif %}>Quinzenal</option> 
+                        <option value="30" {% if invoice.recurring_time == 30 %} selected {% endif %}>Mensal</option>
+                    </select>
+                </div>  
+            </div>
+            <div class="col row justify-content-lg-around justify-content-lg-between py-2">
+                <div class="col-6 d-flex flex-column form-group">
+                    <label for="OBS">Observações</label>
+                    <textarea class="form-control" name="obs" id="OBS" cols="20" rows="4">{{invoice.obs}}</textarea>
+                </div>
+                <div class="col-6"></div>
+            </div>
+            <hr width="100" class="w-100">
+            <div class="d-flex justify-content-end">
+                <div class="ml-auto p-2">
+                    <input type="submit" value="Confirmar" class="btn btn-success">
+                </div>
+                <div class="ml-auto p-2">
+                    <button type="button" url="{% url 'list_person' %}" onclick="cancelCreation(event)" class="btn btn-secondary" id="cancelButton">Voltar</button>
+                </div>
+            </div>
+        </form>
+      </div>
+    {% endblock %}
+</body>
+</html>

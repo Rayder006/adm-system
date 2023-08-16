@@ -1,0 +1,108 @@
+{% extends "./main.html" %}
+
+{% load static %}
+
+{% block title %}Pessoas - Cadastro{% endblock %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    {% block scripts %}
+    <script src="{% static 'js/new_person.js' %}"></script>
+    {% endblock %}
+</head>
+<body onbeforeunload="return confirmacao()">
+    {% block body %}
+    <div class="container-fluid">
+        <!-- para voltar, apague o "row" a seguir e os "cols" de suas divs-filho imediatas -->
+        <form action="" method="post" class="box bg-primary"> 
+            {% csrf_token %}
+            <div class="col row">
+                <h1 class="col align-self-center">Cliente (Cadastro)</h1>
+            </div>
+            <hr width="100" class="w-100">
+            <div class="col row justify-content-lg-around justify-content-lg-between py-2">
+                <div class="form-group col-6 d-flex flex-column">
+                    <label for="Nome">Nome</label>
+                    <input class="form-control" required id="Nome" name="name" type="text" >
+                </div>
+                <div class="form-group col-6 d-flex flex-column">
+                    <label for="CPF">CPF</label>
+                    <input class="form-control" required id="CPF" name="cpf" type="text">
+                </div>
+            </div>
+            <div class="col row justify-content-lg-around justify-content-center py-2">
+                <div class="form-group col-6 d-flex flex-column">
+                    <label for="Nascimento">Data de Nasc.</label>
+                    <input class="form-control" required id="Nascimento" name="birth_date" type="date">
+                </div>
+                <div class="form-group col-6 d-flex flex-column">
+                    <label for="Sexo">Sexo</label>
+                    <select class="custom-select" required id="Sexo" name="gender">
+                        <option value="" disabled selected>Selecione</option>
+                        {% for gender in gender_list %}
+                        <option value="{{gender.pk}}">{{gender.name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="col row justify-content-lg-around justify-content-center py-2">
+                <div class="form-group col-4 d-flex flex-column">
+                    <label for="Telefone">Telefone</label>
+                    <input class="form-control" required id="Telefone" name="phone" type="number">
+                </div>
+                <div class="form-group col-4 d-flex flex-column">
+                    <label for="Celular">Celular</label>
+                    <input class="form-control" required id="Celular" name="cellphone" type="number" >
+                </div>
+                <div class="form-group col-4 d-flex flex-column">
+                    <label for="Email">Email</label>
+                    <input class="form-control"  required id="Email" name="email" type="email">
+                </div>  
+            </div>
+            <hr width="100" class="w-100">
+            <div class="col row justify-content-lg-around justify-content-center py-2">
+                <div class="form-group col-4 d-flex flex-column">
+                    <label for="CEP">CEP</label>
+                    <input class="form-control" id="CEP" name="cep" type="text">
+                </div>
+                <div class="form-group col-4 d-flex flex-column">
+                    <label for="Endereço">Endereço</label>
+                    <input class="form-control" id="Endereço" name="address" type="text">
+                </div>
+                <div class="form-group col-4 d-flex flex-column">
+                    <label for="Cidade">Cidade</label>
+                    <input class="form-control" id="Cidade" name="city" type="text">
+                </div>
+            </div>
+            <div class="col row justify-content-lg-around justify-content-center py-2">
+                <div class="form-group col-4 d-flex flex-column">
+                    <label for="Bairro">Bairro</label>
+                    <input class="form-control" id="Bairro" name="district" type="text">
+                </div>
+                <div class="form-group col-4 d-flex flex-column">
+                    <label for="UF">UF</label>
+                    <input class="form-control" id="UF" name="UF" type="text">
+                </div>
+                <div class="form-group col-4 d-flex flex-column">
+                    <label for="Complemento">Complemento</label>
+                    <input class="form-control" id="Complemento" name="complement" type="text">
+                </div>
+            </div>
+            <hr width="100" class="w-100">
+            <div class="d-flex justify-content-end">
+                <div class="ml-auto p-2">
+                    <input type="submit" value="Confirmar" class="btn btn-success">
+                </div>
+                <div class="ml-auto p-2">
+                    <button type="button" url="{% url 'list_person' %}" onclick="cancelCreation(event)" class="btn btn-danger" id="cancelButton">Cancelar</button>
+                </div>
+            </div>
+        </form>
+      </div>
+    {% endblock %}
+</body>
+</html>

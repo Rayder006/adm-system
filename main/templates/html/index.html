@@ -1,0 +1,20 @@
+{% extends "./main.html" %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="..\css\main.css">  
+    <title>Minha Página</title>
+</head>
+<body>
+    {% block body %}
+    <div class="container-fluid">
+        <a href="{% url 'list_person' %}">Clientes</a>
+        <a href="{% url 'list_invoice' %}">Lançamentos</a>
+        <a href="">Inventário</a>
+        
+    </div>
+    {% endblock %}
+</body>
+</html>

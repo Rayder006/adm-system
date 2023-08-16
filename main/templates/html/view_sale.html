@@ -1,0 +1,134 @@
+{% extends "./main.html" %}
+
+{% load static %}
+
+{% block title %}Vendas - Visualização{% endblock %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    {% block scripts %}
+    <script src="{% static 'js/view_sale.js' %}"></script>
+    {% endblock %}
+</head>
+<body>
+    {% block body %}
+    <div class="container-fluid">
+        <form id="saleForm" action="{% url 'view_sale' sale.pk %}" method="post" class="box bg-primary">
+            {% csrf_token %} 
+            <div class="col row">
+                <h1 class="col align-self-center">Venda (Visualização)</h1>
+            </div>
+            <input type="text" name="pk" id="pk" hidden value="{{sale.pk}}">
+            <hr width="100" class="w-100">
+            <div class="col row justify-content-lg-around justify-content-lg-between py-2">
+                <div class="col-6 d-flex flex-column form-group">
+                    <label for="client">Cliente*</label>
+                    <select class="custom-select" disabled>
+                        <option selected>{{sale.client.name}}</option>
+                    </select>
+                </div>
+                <div class="col-6 d-flex flex-column form-group">
+                    <label for="sale_type">Tipo de Venda*</label>
+                    <select class="custom-select" disabled>
+                        <option selected>{{sale.sale_type.name}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col row justify-content-lg-around justify-content-lg-between py-2">
+                <div class="col-6 d-flex flex-column form-group">
+                    <label for="seller">Vendedor*</label>
+                    <select class="custom-select" disabled>
+                        <option selected>{{sale.seller.name}}</option>
+                    </select>
+                </div>
+                <div class="col-3 d-flex flex-column form-group">
+                    <label for="status">Status*</label>
+                    <select class="custom-select" disabled>
+                        <option selected>{{sale.status.name}}</option>
+                    </select>
+                </div>
+                <div class="col-3 d-flex flex-column form-group">
+                    <label for="payment_type">Origem da Venda*</label>
+                    <select class="custom-select" disabled>
+                        <option selected>{{sale.payment_type.name}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col row justify-content-lg-around justify-content-lg-between py-2">
+                <div class="col-6 d-flex flex-column form-group">
+                    <label for="service">{{sale.service.service_type.name}}*</label>
+                    <select class="custom-select" disabled>
+                        <option selected>{{sale.service.name}}</option>
+                    </select>
+                </div>
+                <div class="col-3 d-flex flex-column form-group">
+                    <label for="price">Preço</label>
+                    <input class="form-control" type="number" disabled value="{{sale.service.price}}">
+                </div>
+                <div class="col-3 d-flex flex-column form-group">
+                    <label for="sessions">Quantidade*</label>
+                    <input class="form-control" disabled value="{{sale.sessions}}" type="number">
+                </div>
+            </div>
+            <div class="col row justify-content-lg-around justify-content-center py-2">
+                <div class="col-6 d-flex flex-column form-group">
+                    <label for="discount_type">Tipo de Desconto*</label>
+                    <select class="custom-select" disabled>
+                        <option selected>{{sale.discount_type.name}}</option>
+                    </select>
+                </div>
+                <div class="col-3 d-flex flex-column form-group">
+                    <label for="discount">Desconto*</label>
+                    <input class="form-control" disabled value="{{sale.discount}}">
+                    <small>Em %</small>
+                </div>
+                <div class="col-3 d-flex form-check flex-column form-group">
+                    <label for="mixed">Venda Mista?*</label>
+                    <select class="custom-select" disabled class="form-select">
+                        <option {% if sale.mixed %} selected {% endif %}>Sim</option>  
+                        <option {% if not sale.mixed %} selected {% endif %}>Não</option> 
+                    </select>
+                </div>
+            </div>
+            <div class="col row  py-2">
+                
+                <div class="col-6 d-flex flex-column form-group">
+                    <label for="payment_type">Forma de Pagamento*</label>
+                    <select class="custom-select" class="form-select" disabled>
+                        <option>{{sale.payment_type.name}}</option>
+                    </select>
+                </div> 
+            </div>
+            <div class="col row justify-content-lg-around justify-content-lg-between py-2">
+                <div class="col-4 d-flex flex-column form-group">
+                    <label for="OBS">Observações</label>
+                    <textarea disabled class="form-control" cols="20" rows="4">{{sale.obs}}</textarea>
+                </div>
+                <div class="col-2 d-flex flex-column form-group">
+                    <label for="date">Data*</label>
+                    <input disabled class="form-control" value="{{sale.date|date:'Y-m-d'}}">
+                </div>
+                <div class="col-2"></div>
+                <div class="col-4 d-flex flex-column form-group">
+                    <label for="final_price">Preço Final</label>
+                    <input class="form-control" value="{{sale.final_price}}" disabled>
+                </div>
+            </div>
+            <hr width="100" class="w-100">
+            <div class="d-flex justify-content-end">
+                <div class="ml-auto p-2">
+                    <a href="{% url 'edit_sale' sale.pk %}" class="btn btn-light">Editar</a>
+                </div>
+                <div class="ml-auto p-2">
+                    <button type="button" sale_pk="{{sale.pk}}" url="{% url 'view_sale' sale.pk %}" class="btn btn-danger" onclick="deleteSale(this)">Apagar</button>
+                </div>
+            </div>
+        </form>
+      </div>
+    {% endblock %}
+</body>
+</html>

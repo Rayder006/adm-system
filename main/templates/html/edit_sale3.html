@@ -1,0 +1,161 @@
+{% extends "./main.html" %}
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    {% block scripts %}
+    <script src="{% static 'js/edit_sale.js' %}"></script>
+    {% endblock %}
+</head>
+<body>
+    {% block body %}
+    <div class="container-fluid">
+        <form action="{% url 'new_sale' %}" method="post" class="box bg-primary"> 
+            {% csrf_token %}
+            <div class="col row">
+                <h1 class="col align-self-center">Venda (Edição)</h1>
+            </div>
+            <hr width="100" class="w-100">
+            <div class="col row justify-content-lg-around justify-content-lg-between py-2">
+                <div class="col-6 d-flex flex-column form-group">
+                    <label for="client">Cliente*</label>
+                    <select class="custom-select"  id="client" name="client">
+                        {% for client in client_list %}
+                        <option value="{{client.pk}}" {% if client.pk == sale.client.pk %} selected {% endif %}>{{client.name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-6 d-flex flex-column form-group">
+                    <label for="sale_type">Tipo de Venda*</label>
+                    <select class="custom-select" name="sale_type" id="sale_type">
+                        {% for type in sale_type_list %}
+                        <option value="{{type.pk}}" {% if type.pk == sale.sale_type.pk %} selected {% endif %}>{{type.name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="col row justify-content-lg-around justify-content-lg-between py-2">
+                <div class="col-6 d-flex flex-column form-group">
+                    <label for="seller">Vendedor*</label>
+                    <select class="custom-select" id="seller" name="seller">
+                        {% for seller in seller_list %}
+                        <option value="{{seller.pk}}" {% if seller.pk == sale.seller.pk %} selected {% endif %}>{{seller.name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-3 d-flex flex-column form-group">
+                    <label for="status">Status*</label>
+                    <select class="custom-select" name="status" id="status">
+                        {% for status in status_list %}
+                        <option value="{{status.pk}}" {% if status.pk == sale.status.pk %} selected {% endif %}>{{status.name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-3 d-flex flex-column form-group">
+                    <label for="payment_type">Origem da Venda*</label>
+                    <select class="custom-select" name="payment_type" id="payment_type">
+                        {% for type in payment_type_list %}
+                        <option value="{{type.pk}}" {% if type.pk == sale.payment_type.pk %} selected {% endif %}>{{type.name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="col row justify-content-lg-around justify-content-lg-between py-2">
+                <div class="col-6 d-flex flex-column form-group">
+                    <label for="service">Plano*</label>
+                    <select class="custom-select"  id="service" name="service">
+                        {% for plan in plan_list %}
+                        <option data-price="{{plan.price}}" data-sessions="{{plan.sessions}}" value="{{plan.pk}}" {% if plan.pk == sale.plan.pk %} selected {% endif %}>{{plan.name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div id="2" class="col-6 flex-column form-group" hidden>
+                    <label for="service" id="service_label">Serviço*</label>
+                    <select class="custom-select" id="service" name="service">
+                        {% for service in service_list %}
+                        <option data-price="{{service.price}}" {% if service.pk == sale.service.pk %} selected {% endif %} data-sessions="{{service.sessions}}" id="{{service.service_type.pk}}{{service.pk}}" value="{{service.pk}}">{{service.name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div id="3" class="col-6 flex-column form-group" hidden>
+                    <label for="product" id="product_label">Produto*</label>
+                    <select class="custom-select" id="product" name="product">
+                        {% for product in product_list %}
+                        <option data-price="{{product.price}}" {% if product.pk == sale.product.pk %} selected {% endif %} data-sessions="{{product.sessions}}" id="{{product.service_type.pk}}{{product.pk}}" value="{{product.pk}}">{{product.name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-3 d-flex flex-column form-group">
+                    <label for="price">Preço</label>
+                    <input class="form-control" value="{{sale.price}}" type="number" min="0.00" step="0.01" value="111" name="price" id="price" onchange="priceCalc(event)">
+                </div>
+                <div class="col-3 d-flex flex-column form-group">
+                    <label for="sessions">Qtd. de sessões*</label>
+                    <input class="form-control" value="{{sale.sessions}}" type="number" name="sessions" id="sessions">
+                </div>
+            </div>
+            <div class="col row justify-content-lg-around justify-content-center py-2">
+                <div class="col-6 d-flex flex-column form-group">
+                    <label for="discount_type">Tipo de Desconto*</label>
+                    <select class="custom-select"  id="discount_type" name="discount_type">
+                        {% for discount_type in discount_type_list %}
+                        <option value="{{discount_type.pk}}" {% if discount_type.pk == sale.discount_type.pk %} selected {% endif %}>{{discount_type.name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-3 d-flex flex-column form-group">
+                    <label for="discount">Desconto*</label>
+                    <input class="form-control" type="number" value="{{sale.discount}}" id="discount" name="discount" value="0" onchange="priceCalc(event)">
+                </div>
+                <div class="col-3 d-flex form-check flex-column form-group">
+                    <label for="mixed">Venda Mista?*</label>
+                    <select class="custom-select" class="form-select"  id="mixed" name="mixed">
+                        <option value="True" {% if sale.mixed %} selected {% endif %}>Sim</option>  
+                        <option value="False" {% if not sale.mixed %} selected {% endif %}>Não</option> 
+                    </select>
+                </div>
+            </div>
+            <div class="col row py-2">
+                <div class="col-6 d-flex flex-column form-group">
+                    <label for="payment_type">Forma de Pagamento*</label>
+                    <select class="custom-select" class="form-select"   id="payment_type" name="payment_type">
+                        {% for payment in payment_type_list %}
+                        <option value="{{payment.pk}}" {% if payment.pk == sale.payment_type.pk %} selected {% endif %}>{{payment.name}}</option>
+                        {% endfor %} 
+                    </select>
+                </div>  
+            </div>
+            <div class="col row justify-content-lg-around justify-content-lg-between py-2">
+                <div class="col-4 d-flex flex-column form-group">
+                    <label for="OBS">Observações</label>
+                    <textarea  class="form-control" name="obs" id="OBS" cols="20" rows="4">{{sale.obs}}</textarea>
+                </div>
+                <div class="col-2 d-flex flex-column form-group">
+                    <label for="date">Data*</label>
+                    <input class="form-control" value="{{sale.date|date:'Y-m-d'}}" id="date" name="date" type="date">
+                </div>
+                <div class="col-2"></div>
+                <div class="col-4 d-flex flex-column form-group">
+                    <label for="final_price">Preço Final</label>
+                    <input class="form-control" step="0.01" value="{{sale.final_price}}" readonly id="final_price" name="final_price">
+                </div>
+            </div>
+            <hr width="100" class="w-100">
+            <div class="d-flex justify-content-end">
+                <div class="ml-auto p-2">
+                    <input type="submit" value="Confirmar" class="btn btn-success">
+                </div>
+                <div class="ml-auto p-2">
+                    <button type="button" url="" onclick="cancelEditing(event)" class="btn btn-danger" id="cancelButton">Cancelar</button>
+                </div>
+            </div>
+        </form>
+      </div>
+    {% endblock %}
+</body>
+</html>

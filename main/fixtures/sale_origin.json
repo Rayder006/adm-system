@@ -1,0 +1,93 @@
+[
+    {
+      "model": "main.saleorigin",
+      "pk": 1,
+      "fields": {
+        "name": "Agendamento"
+      }
+    },
+    {
+      "model": "main.saleorigin",
+      "pk": 2,
+      "fields": {
+        "name": "Agendamento (Avaliação)"
+      }
+    },
+    {
+      "model": "main.saleorigin",
+      "pk": 3,
+      "fields": {
+        "name": "Agendamento (Cortesia)"
+      }
+    },
+    {
+      "model": "main.saleorigin",
+      "pk": 4,
+      "fields": {
+        "name": "Indicação"
+      }
+    },
+    {
+      "model": "main.saleorigin",
+      "pk": 5,
+      "fields": {
+        "name": "Ligação"
+      }
+    },
+    {
+      "model": "main.saleorigin",
+      "pk": 6,
+      "fields": {
+        "name": "Facebook"
+      }
+    },
+    {
+      "model": "main.saleorigin",
+      "pk": 7,
+      "fields": {
+        "name": "Instagram"
+      }
+    },
+    {
+      "model": "main.saleorigin",
+      "pk": 8,
+      "fields": {
+        "name": "Interesse Próprio"
+      }
+    },
+    {
+      "model": "main.saleorigin",
+      "pk": 9,
+      "fields": {
+        "name": "Parceria"
+      }
+    },
+    {
+      "model": "main.saleorigin",
+      "pk": 10,
+      "fields": {
+        "name": "Up Sell"
+      }
+    },
+    {
+      "model": "main.saleorigin",
+      "pk": 11,
+      "fields": {
+        "name": "Tráfego Pago"
+      }
+    },
+    {
+      "model": "main.saleorigin",
+      "pk": 12,
+      "fields": {
+        "name": "Whatsapp"
+      }
+    },
+    {
+      "model": "main.saleorigin",
+      "pk": 13,
+      "fields": {
+        "name": "Evento"
+      }
+    }
+  ]

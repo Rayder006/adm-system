@@ -1,0 +1,1301 @@
+[
+    
+    {
+        "model": "main.account",
+        "pk": 1,
+        "fields":{
+            "is_expense": false,
+            "account_type": 1,
+            "number": "3.01.01.0001",
+            "name": "FATURAMENTO - SERVIÇOS CORPORAIS",
+            "commentary": "FATURAMENTO"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 2,
+        "fields":{
+            "is_expense": false,
+            "account_type": 1,
+            "number": "3.01.01.0002",
+            "name": "FATURAMENTO - SERVIÇOS FACIAIS",
+            "commentary": "FATURAMENTO"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 3,
+        "fields":{
+            "is_expense": false,
+            "account_type": 1,
+            "number": "3.01.01.0003",
+            "name": "FATURAMENTO - SERVIÇOS DE INJETÁVEIS",
+            "commentary": "FATURAMENTO"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 4,
+        "fields":{
+            "is_expense": false,
+            "account_type": 1,
+            "number": "3.01.01.0004",
+            "name": "FATURAMENTO - PLANOS CORPORAIS",
+            "commentary": "FATURAMENTO"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 5,
+        "fields":{
+            "is_expense": false,
+            "account_type": 1,
+            "number": "3.01.01.0005",
+            "name": "FATURAMENTO - PLANOS FACIAIS",
+            "commentary": "FATURAMENTO"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 6,
+        "fields":{
+            "is_expense": false,
+            "account_type": 1,
+            "number": "3.01.01.0006",
+            "name": "FATURAMENTO - PLANOS DE INJETÁVEIS",
+            "commentary": "FATURAMENTO"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 7,
+        "fields":{
+            "is_expense": false,
+            "account_type": 1,
+            "number": "3.01.01.0007",
+            "name": "FATURAMENTO - PILATES",
+            "commentary": "FATURAMENTO"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 8,
+        "fields":{
+            "is_expense": false,
+            "account_type": 1,
+            "number": "3.01.01.0008",
+            "name": "FATURAMENTO - MANICURE",
+            "commentary": "FATURAMENTO"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 9,
+        "fields":{
+            "is_expense": false,
+            "account_type": 1,
+            "number": "3.03.01.0001",
+            "name": "OUTRAS ENTRADAS - APORTE DE CAPITAL",
+            "commentary": "OUTRAS ENTRADAS"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 10,
+        "fields":{
+            "is_expense": false,
+            "account_type": 1,
+            "number": "3.03.01.0002",
+            "name": "OUTRAS ENTRADAS - DESCONTOS OBTIDOS",
+            "commentary": "OUTRAS ENTRADAS"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 11,
+        "fields":{
+            "is_expense": false,
+            "account_type": 1,
+            "number": "3.03.01.0003",
+            "name": "OUTRAS ENTRADAS - EMPRÉSTIMOS OBTIDOS",
+            "commentary": "OUTRAS ENTRADAS"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 12,
+        "fields":{
+            "is_expense": false,
+            "account_type": 1,
+            "number": "3.03.01.0004",
+            "name": "OUTRAS ENTRADAS - OUTRAS ENTRADAS",
+            "commentary": "OUTRAS ENTRADAS"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 13,
+        "fields":{
+            "is_expense": false,
+            "account_type": 1,
+            "number": "3.03.01.0005",
+            "name": "OUTRAS ENTRADAS - RECEITAS FINANCEIRAS",
+            "commentary": "OUTRAS ENTRADAS"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 14,
+        "fields":{
+            "is_expense": false,
+            "account_type": 1,
+            "number": "3.03.01.0006",
+            "name": "OUTRAS ENTRADAS - TRANSFERÊNCIA ENTRE CONTAS - maria",
+            "commentary": "OUTRAS ENTRADAS"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 15,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "3.02.01.0001",
+            "name": "CANCELAMENTO - SERVIÇOS CORPORAIS",
+            "commentary": "CANCELAMENTO"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 16,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "3.02.01.0002",
+            "name": "CANCELAMENTO - SERVIÇOS FACIAIS",
+            "commentary": "CANCELAMENTO"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 17,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "3.02.01.0003",
+            "name": "CANCELAMENTO - SERVIÇOS DE INJETÁVEIS",
+            "commentary": "CANCELAMENTO"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 18,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "3.02.01.0004",
+            "name": "CANCELAMENTO - PLANOS CORPORAIS",
+            "commentary": "CANCELAMENTO"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 19,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "3.02.01.0005",
+            "name": "CANCELAMENTO - PLANOS FACIAIS",
+            "commentary": "CANCELAMENTO"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 20,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "3.02.01.0006",
+            "name": "CANCELAMENTO - PLANOS DE INJETÁVEIS",
+            "commentary": "CANCELAMENTO"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 21,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "3.02.01.0007",
+            "name": "CANCELAMENTO - PILATES",
+            "commentary": "CANCELAMENTO"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 22,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "3.02.01.0008",
+            "name": "CANCELAMENTO - MANICURE",
+            "commentary": "CANCELAMENTO"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 23,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.01.01.0001",
+            "name": "DEDUÇÕES FATURAMENTO - COFINS",
+            "commentary": "DEDUÇÕES FATURAMENTO"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 24,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.01.01.0002",
+            "name": "DEDUÇÕES FATURAMENTO - PIS",
+            "commentary": "DEDUÇÕES FATURAMENTO"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 25,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.02.01.0001",
+            "name": "PESSOAL - PRO-LABORE",
+            "commentary": "PESSOAL"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 26,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.02.01.0002",
+            "name": "PESSOAL - SALARIOS E ORDENADOS",
+            "commentary": "PESSOAL"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 27,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.02.01.0003",
+            "name": "PESSOAL - PJ'S",
+            "commentary": "PESSOAL"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 28,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.02.01.0004",
+            "name": "PESSOAL - RPA",
+            "commentary": "PESSOAL"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 29,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.02.01.0005",
+            "name": "PESSOAL - PREMIOS E GRATIFICACOES",
+            "commentary": "PESSOAL"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 30,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.02.01.0006",
+            "name": "PESSOAL - HORAS EXTRAS",
+            "commentary": "PESSOAL"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 31,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.02.01.0007",
+            "name": "PESSOAL - FÉRIAS",
+            "commentary": "PESSOAL"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 32,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.02.01.0008",
+            "name": "PESSOAL - 13o. SALARIO",
+            "commentary": "PESSOAL"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 33,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.02.01.0009",
+            "name": "PESSOAL - INDENIZACOES \/ AVISO PREVIO",
+            "commentary": "PESSOAL"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 34,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.02.01.0010",
+            "name": "PESSOAL - DISTRIBUIÇÃO DE LUCROS",
+            "commentary": "PESSOAL"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 35,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.02.02.0001",
+            "name": "PESSOAL - INSS \/ GPS",
+            "commentary": "PESSOAL"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 36,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.02.02.0002",
+            "name": "PESSOAL - FGTS",
+            "commentary": "PESSOAL"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 37,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.02.02.0003",
+            "name": "PESSOAL - IRRF S\/ FOLHA - CÓD. 0561",
+            "commentary": "PESSOAL"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 38,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.02.03.0001",
+            "name": "PESSOAL - ASSISTENCIA ALIMENTAR",
+            "commentary": "PESSOAL"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 39,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.02.03.0002",
+            "name": "PESSOAL - ASSISTENCIA MEDICA",
+            "commentary": "PESSOAL"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 40 ,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.02.03.0003",
+            "name": "PESSOAL - ASSISTENCIA ODONTOLOGICA",
+            "commentary": "PESSOAL"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 41 ,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.02.03.0004",
+            "name": "PESSOAL - CURSOS E TREINAMENTOS",
+            "commentary": "PESSOAL"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 42 ,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.02.03.0005",
+            "name": "PESSOAL - DIARIAS E AJUDA DE CUSTOS",
+            "commentary": "PESSOAL"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 43 ,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.02.03.0006",
+            "name": "PESSOAL - VALE TRANSPORTE",
+            "commentary": "PESSOAL"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 44 ,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.02.04.0001",
+            "name": "PESSOAL - CONFRATERNIZAÇÃO \/ EVENTOS INTERNOS",
+            "commentary": "PESSOAL"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 45 ,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.02.04.0002",
+            "name": "PESSOAL - CONTRIBUIÇÃO SOCIAL \/ SINDICAL",
+            "commentary": "PESSOAL"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 46 ,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.02.04.0003",
+            "name": "PESSOAL - DESPESAS C\/ PESSOAL DIVERSAS",
+            "commentary": "PESSOAL"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 47 ,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.02.04.0004",
+            "name": "PESSOAL - ESTAGIARIO",
+            "commentary": "PESSOAL"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 48 ,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.02.04.0005",
+            "name": "PESSOAL - EXAMES MEDICOS \/ PCMSO \/ PPRA \/ PPP",
+            "commentary": "PESSOAL"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 49 ,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.02.04.0006",
+            "name": "PESSOAL - RECRUTAMENTO E SELECAO",
+            "commentary": "PESSOAL"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 50,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.02.04.0007",
+            "name": "PESSOAL - SERVICOS TERCEIRIZADOS",
+            "commentary": "PESSOAL"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 51,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.02.04.0008",
+            "name": "PESSOAL - UNIFORME",
+            "commentary": "PESSOAL"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 52,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.03.01.0001",
+            "name": "OCUPAÇÃO - AGUA\/ESGOTO",
+            "commentary": "OCUPAÇÃO"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 53,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.03.01.0002",
+            "name": "OCUPAÇÃO - CARTÓRIO",
+            "commentary": "OCUPAÇÃO"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 54,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.03.01.0003",
+            "name": "OCUPAÇÃO - CONDOMÍNIO",
+            "commentary": "OCUPAÇÃO"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 55,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.03.01.0004",
+            "name": "OCUPAÇÃO - CORREIOS \/ MALOTES \/ CORRESPONDENCIA",
+            "commentary": "OCUPAÇÃO"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 56,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.03.01.0005",
+            "name": "OCUPAÇÃO - DECORAÇÃO E ORNAMENTAÇÃO",
+            "commentary": "OCUPAÇÃO"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 57,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.03.01.0006",
+            "name": "OCUPAÇÃO - DESPESA COM FRETE",
+            "commentary": "OCUPAÇÃO"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 58,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.03.01.0007",
+            "name": "OCUPAÇÃO - ENERGIA ELETRICA",
+            "commentary": "OCUPAÇÃO"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 59,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.03.01.0008",
+            "name": "OCUPAÇÃO - IPTU",
+            "commentary": "OCUPAÇÃO"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 60,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.03.01.0009",
+            "name": "OCUPAÇÃO - MATERIAL DE ESCRITÓRIO",
+            "commentary": "OCUPAÇÃO"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 61,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.03.01.0010",
+            "name": "OCUPAÇÃO - MATERIAL DE LIMPEZA\/CONSUMO",
+            "commentary": "OCUPAÇÃO"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 62,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.03.01.0011",
+            "name": "OCUPAÇÃO - REVISTAS, JORNAIS E  LIVROS",
+            "commentary": "OCUPAÇÃO"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 63,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.03.01.0012",
+            "name": "OCUPAÇÃO - SEGUROS",
+            "commentary": "OCUPAÇÃO"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 64,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.03.01.0013",
+            "name": "OCUPAÇÃO - SERVIÇO DE SEGURANÇA ",
+            "commentary": "OCUPAÇÃO"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 65,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.03.01.0014",
+            "name": "OCUPAÇÃO - SERVIÇOS CONTRATADOS DE LIMPEZA",
+            "commentary": "OCUPAÇÃO"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 66,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.03.01.0015",
+            "name": "OCUPAÇÃO - SERVIÇOS DE COURIER \/ MOTOBOY \/ PORTADOR",
+            "commentary": "OCUPAÇÃO"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 67,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.03.01.0016",
+            "name": "OCUPAÇÃO - SERVIÇOS GRÁFICOS",
+            "commentary": "OCUPAÇÃO"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 68,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.03.02.0001",
+            "name": "OCUPAÇÃO - MANUTENCAO E CONSERVAÇÃO DE IMOVEIS E INSTALAÇÕES",
+            "commentary": "OCUPAÇÃO"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 69,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.03.02.0002",
+            "name": "OCUPAÇÃO - MATERIAIS DE REPAROS\/REFORMAS",
+            "commentary": "OCUPAÇÃO"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 70,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.03.03.0001",
+            "name": "OCUPAÇÃO - ALUGUEIS DE IMOVEIS",
+            "commentary": "OCUPAÇÃO"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 71,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.03.03.0002",
+            "name": "OCUPAÇÃO - ALUGUEIS DE EQUIPAMENTOS ADMINISTRATIVO",
+            "commentary": "OCUPAÇÃO"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 72,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.03.04.0001",
+            "name": "OCUPAÇÃO - ANUIDADES",
+            "commentary": "OCUPAÇÃO"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 73,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.03.04.0002",
+            "name": "OCUPAÇÃO - OUTROS TRIBUTOS",
+            "commentary": "OCUPAÇÃO"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 74,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.03.05.0001",
+            "name": "OCUPAÇÃO - TAXAS DIVERSAS",
+            "commentary": "OCUPAÇÃO"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 75,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.03.05.0002",
+            "name": "OCUPAÇÃO - DESPESAS DIVERSAS",
+            "commentary": "OCUPAÇÃO"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 76,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.04.01.0001",
+            "name": "VIAGEM - ALIMENTACAO DE VIAGEM",
+            "commentary": "VIAGEM"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 77,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.04.01.0002",
+            "name": "VIAGEM - FEE DA AGENCIA DE VIAGEM",
+            "commentary": "VIAGEM"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 78,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.04.01.0003",
+            "name": "VIAGEM - HOSPEDAGEM DE VIAGEM",
+            "commentary": "VIAGEM"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 79,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.04.01.0004",
+            "name": "VIAGEM - PASSAGENS AEREAS DE VIAGENS",
+            "commentary": "VIAGEM"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 80,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.04.01.0005",
+            "name": "VIAGEM - TRANSPORTE DE VIAGEM",
+            "commentary": "VIAGEM"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 81,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.04.01.0006",
+            "name": "VIAGEM - OUTRAS DESPESAS DE VIAGENS",
+            "commentary": "VIAGEM"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 82,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.04.01.0007",
+            "name": "VIAGEM - SEGURO DE VIAGEM",
+            "commentary": "VIAGEM"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 83,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.05.01.0001",
+            "name": "CONSULTORIA CONTABIL",
+            "commentary": "CONSULTORIA"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 84,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.05.01.0002",
+            "name": "CONSULTORIA JURÍDICA",
+            "commentary": "CONSULTORIA"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 85,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.05.01.0003",
+            "name": "CONSULTORIA DE RH",
+            "commentary": "CONSULTORIA"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 86,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.05.01.0004",
+            "name": "CONSULTORIA DE MKT",
+            "commentary": "CONSULTORIA"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 87,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.05.01.0005",
+            "name": "CONSULTORIA TÉCNICA",
+            "commentary": "CONSULTORIA"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 88,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.06.01.0001",
+            "name": "MARKETING - TRÁFEGO PAGO",
+            "commentary": "MARKETING"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 89,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.06.01.0002",
+            "name": "MARKETING - ASSOCIAÇÃO DE CLASSE",
+            "commentary": "MARKETING"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 90,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.06.01.0003",
+            "name": "MARKETING - EVENTOS INSTITUCIONAIS",
+            "commentary": "MARKETING"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 91,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.06.01.0004",
+            "name": "MARKETING - MATERIAL DE MARKETING",
+            "commentary": "MARKETING"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 92,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.06.01.0005",
+            "name": "MARKETING - PATROCINIOS DE EVENTOS E SEMINARIOS",
+            "commentary": "MARKETING"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 93,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.06.01.0006",
+            "name": "MARKETING - PROPAGANDA E PUBLICIDADE",
+            "commentary": "MARKETING"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 94,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.06.01.0007",
+            "name": "MARKETING - INSCRICAO EM EVENTOS",
+            "commentary": "MARKETING"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 95,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.06.01.0008",
+            "name": "MARKETING - OUTROS (MARKETING)",
+            "commentary": "MARKETING"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 96,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.07.01.0001",
+            "name": "TI - ARMAZENAGEM DE MIDIA",
+            "commentary": "TI"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 97,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.07.01.0002",
+            "name": "TI - IMPRESSORA",
+            "commentary": "TI"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 98,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.07.01.0003",
+            "name": "TI - LINK DE DADOS E INTERNET",
+            "commentary": "TI"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 99,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.07.01.0004",
+            "name": "TI - MANUTENCAO DE EQUIPAMENTOS",
+            "commentary": "TI"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 100,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.07.01.0005",
+            "name": "TI - MATERIAL DE CONSUMO - INFORMATICA",
+            "commentary": "TI"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 101,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.07.01.0006",
+            "name": "TI - ALUGUEIS DE EQUIPAMENTOS DE TI",
+            "commentary": "TI"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 102,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.07.01.0007",
+            "name": "TI - TELEFONIA FIXA",
+            "commentary": "TI"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 103,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.07.01.0008",
+            "name": "TI - TELEFONIA MOVEL",
+            "commentary": "TI"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 104,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.08.01.0001",
+            "name": "SISTEMAS - MANUTENCAO \/ MENSALIDADE DE SISTEMAS",
+            "commentary": "SISTEMAS"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 105,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.12.01.0001",
+            "name": "TRIBUTOS TERC. - IRRF - COD. 1708",
+            "commentary": "TRIBUTOS TERC."
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 106,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.12.01.0002",
+            "name": "TRIBUTOS TERC. - ISS",
+            "commentary": "TRIBUTOS TERC."
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 107,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.12.01.0003",
+            "name": "TRIBUTOS TERC. - PCC - COD. 5952",
+            "commentary": "TRIBUTOS TERC."
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 108,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.12.02.0001",
+            "name": "DESP. FINANCEIRAS - DESPESAS BANCÁRIAS",
+            "commentary": "DESP. FINANCEIRAS"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 109,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.12.02.0002",
+            "name": "DESP. FINANCEIRAS - IOF",
+            "commentary": "DESP. FINANCEIRAS"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 110,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.12.02.0003",
+            "name": "DESP. FINANCEIRAS - JUROS \/ MULTA \/ MORA",
+            "commentary": "DESP. FINANCEIRAS"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 111,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.12.02.0004",
+            "name": "DESP. FINANCEIRAS - JUROS S\/ EMPRÉSTIMOS BANCÁRIOS",
+            "commentary": "DESP. FINANCEIRAS"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 112,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.12.03.0001",
+            "name": "REC. FINANCEIRAS - DESCONTOS FINANCEIROS CONCEDIDOS",
+            "commentary": "REC. FINANCEIRAS"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 113,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.12.03.0002",
+            "name": "REC. FINANCEIRAS - IRRF S\/APLICAÇÕES E OUTROS",
+            "commentary": "REC. FINANCEIRAS"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 114,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.12.04.0001",
+            "name": "DEVOLUÇÕES - DEVOLUÇÕES",
+            "commentary": "DEVOLUÇÕES"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 115,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.12.04.0002",
+            "name": "DEVOLUÇÕES - TRANSFERÊNCIA ENTRE CONTAS - SAÍDAS",
+            "commentary": "DEVOLUÇÕES"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 116,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.12.05.0001",
+            "name": "IRPJ E ADICIONAIS",
+            "commentary": "IMPOSTOS"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 117,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.12.02.0005",
+            "name": "DESP. FINANCEIRAS - DESPESAS COM CARTÃO DE CRÉDITO",
+            "commentary": "DESP. FINANCEIRAS"
+        }
+    },
+    {
+        "model": "main.account",
+        "pk": 118,
+        "fields":{
+            "is_expense": true,
+            "account_type": 1,
+            "number": "4.12.02.0006",
+            "name": "DESP. FINANCEIRAS - DESPESAS COM CARTÃO DE DÉBITO",
+            "commentary": "DESP. FINANCEIRAS"
+        }
+    }
+]

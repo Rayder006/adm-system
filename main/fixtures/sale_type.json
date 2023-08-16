@@ -1,0 +1,23 @@
+[
+    {
+      "model": "main.saletype",
+      "pk": 1,
+      "fields": {
+        "name": "Plano"
+      }
+    },
+    {
+      "model": "main.saletype",
+      "pk": 2,
+      "fields": {
+        "name": "Serviço"
+      }
+    },
+    {
+        "model": "main.saletype",
+        "pk": 3,
+        "fields": {
+          "name": "Produto"
+        }
+      }
+  ]

@@ -1,0 +1,102 @@
+{% extends "./main.html" %}
+
+{% load static %}
+
+{% block title %}Despesas - Visualização{% endblock %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Despesa</title>
+    {% block scripts %}
+    <script src="{% static 'js/view_invoice.js' %}"></script>
+    {% endblock %}
+</head>
+<body>
+    {% block body %}
+    <div class="container-fluid">
+        <form id="deleteForm" action="{% url 'view_invoice' invoice.pk%}" method="post" class="box bg-primary"> 
+            {% csrf_token %}
+            <div class="col row">
+                <h1 class="col align-self-center">Despesa (Visualização)</h1>
+            </div>
+            <hr width="100" class="w-100">
+            <div class="col row justify-content-lg-around justify-content-lg-between py-2">
+                <div class="col-6 d-flex flex-column form-group">
+                    <label for="TipoConta">Tipo*</label>
+                    <select class="custom-select" disabled id="TipoConta" name="invoice_type">
+                        <option value="{{invoice.invoice_type.pk}}" selected>{{invoice.invoice_type.name}}</option>
+                    </select>
+                </div>
+                <div class="col-6 d-flex flex-column form-group">
+                    <label for="Descrição">Descrição</label>
+                    <input class="form-control" value="{{invoice.description}}" disabled id="Descrição" name="description" type="text">
+                </div>
+            </div>
+            <div class="col row justify-content-lg-around justify-content-center py-2">
+                <div class="col-3 d-flex flex-column form-group">
+                    <label for="Lançamento">Data de Lançamento*</label>
+                    <input class="form-control" value="{{invoice.release_date|date:"Y-m-d"}}" disabled  id="Lançamento" name="release_date" type="date">
+                </div>
+                <div class="col-3 d-flex flex-column form-group">
+                    <label for="Pagamento">Data de Pagamento*</label>
+                    <input class="form-control" value="{{invoice.payment_date|date:"Y-m-d"}}" disabled  id="Pagamento" name="payment_date" type="date">
+                </div>
+                <div class="col-3 d-flex flex-column form-group">
+                    <label for="Nascimento">Valor*</label>
+                    <input class="form-control" value="{{invoice.cost}}" disabled  id="Nascimento" name="cost" type="number">
+                </div>
+                <div class="col-3 d-flex form-check flex-column form-group">
+                    <label for="Inadimplente">Pago?*</label>
+                    <select class="custom-select" class="form-select" disabled id="Inadimplente" name="paid">
+                        <option value="{{invoice.paid}}" selected>{{paid}}</option>   
+                    </select>
+                </div>
+            </div>
+            <div class="col row justify-content-lg-around justify-content-lg-between py-2">
+                <div class="col-6 d-flex flex-column form-group">
+                    <label for="supplier">Fornecedor*</label>
+                    <select class="custom-select" disabled  id="supplier" name="unit">
+                        <option value="{{invoice.supplier.pk}}" selected>{{invoice.supplier.name}}</option>
+                    </select>
+                </div>
+                <div class="col-2 d-flex flex-column form-group">
+                    <label for="Recorrencia">Há recorrência?*</label>
+                    <select class="custom-select" class="form-select" disabled  id="Recorrencia" name="recurring" onload="changeView(event)">
+                        <option value="{{invoice.recurring}}" selected>{{recurring}}</option>  
+                    </select>
+                </div>
+                <div id="qtd_div" class="col-2 d-flex flex-column form-group" style="visibility: hidden">
+                    <label for="Qtd">Qtd. recorrência*</label>
+                    <input class="form-control" id="Qtd" name="recurring_qtd" type="number" value="{{invoice.recurring_qtd}}">
+                </div>  
+                <div id="rec_div" class="col-2 d-flex flex-column form-group" style="visibility: hidden">
+                    <label for="Prazo">Recorrência*</label>
+                    <select class="custom-select" class="form-select" id="Prazo" name="recurring_time">
+                        <option value="{{invoice.recurring_time}}" selected>{{time}}</option>  
+                    </select>
+                </div>  
+            </div>
+            <div class="col row justify-content-lg-around justify-content-lg-between py-2">
+                <div class="col-6 d-flex flex-column form-group">
+                    <label for="OBS">Observações</label>
+                    <textarea disabled class="form-control" name="obs" id="OBS" cols="20" rows="4">{{invoice.obs}}</textarea>
+                </div>
+                <div class="col-6"></div>
+            </div>
+            <hr width="100" class="w-100">
+            <div class="d-flex justify-content-end">
+                <div class="ml-auto p-2">
+                    <a class="btn btn-light" href="{% url 'edit_invoice' invoice.pk %}">Editar</a>
+                </div>
+                <div class="ml-auto p-2">
+                    <button type="button" class="btn btn-danger" id="cancelButton" onclick="deleteInvoice(event)">Apagar</button>
+                </div>
+            </div>
+        </form>
+      </div>
+    {% endblock %}
+</body>
+</html>
