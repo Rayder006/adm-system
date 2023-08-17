@@ -125,13 +125,13 @@ window.onload = (e) => {
     }
 }
 
-function doSomething() {
-    alert("I'm done resizing for the moment");
-};
+// function doSomething() {
+//     alert("I'm done resizing for the moment");
+// };
 
-var resizeTimer;
-$(window).resize(function() {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(doSomething, 100);
-    doSomething();
-});
+// var resizeTimer;
+// $(window).resize(function() {
+//     clearTimeout(resizeTimer);
+//     resizeTimer = setTimeout(doSomething, 100);
+//     doSomething();
+// });

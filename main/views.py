@@ -1,12 +1,19 @@
 from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
 from django.contrib.auth import authenticate, login, logout, get_backends
 from django.shortcuts import get_object_or_404, render, redirect
+from django.template.loader import get_template
 from django.contrib.auth.models import User
+from reportlab.lib.pagesizes import letter
 from django.http import HttpResponse
 from django.core import serializers
+from reportlab.pdfgen import canvas
 from django.urls import reverse
-from .models import *
+from xhtml2pdf import pisa
 from .functions import *
+from .models import *
+
+
+
 
 def createRecurringInvoice(inv_pk):
     recurring_time = Invoice.objects.get(pk=inv_pk).recurring_time
@@ -34,14 +41,8 @@ def user_is_staff(user):
     return user.groups.filter(name='Financeiro').exists() or user.is_superuser
 
 def TesteContrato(request, sale_id):
-    sale = Sale.objects.get(pk=sale_id)
-    
-    context = {
-        "sale":sale,
-        "user":request.user
-    }
 
-    return render(request, "contrato.html", context)
+    return render(request, 'contrato.html', {"sale":Sale.objects.get(pk=sale_id), "user":request.user})
 
 def Test(request):
     account = Account.objects.all()

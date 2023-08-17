@@ -11,7 +11,7 @@ class Person(models.Model):
     cellphone = models.CharField(max_length=15)
     email = models.EmailField(max_length=128)
     cep = models.CharField(max_length=9, null=True, blank=True)
-    address = models.CharField(max_length=30, null=True, blank=True)
+    address = models.CharField(max_length=100, null=True, blank=True)
     city = models.CharField(max_length=30, null=True, blank=True)
     district = models.CharField(max_length=30, null=True, blank=True)
     UF = models.CharField(max_length=2, null=True, blank=True)
