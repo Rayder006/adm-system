@@ -65,6 +65,7 @@
                                     <a href="{% url 'view_sale' s.pk %}"><i class="fa-solid fa-eye"></i></a>
                                     <a href="{% url 'edit_sale' s.pk %}"><i class="fa fa-pencil" aria-hidden="true"></i></a>
                                     <a href="#" s_pk="{{s.pk}}" onclick="deleteSale(this)"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                                    <a href="{% url 'contrato' s.pk %}" target="_blank"><i class="fa fa-paperclip" aria-hidden="true"></i></a>
                                     <form hidden id="deleteForm-{{s.pk}}" action="{% url 'view_sale' s.pk %}" method="post"> 
                                         {% csrf_token %}
                                         <input type="text" name="pk" id="pk" value="{{s.pk}}">

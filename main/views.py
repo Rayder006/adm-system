@@ -33,6 +33,16 @@ def get_or_none(classmodel, classmodel_id):
 def user_is_staff(user):
     return user.groups.filter(name='Financeiro').exists() or user.is_superuser
 
+def TesteContrato(request, sale_id):
+    sale = Sale.objects.get(pk=sale_id)
+    
+    context = {
+        "sale":sale,
+        "user":request.user
+    }
+
+    return render(request, "contrato.html", context)
+
 def Test(request):
     account = Account.objects.all()
 

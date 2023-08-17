@@ -65,7 +65,7 @@ class Sale(models.Model):
     service = models.ForeignKey("SaleService", null=True, blank=True, on_delete=models.SET_NULL) #service = o que estão vendendo
     payment_type = models.ForeignKey("PaymentType", null=True, blank=True, on_delete=models.SET_NULL)
     discount_is_percent = models.BooleanField(default=False)
-    discount = models.IntegerField(null=True, blank=True)
+    discount = models.DecimalField(null=True, blank=True, decimal_places=2, max_digits=8)
     sessions = models.IntegerField(null=True, blank=True)
     obs = models.CharField(max_length=200, null=True, blank=True)
     date = models.DateField(null=True, blank=True)
