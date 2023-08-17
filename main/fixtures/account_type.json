@@ -1,9 +1,0 @@
-[
-    {
-        "model": "main.accounttype",
-        "pk":1,
-        "fields": {
-            "name": "ANALÍTICO"
-        }
-    }
-]
