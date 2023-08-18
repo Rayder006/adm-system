@@ -773,7 +773,7 @@
         <div id="container-ruller">
             <div id="preview-content">
                 <div style="display: flex; flex-direction: row; margin-bottom: 32px;">
-                    <img src="{% static 'images/logo.jpeg' %}"  alt="Minha Imagem Redimensionada" style="width: 150px; padding-bottom: 10px;">
+                    <img src="{% static 'images/logo.png' %}"  alt="Minha Imagem Redimensionada" style="width: 200px; padding-bottom: 10px;">
                     <h1 type="title" class="main-title preview-paragraph-0 preview-line 0 1 2" id="termo-de-ades%C3%A3o-de-servi%C3%A7os-est%C3%A9ticos" data_line_start="0" data_line_end="2" data_line="0,3" count_line="3" style="padding-top: 32px;">
                         TERMO DE ADESÃO DE SERVIÇOS ESTÉTICOS 
                     </h1>
@@ -782,7 +782,7 @@
                 <div class="preview-paragraph-6 preview-line 6" data_line_start="6" data_line_end="6" data_line="6,7" count_line="1"><strong><strong>CONTRATADA</strong>:</strong> PODEROSA ESTETICA SAUDE E BELEZA LTDA., inscrita no CNPJ sob no 48.485.053/0001-76, situada à R MAGALHAES COUTO, 320 MEIER - RIO DE JANEIRO/RJ, que por este contrato vende seus serviços de estética facial e corporal, na modalidade avulsa, por plano de assinatura ou pacote de sessões, que serão realizados no endereço acima indicado, aqui denominada <strong>CONTRATADA</strong>, e de outro lado a parte abaixo qualificada, denominada como <strong>CONTRATANTE</strong>:</div>
                 <div class="preview-paragraph-8 preview-line 8" data_line_start="8" data_line_end="8" data_line="8,9" count_line="1"><strong><strong>CONTRATANTE</strong>:</strong> {{ sale.client.name }}</div>
                 <div class="preview-paragraph-10 preview-line 10" data_line_start="10" data_line_end="10" data_line="10,11" count_line="1"><strong>CPF:</strong> {{ sale.client.cpf }} &nbsp;&nbsp;&nbsp;&nbsp;<strong>EMAIL: </strong><a href="mailto:{{sale.client.email}}">{{ sale.client.email }}</a></div>
-                <div class="preview-paragraph-10 preview-line 10" data_line_start="12" data_line_end="12" data_line="12,13" count_line="1"><strong>ENDEREÇO:</strong> {{ sale.client.address }}, {{sale.client.district}} - {{sale.client.city}} ({{sale.client.UF}}) - {{sale.client.cep}}</div>
+                <div class="preview-paragraph-10 preview-line 10" data_line_start="12" data_line_end="12" data_line="12,13" count_line="1"><strong>ENDEREÇO:</strong> {{ sale.client.address }}</div>
                 <div class="preview-paragraph-14 preview-line 14" data_line_start="14" data_line_end="14" data_line="14,15" count_line="1"><strong>CONTATO:</strong> Celular: {{ sale.client.cellphone }}</div>
                 <h2 type="section" class="section-title preview-paragraph-16 preview-line 16" id="cl%C3%A1usulas-contratuais%3A" data_line_start="16" data_line_end="16" data_line="16,17" count_line="1">
                     <span class="section-number">1. </span>Cláusulas Contratuais:
