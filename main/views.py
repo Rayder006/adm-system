@@ -1,18 +1,16 @@
 from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
 from django.contrib.auth import authenticate, login, logout, get_backends
 from django.shortcuts import get_object_or_404, render, redirect
+from django.http import HttpResponse, JsonResponse
 from django.template.loader import get_template
 from django.contrib.auth.models import User
 from reportlab.lib.pagesizes import letter
-from django.http import HttpResponse
 from django.core import serializers
 from reportlab.pdfgen import canvas
 from django.urls import reverse
 from xhtml2pdf import pisa
 from .functions import *
 from .models import *
-
-
 
 
 def createRecurringInvoice(inv_pk):
@@ -589,3 +587,29 @@ def DeleteSchedule(request, schedule_id):
         schedule.delete()
 
     return redirect(reverse('schedule_list'))
+
+def PayInvoiceGroup(request):
+    if request.method == 'POST':
+        ids = request.POST.getlist('ids[]')  # Recebe o array de IDs
+        today = datetime.date.today()
+        for idx in ids:
+            try:
+                i = Invoice.objects.get(pk=idx)
+                i.paid = True
+                i.payment_date = today
+
+                i.save()
+            except Invoice.DoesNotExist:
+                pass  # Lidar com o caso de ID inválido
+            
+        response_data = {
+            'success': True,
+            'message': 'Contas marcadas como pagas com sucesso.'
+        }
+        return JsonResponse(response_data)
+
+        
+    response_data = {
+        'error': 'Método não permitido'
+    }
+    return JsonResponse(response_data, status=405)

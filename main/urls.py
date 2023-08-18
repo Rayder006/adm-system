@@ -14,6 +14,7 @@ urlpatterns = [
     path("person/new/", views.NewPerson, name="new_person"),
     path("invoice/", views.ListInvoice, name="list_invoice"),
     path("invoice/new", views.NewInvoice, name="new_invoice"),
+    path("invoice/pay", views.PayInvoiceGroup, name="pay_invoices"),
     path("invoice/edit/<int:invoice_id>", views.EditInvoice, name="edit_invoice"),
     path("invoice/<int:invoice_id>", views.ViewInvoice, name="view_invoice"),
     path("payment/", views.ListSale, name="list_sale"),

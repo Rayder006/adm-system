@@ -40,7 +40,8 @@
                             <tr>
                                 <th scope="col">Nome</th>
                                 <th scope="col">CPF</th>
-                                <th scope="col">Unidade</th>
+                                <th scope="col">Data de Nasc.</th>
+                                <th scope="col">Sexo</th>
                                 <th scope="col">Ações</th>
                                 <th hidden></th>
                             </tr>
@@ -50,7 +51,8 @@
                             <tr>
                                 <td><a href="{% url 'view_person' p.pk %}">{{p.name}}</a></th>
                                 <td>{{p.cpf}}</td>
-                                <td>{{p.unit}}</td>
+                                <td>{{p.birth_date|date:"d/m/Y"}}</td>
+                                <td>{{p.gender.name}}</td>
                                 <td>
                                     <a href="{% url 'edit_person' p.pk %}"><i class="fa fa-pencil" aria-hidden="true"></i></a>
                                     <a href="#" p_pk="{{p.pk}}" p_name="{{p.name}}" onclick="deletePerson(this)"><i class="fa fa-trash" aria-hidden="true"></i></a>

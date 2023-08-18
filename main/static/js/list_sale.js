@@ -10,26 +10,40 @@ $(document).ready( function () {
             depthLimit: 2
         },
         dom: 'Bfrtip',
+        columnDefs: [
+            {
+                targets: [1,2,3,5,6,7], // Índice da coluna de data (começando em 0)
+                type: 'string', // Define o tipo de dados como "datetime"
+            },
+            {
+                targets:[8],
+                orderable:false
+            },
+            {
+                targets:[0],
+                type:'date',
+                // render: function(data, type){
+                //     console.log(data)
+                //     let date=data.split("/");
+                //     if(type=="display"){
+                //         return `${date[2]}/${date[1]}/${date[0]}`;
+                //     }
+                //     return new Date(date);
+                // }
+            }
+        ],
         buttons:[
             {
                 extend: 'searchBuilder'
             },
             {
-                extend: "copy",
-                text: "Copiar",
+                extend: "excelHtml5",
+                text: "Excel",
+                title:"Teste",
                 key: {
                     key:'c',
                     altKey:true
                 }
-            },
-            {
-                extend: "excelHtml5",
-                text: "Excel",
-                title:"Teste"
-            },
-            {
-                extend: "print",
-                text: "Imprimir",
             }
         ],
         search: {
@@ -83,4 +97,10 @@ function deleteSale(e){
         document.getElementById("deleteForm-" + e.getAttribute("s_pk")).submit();
     }
     
+}
+
+function renderData(data, type, row){
+    console.log("data:", data)
+    console.log("type:", type)
+    console.log("row:", row)
 }

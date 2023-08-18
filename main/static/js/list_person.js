@@ -10,9 +10,6 @@ $(document).ready( function () {
         dom: 'Bfrtip',
         buttons:[
             {
-                extend: 'searchBuilder'
-            },
-            {
                 extend: "copy",
                 text: "Copiar",
                 key: {
@@ -24,11 +21,10 @@ $(document).ready( function () {
                 extend: "excelHtml5",
                 text: "Excel",
                 title:"Teste"
-            },
-            {
-                extend: "print",
-                text: "Imprimir",
             }
+        ],
+        columnDefs:[
+            {"targets":4, orderable:false}
         ],
         search: {
             "smart" : false,

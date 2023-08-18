@@ -25,7 +25,7 @@ class Person(models.Model):
         verbose_name_plural = 'Clientes'
 
 
-class Gender(models.Model):
+class Gender(models.Model): 
     name= models.CharField(max_length=20)
 
     def __str__(self):
