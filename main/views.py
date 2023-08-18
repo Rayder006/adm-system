@@ -6,6 +6,7 @@ from django.template.loader import get_template
 from django.contrib.auth.models import User
 from django.core import serializers
 from django.urls import reverse
+from decimal import Decimal
 from .functions import *
 from .models import *
 
@@ -378,12 +379,14 @@ def NewSale(request):
 
         service_value = value[len(request.POST.get("sale_type")):]
 
+        payment_type = get_or_none(PaymentType, request.POST.get("payment_type"))
+
         s = Sale(
             sale_type = get_or_none(SaleType, request.POST.get("sale_type")),
             client = get_or_none(Person, request.POST.get("client")),
             seller = get_or_none(Employee, request.POST.get("seller")),
             status = get_or_none(SaleStatus, request.POST.get("status")),
-            payment_type = get_or_none(PaymentType, request.POST.get("payment_type")),
+            payment_type = payment_type,
             service = get_or_none(Service, service_value),
             discount = request.POST.get("discount"),
             sessions = request.POST.get("sessions"),
@@ -395,6 +398,27 @@ def NewSale(request):
         )
         print(s.__dict__)
         s.save()
+        
+        if payment_type.has_tax:
+            tax = get_or_none(Tax, request.POST.get("tax"))
+            account = Account.objects.get(pk=118) if tax.payment_type.pk ==  1 else Account.objects.get(pk=117)  # Account 117 == despesa com cartãod e credito; account 118 == despesa com cartão de débito
+            i = Invoice(
+                invoice_type = account,
+                supplier = None,
+                payment_type = None,
+                description = account.commentary,
+                release_date = datetime.datetime.today(),
+                payment_date = None,
+                cost = (Decimal(float(request.POST.get("final_price")))) * (tax.tax/100),
+                paid = False,
+                recurring = False,
+                recurring_qtd = 0,
+                recurring_time = 0,
+                obs = "Despesa com cartão de débito" if tax.payment_type.pk ==  1 else "Despesa com cartão de crédito"
+            )
+            print(i.__dict__)
+            i.save()
+
 
         return redirect(reverse("list_sale"))
 

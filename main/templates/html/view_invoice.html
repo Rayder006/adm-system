@@ -62,21 +62,15 @@
                         <option value="{{invoice.supplier.pk}}" selected>{{invoice.supplier.name}}</option>
                     </select>
                 </div>
-                <div class="col-2 d-flex flex-column form-group">
+                <div class="col-3 d-flex flex-column form-group">
                     <label for="Recorrencia">Há recorrência?*</label>
                     <select class="custom-select" class="form-select" disabled  id="Recorrencia" name="recurring" onload="changeView(event)">
                         <option value="{{invoice.recurring}}" selected>{{recurring}}</option>  
                     </select>
                 </div>
-                <div id="qtd_div" class="col-2 d-flex flex-column form-group" style="visibility: hidden">
+                <div id="qtd_div" class="col-3 d-flex flex-column form-group" {% if not invoice.recurring %} style="visibility: hidden" {% endif %}>
                     <label for="Qtd">Qtd. recorrência*</label>
-                    <input class="form-control" id="Qtd" name="recurring_qtd" type="number" value="{{invoice.recurring_qtd}}">
-                </div>  
-                <div id="rec_div" class="col-2 d-flex flex-column form-group" style="visibility: hidden">
-                    <label for="Prazo">Recorrência*</label>
-                    <select class="custom-select" class="form-select" id="Prazo" name="recurring_time">
-                        <option value="{{invoice.recurring_time}}" selected>{{time}}</option>  
-                    </select>
+                    <input class="form-control" id="Qtd" disabled name="recurring_qtd" type="number" value="{{invoice.recurring_qtd}}">
                 </div>  
             </div>
             <div class="col row justify-content-lg-around justify-content-lg-between py-2">

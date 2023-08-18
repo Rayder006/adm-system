@@ -18,7 +18,7 @@
     {% block body %}
     <div class="container-fluid">
         <!-- para voltar, apague o "row" a seguir e os "cols" de suas divs-filho imediatas -->
-        <form id="personForm" action="{% url 'view_person' person.pk %}" method="post" class="box row"> 
+        <form id="personForm" action="{% url 'view_person' person.pk %}" method="post" class="box bg-primary"> 
             {% csrf_token %}
             <input type="hidden" name="pk" id="pk" value={{person.pk}}>
             <div class="col row">
@@ -26,23 +26,23 @@
             </div>
             <hr width="100" class="w-100">
             <div class="col row justify-content-lg-around justify-content-lg-between py-2">
-                <div class="col-6 d-flex flex-column">
+                <div class="col-6 d-flex flex-column form-group">
                     <label for="Nome">Nome</label>
-                    <input disabled value="{{person.name}}" id="Nome" name="Nome" type="text" >
+                    <input class="form-control" disabled value="{{person.name}}" id="Nome" name="Nome" type="text" >
                 </div>
-                <div class="col-6 d-flex flex-column">
+                <div class="col-6 d-flex flex-column form-group">
                     <label for="CPF">CPF</label>
-                    <input disabled value="{{person.cpf}}" id="CPF" name="CPF" type="text">
+                    <input class="form-control" disabled value="{{person.cpf}}" id="CPF" name="CPF" type="text">
                 </div>
             </div>
             <div class="col row justify-content-lg-around justify-content-center py-2">
-                <div class="col-4 d-flex flex-column">
+                <div class="col-6 d-flex flex-column form-group">
                     <label for="Nascimento">Data de Nasc.</label>
-                    <input disabled value={{person.birth_date|date:"Y-m-d"}} id="Nascimento" name="Nascimento" type="date">
+                    <input class="form-control" disabled value={{person.birth_date|date:"Y-m-d"}} id="Nascimento" name="Nascimento" type="date">
                 </div>
-                <div class="col-4 d-flex flex-column">
+                <div class="col-6 d-flex flex-column form-group">
                     <label for="Sexo">Sexo</label>
-                    <select id="Sexo" name="Sexo" value={{person.gender.pk}} disabled>
+                    <select class="custom-select" id="Sexo" name="Sexo" value={{person.gender.pk}} disabled>
                         {% for gender in gender_list %}
                             {% if gender.pk == person.gender.pk %}
                             <option value={{gender.pk}} selected>{{gender.name}}</option>
@@ -52,52 +52,44 @@
                         {% endfor %}
                     </select>
                 </div>
-                <div class="col-4 d-flex flex-column">
-                    <label for="Unidade">Unidade</label>
-                    <input disabled value="{{person.unit}}" id="Unidade" name="Unidade" type="text">
-                </div>
             </div>
             <div class="col row justify-content-lg-around justify-content-center py-2">
-                <div class="col-4 d-flex flex-column">
-                    <label for="Telefone">Telefone</label>
-                    <input disabled value="{{person.phone}}" id="Telefone" name="Telefone" type="text">
-                </div>
-                <div class="col-4 d-flex flex-column">
+                <div class="col-6 d-flex flex-column form-group">
                     <label for="Celular">Celular</label>
-                    <input disabled value="{{person.cellphone}}" id="Celular" name="Celular" type="text">
+                    <input class="form-control" disabled value="{{person.cellphone}}" id="Celular" name="Celular" type="text">
                 </div>
-                <div class="col-4 d-flex flex-column">
+                <div class="col-6 d-flex flex-column form-group">
                     <label for="Email">Email</label>
-                    <input disabled value="{{person.email}}" id="Email" name="Email" type="text">
+                    <input class="form-control" disabled value="{{person.email}}" id="Email" name="Email" type="text">
                 </div>  
             </div>
             <hr width="100" class="w-100">
             <div class="col row justify-content-lg-around justify-content-center py-2">
-                <div class="col-4 d-flex flex-column">
+                <div class="col-4 d-flex flex-column form-group">
                     <label for="CEP">CEP</label>
-                    <input disabled value="{{person.cep}}" id="CEP" name="CEP" type="text">
+                    <input class="form-control" disabled value="{{person.cep}}" id="CEP" name="CEP" type="text">
                 </div>
-                <div class="col-4 d-flex flex-column">
+                <div class="col-4 d-flex flex-column form-group">
                     <label for="Endereço">Endereço</label>
-                    <input disabled value="{{person.address}}" id="Endereço" name="Endereço" type="text">
+                    <input class="form-control" disabled value="{{person.address}}" id="Endereço" name="Endereço" type="text">
                 </div>
-                <div class="col-4 d-flex flex-column">
+                <div class="col-4 d-flex flex-column form-group">
                     <label for="Cidade">Cidade</label>
-                    <input disabled value="{{person.city}}" id="Cidade" name="Cidade" type="text">
+                    <input class="form-control" disabled value="{{person.city}}" id="Cidade" name="Cidade" type="text">
                 </div>
             </div>
             <div class="col row justify-content-lg-around justify-content-center py-2">
-                <div class="col-4 d-flex flex-column">
+                <div class="col-4 d-flex flex-column form-group">
                     <label for="Distrito">Bairro</label>
-                    <input disabled value="{{person.district}}" id="Distrito" name="Distrito" type="text">
+                    <input class="form-control" disabled value="{{person.district}}" id="Distrito" name="Distrito" type="text">
                 </div>
-                <div class="col-4 d-flex flex-column">
+                <div class="col-4 d-flex flex-column form-group">
                     <label for="UF">UF</label>
-                    <input disabled value="{{person.UF}}" id="UF" name="UF" type="text">
+                    <input class="form-control" disabled value="{{person.UF}}" id="UF" name="UF" type="text">
                 </div>
-                <div class="col-4 d-flex flex-column">
+                <div class="col-4 d-flex flex-column form-group">
                     <label for="Complemento">Complemento</label>
-                    <input disabled value="{{person.complement}}" id="Complemento" name="Complemento" type="text">
+                    <input class="form-control" disabled value="{{person.complement}}" id="Complemento" name="Complemento" type="text">
                 </div>
             </div>
             <hr width="100" class="w-100">

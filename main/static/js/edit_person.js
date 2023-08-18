@@ -1,10 +1,9 @@
-// $(document).ready(function(){
-//     console.log("teste")
-//     IMask(document.getElementById("Telefone"), { mask : '0000-0000' });
-//     IMask(document.getElementById("Celular"), { mask : '(00) 90000-0000' });
-// });
-
-
+$(document).ready(function() {
+    $('#CPF').inputmask();
+    // $('#Telefone').inputmask();
+    $('#Celular').inputmask();
+    $("#CEP").inputmask("99999-999");
+});
 
 function cancelEdit(e){
     e.preventDefault();

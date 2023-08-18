@@ -47,7 +47,7 @@ class Invoice(models.Model):
     payment_type = models.ForeignKey("PaymentType", null=True, blank=True, on_delete=models.SET_NULL)
     description = models.CharField(max_length=200)
     release_date = models.DateField()
-    payment_date = models.DateField()
+    payment_date = models.DateField(blank=True, null=True)
     cost = models.DecimalField(max_digits=8, decimal_places=2)
     paid = models.BooleanField(default=False)
     recurring = models.BooleanField(default=False)
