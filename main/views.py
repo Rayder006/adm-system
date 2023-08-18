@@ -4,11 +4,8 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.http import HttpResponse, JsonResponse
 from django.template.loader import get_template
 from django.contrib.auth.models import User
-from reportlab.lib.pagesizes import letter
 from django.core import serializers
-from reportlab.pdfgen import canvas
 from django.urls import reverse
-from xhtml2pdf import pisa
 from .functions import *
 from .models import *
 
