@@ -35,6 +35,11 @@ window.onload = (e) => {
     useDetailPopup: false,
   });
 
+  const meses = [
+    "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+    "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+  ];
+
   var lastEdit;
 
     //carrega os eventos do Banco de Dados
@@ -52,6 +57,8 @@ window.onload = (e) => {
       },
     ]);
   }
+  document.getElementById("month").textContent=`${meses[calendar.getDate().getMonth()]}/${calendar.getDate().getFullYear()}`;
+
 
     //Event Handlers
   document.getElementById("editButton").addEventListener(
@@ -66,27 +73,28 @@ window.onload = (e) => {
   document.getElementById("prev").addEventListener(
     "click", (e) => {
       calendar.prev()
+      document.getElementById("month").textContent=`${meses[calendar.getDate().getMonth()]}/${calendar.getDate().getFullYear()}`;
     }
   )
   document.getElementById("next").addEventListener(
     "click", (e) => {
       calendar.next()
+      document.getElementById("month").textContent=`${meses[calendar.getDate().getMonth()]}/${calendar.getDate().getFullYear()}`;
     }
   )
   document.getElementById("today").addEventListener(
     "click", (e) => {
       calendar.today()
+      document.getElementById("month").textContent=`${meses[calendar.getDate().getMonth()]}/${calendar.getDate().getFullYear()}`;
     }
   )
 
   for(let i=0;i<radios.length;i++){
     radios[i].addEventListener("change", (e) =>{
       console.log(e.target.value)
-      console.log(typeof(e.target.value))
-      if(e.target.value == "month"){
-        
-      }
+      console.log(document.getElementById("month"))
       calendar.changeView(e.target.value)
+      document.getElementById("month").textContent=`${meses[calendar.getDate().getMonth()]}/${calendar.getDate().getFullYear()}`;
     })
   }
 
@@ -158,7 +166,7 @@ window.onload = (e) => {
 
       let start = new Date(e.start)
       let end = new Date(e.end)
-      let year = String(start.getYear()+1900);
+      let year = String(start.getFullYear()+1900);
       let month = start.getMonth()+1;
       let day = start.getDate();
 
