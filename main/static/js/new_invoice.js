@@ -1,3 +1,14 @@
+$(document).ready(function() {
+    $('#cost').inputmask("numeric", {
+      radixPoint: ",",
+      groupSeparator: ",",
+      digits: 2,
+      autoGroup: true,
+      prefix: 'R$ ',
+      placeholder: "0"
+    });
+});
+
 function changeView(e){
     console.log(e);
     if(e.target.value=="True"){

@@ -296,10 +296,12 @@ def NewInvoice(request):
 @user_passes_test(user_is_staff, login_url="login")
 def EditInvoice(request, invoice_id):
     if request.method == "POST":
+        print("\n\n")
+        print(request.POST)
+        print("\n\n")
         invoice = Invoice.objects.get(pk=invoice_id)
-        invoice.invoice_type = get_or_none(Account, request.POST.get("invoice_type")), 
-        # invoice.unit = get_or_none(Unit, request.POST.get("unit")), 
-        invoice.payment_type = get_or_none(PaymentType, request.POST.get("payment_type")), 
+        invoice.invoice_type = get_or_none(Account, request.POST.get("invoice_type"))
+        invoice.payment_type = get_or_none(PaymentType, request.POST.get("payment_type"))
         invoice.description = request.POST.get("description")
         invoice.release_date = request.POST.get("release_date")
         invoice.due_date = request.POST.get("due_date")
@@ -366,18 +368,15 @@ def ListSale(request):
 @user_passes_test(user_is_staff, login_url="login")
 def NewSale(request):
     if request.method == "POST":
-        print(request.POST)
         value = ""
         if request.POST.get("sale_type") == "1":
-            service_post_value = request.POST.get("plan")
+            value = request.POST.get("plan")
 
         elif request.POST.get("sale_type") == "2":
-            service_post_value = request.POST.get("service")
+            value = request.POST.get("service")
 
         else:
-            service_post_value = request.POST.get("product")
-
-        service_value = value[len(request.POST.get("sale_type")):]
+            value = request.POST.get("product")
 
         payment_type = get_or_none(PaymentType, request.POST.get("payment_type"))
 
@@ -387,7 +386,7 @@ def NewSale(request):
             seller = get_or_none(Employee, request.POST.get("seller")),
             status = get_or_none(SaleStatus, request.POST.get("status")),
             payment_type = payment_type,
-            service = get_or_none(Service, service_value),
+            service = get_or_none(SaleService, value),
             discount = request.POST.get("discount"),
             sessions = request.POST.get("sessions"),
             discount_is_percent = True if request.POST.get("discount") == "percent" else False,
@@ -535,6 +534,7 @@ def EditSale(request, sale_id):
     service_list = SaleService.objects.filter(service_type__pk=2)
     product_list = SaleService.objects.filter(service_type__pk=3)
     plan_list = SaleService.objects.filter(service_type__pk=1)
+    origin_list = SaleOrigin.objects.all()
 
     context = {
         "perms":request.user.get_all_permissions(),
@@ -547,6 +547,9 @@ def EditSale(request, sale_id):
         "payment_type_list" : payment_type_list,
         "service_list" : service_list,
         "payment_type_list" : payment_type_list,
+        "plan_list" : plan_list,
+        "product_list" : product_list,
+        "origin_list" : origin_list,
     }
 
     return render(request, "html/edit_sale.html", context)
@@ -559,6 +562,7 @@ def ScheduleList(request):
     service_list = SaleService.objects.all()
     equipment_list = Equipment.objects.all()
     event_list = list(ScheduleEvent.objects.all().values())
+    employee_list = Employee.objects.all()
 
     context = {
         "status_list" : status_list,
@@ -567,6 +571,7 @@ def ScheduleList(request):
         "service_list" : service_list,
         "equipment_list" : equipment_list,
         "event_list" : event_list,
+        "employee_list":employee_list,
         "username":request.user
     }
 
@@ -635,12 +640,20 @@ def DeleteSchedule(request, schedule_id):
 def PayInvoiceGroup(request):
     if request.method == 'POST':
         ids = request.POST.getlist('ids[]')  # Recebe o array de IDs
-        today = datetime.date.today()
+        payment_date=request.POST.get("payment_date")
+        if payment_date !="":
+            dia, mes, ano = payment_date.split('/')
+            if len(ano) == 2:
+                ano = '20' + ano  # ano é no século 21
+            payment_date = f'{ano}-{mes.zfill(2)}-{dia.zfill(2)}'
+        else:
+            payment_date=datetime.date.today()
+        
         for idx in ids:
             try:
                 i = Invoice.objects.get(pk=idx)
                 i.paid = True
-                i.payment_date = today
+                i.payment_date = payment_date
 
                 i.save()
             except Invoice.DoesNotExist:

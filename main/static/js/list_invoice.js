@@ -44,15 +44,20 @@ $(document).ready( function () {
                     {
                         text: 'Pagar',
                         action: function ( e, dt, node, config ) {
+                            let pass = false; 
                             var dados = table.rows({ selected: true });
-                            if(confirm(`Tem certeza que deseja pagar ${dados.count()} Contas?`)==true){
-                                console.log(dados.data())
+                            let payment_date = window.prompt("Insira a data de pagamento referente:\n\t(dd/mm/AA)\n\tDeixe em branco para hoje");
+                            if(payment_date!=null){
                                 dados = dados.data();
                                 ids = []
                                 dados.each(function(data) {
+                                    if(data[7]=="Não" || !pass){
+                                        if(confirm("Uma ou mais dessas contas já está paga. Deseja alterar a data?")==false) return;
+                                        else pass=true;
+                                    }
                                     ids.push(data[9])
                                 });
-                                payInvoiceFunction(ids);
+                                payInvoiceFunction(ids, payment_date);
                             }
                         }
                     }
@@ -69,7 +74,6 @@ $(document).ready( function () {
             {                     //Valor
                 "render": function(data, type, row) {
                     if (type === 'display' || type === 'filter') {
-                        console.table(data);
                         return `R$${data}`;
                     }
                     return data;
@@ -139,7 +143,7 @@ function getCSRFToken() {
     return cookieValue;
 }
 
-function payInvoiceFunction(ids) {
+function payInvoiceFunction(ids, payment_date) {
     $.ajax({
         url: payInvoices, // Substitua pela URL correta
         type: 'POST',
@@ -147,7 +151,8 @@ function payInvoiceFunction(ids) {
             "X-CSRFToken": csrfToken // Inclui o token CSRF no cabeçalho
         },
         data: {
-            ids: ids
+            ids: ids,
+            payment_date: payment_date
         },
         dataType: "json", // Especifica o tipo de dados esperado na resposta
         success: function(data) {
@@ -165,7 +170,6 @@ function payInvoiceFunction(ids) {
 
 
 function deleteInvoice(e){
-    console.log(e);
     if(confirm("Tem certeza que deseja deletar o Lançamento?") == true){
         document.getElementById("deleteForm-" + e.getAttribute("i_pk")).submit();
     }

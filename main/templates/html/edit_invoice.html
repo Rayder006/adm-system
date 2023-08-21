@@ -26,7 +26,7 @@
             <div class="col row justify-content-lg-around justify-content-lg-between py-2">
                 <div class="col-6 d-flex flex-column form-group">
                     <label for="TipoConta">Tipo*</label>
-                    <select class="custom-select" id="TipoConta" name="invoice_type">
+                    <select class="custom-select" id="TipoConta" required name="invoice_type">
                         {% for type in invoice_type_list %}
                         <option value="{{type.pk}}" {% if type.pk == invoice.invoice_type.pk %} selected {% endif %}>{{type.name}}</option>
                         {% endfor %}
@@ -38,30 +38,30 @@
                 </div>
             </div>
             <div class="col row justify-content-lg-around justify-content-center py-2">
-                <div class="col-3 d-flex flex-column form-group">
+                <div class="col-4 d-flex flex-column form-group">
                     <label for="Lançamento">Data de Lançamento*</label>
-                    <input class="form-control" value="{{invoice.release_date|date:'Y-m-d'}}" id="Lançamento" name="release_date" type="date">
+                    <input class="form-control" required value="{{invoice.release_date|date:'Y-m-d'}}" id="Lançamento" name="release_date" type="date">
                 </div>
-                <div class="col-3 d-flex flex-column form-group">
+                <div class="col-4 d-flex flex-column form-group">
                     <label for="Pagamento">Data de Vencimento*</label>
-                    <input class="form-control" value="{{invoice.due_date|date:'Y-m-d'}}" id="Pagamento" name="due_date" type="date">
+                    <input class="form-control" required value="{{invoice.due_date|date:'Y-m-d'}}" id="Pagamento" name="due_date" type="date">
                 </div>
-                <div class="col-3 d-flex flex-column form-group">
+                <div class="col-4 d-flex flex-column form-group">
                     <label for="Nascimento">Valor*</label>
-                    <input class="form-control" value="{{invoice.cost}}" id="Nascimento" name="cost" type="number">
+                    <input class="form-control" required value="{{invoice.cost}}" id="Nascimento" name="cost" type="number">
                 </div>
-                <div class="col-3 d-flex flex-column form-group">
+                <!-- <div class="col-3 d-flex flex-column form-group">
                     <label for="paid">Pago?*</label>
                     <select class="custom-select" class="form-select"  id="paid" value="{{invoice.recurring}}" name="paid">
                         <option value="True" {% if invoice.paid %} selected {% endif %}>Sim</option>  
                         <option value="False" {% if not invoice.paid %} selected {% endif %}>Não</option> 
                     </select>
-                </div>
+                </div> -->
             </div>
             <div class="col row justify-content-lg-around justify-content-lg-between py-2">
                 <div class="col-6 d-flex flex-column form-group">
                     <label for="supplier">Fornecedor*</label>
-                    <select class="custom-select"  id="supplier" name="supplier">
+                    <select class="custom-select" required id="supplier" name="supplier">
                         {% for supplier in supplier_list %}
                         <option value="{{supplier.pk}}" {% if supplier.pk == invoice.supplier.pk %} selected {% endif %}>{{supplier.name}}</option>
                         {% endfor %}
@@ -101,7 +101,7 @@
                     <input type="submit" value="Confirmar" class="btn btn-success">
                 </div>
                 <div class="ml-auto p-2">
-                    <button type="button" url="{% url 'list_person' %}" onclick="cancelCreation(event)" class="btn btn-secondary" id="cancelButton">Voltar</button>
+                    <button type="button" url="{% url 'list_person' %}" onclick="cancelCreation(event)" class="btn btn-info" id="cancelButton">Voltar</button>
                 </div>
             </div>
         </form>

@@ -7,9 +7,9 @@ class Person(models.Model):
     cpf = models.CharField(max_length=14)
     birth_date = models.DateField()
     gender = models.ForeignKey("Gender", null=True, blank=True, on_delete=models.SET_NULL)
-    phone = models.CharField(max_length=14)
+    # phone = models.CharField(max_length=14)
     cellphone = models.CharField(max_length=15)
-    email = models.EmailField(max_length=128)
+    # email = models.EmailField(max_length=128)
     cep = models.CharField(max_length=9, null=True, blank=True)
     address = models.CharField(max_length=100, null=True, blank=True)
     city = models.CharField(max_length=30, null=True, blank=True)
@@ -31,7 +31,7 @@ class Gender(models.Model):
     def __str__(self):
         return self.name
 
-class Employee(models.Model): #Employee = User?
+class Employee(models.Model):
     name = models.CharField(max_length=50, verbose_name="Nome")
 
     def __str__(self):

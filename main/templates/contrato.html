@@ -768,7 +768,12 @@
         </style>
         {% load static %}
     </head>
-    <body>
+    <body onload="imprimir()">
+        <script>
+            function imprimir() {
+                window.print();
+            }
+        </script>
         <div id="preview" class="preview scrollEditor">
         <div id="container-ruller">
             <div id="preview-content">

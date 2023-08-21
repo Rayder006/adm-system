@@ -26,7 +26,7 @@
                 <h1 class="col align-self-center">Venda (Edição)</h1>
             </div>
             <hr width="100" class="w-100">
-            <div class="col row justify-content-lg-around justify-content-lg-between py-2">
+            <div class="col row  py-2">
                 <div class="col-6 d-flex flex-column form-group">
                     <label for="client">Cliente*</label>
                     <select class="custom-select"  id="client" name="client">
@@ -44,7 +44,7 @@
                     </select>
                 </div>
             </div>
-            <div class="col row justify-content-lg-around justify-content-lg-between py-2">
+            <div class="col row  py-2">
                 <div class="col-6 d-flex flex-column form-group">
                     <label for="seller">Vendedor*</label>
                     <select class="custom-select"  id="seller" name="seller">
@@ -70,7 +70,7 @@
                     </select>
                 </div>
             </div>
-            <div class="col row justify-content-lg-around justify-content-lg-between py-2">
+            <div class="col row  py-2">
                 <div hidden id="1" class="col-6 flex-column form-group">
                     <label for="plan" id="plan_label">Plano*</label>
                     <select class="custom-select" id="plan" name="plan">
@@ -96,7 +96,7 @@
                     </select>
                 </div>
                 <div class="col-3 d-flex flex-column form-group">
-                    <label for="price">Preço</label>
+                    <label for="price">Preço*</label>
                     <input class="form-control" value="{{sale.service.price}}" readonly required placeholder="0.00" type="number" min="0.00" step="0.01" id="price">
                 </div>
                 <div class="col-3 d-flex flex-column form-group">
@@ -125,7 +125,7 @@
                     </select>
                 </div>
             </div>
-            <div class="col row justify-content-lg-around justify-content-lg-between py-2">
+            <div class="col row  py-2">
                 
                 <div class="col-6 d-flex flex-column form-group">
                     <label for="payment_type">Forma de Pagamento*</label>
@@ -145,7 +145,7 @@
                     </select>
                 </div> 
             </div>
-            <div class="col row justify-content-lg-around justify-content-lg-between py-2">
+            <div class="col row  py-2">
                 <div class="col-4 d-flex flex-column form-group">
                     <label for="OBS">Observações</label>
                     <textarea  class="form-control" name="obs" id="OBS" cols="20" rows="4">{{sale.obs}}</textarea>
@@ -160,6 +160,7 @@
                     <input class="form-control" step="0.01" readonly id="final_price" value="{{sale.final_price}}" name="final_price">
                 </div>
             </div>
+            {{sale.service}}
             <hr width="100" class="w-100">
             <div class="d-flex justify-content-end">
                 <div class="ml-auto p-2">

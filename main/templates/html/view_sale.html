@@ -45,13 +45,13 @@
                         <option selected>{{sale.seller.name}}</option>
                     </select>
                 </div>
-                <div class="col-3 d-flex flex-column form-group">
+                <!-- <div class="col-3 d-flex flex-column form-group">
                     <label for="status">Status*</label>
                     <select class="custom-select" disabled>
                         <option selected>{{sale.status.name}}</option>
                     </select>
-                </div>
-                <div class="col-3 d-flex flex-column form-group">
+                </div> -->
+                <div class="col-6 d-flex flex-column form-group">
                     <label for="payment_type">Origem da Venda*</label>
                     <select class="custom-select" disabled>
                         <option selected>{{sale.payment_type.name}}</option>
@@ -78,13 +78,12 @@
                 <div class="col-6 d-flex flex-column form-group">
                     <label for="discount_type">Tipo de Desconto*</label>
                     <select class="custom-select" disabled>
-                        <option selected>{{sale.discount_type.name}}</option>
+                        <option selected>{% if sale.discount_is_percent %} Porcentagem (%) {% else %} Reais (R$) {% endif %}</option>
                     </select>
                 </div>
                 <div class="col-3 d-flex flex-column form-group">
                     <label for="discount">Desconto*</label>
                     <input class="form-control" disabled value="{{sale.discount}}">
-                    <small>Em %</small>
                 </div>
                 <div class="col-3 d-flex form-check flex-column form-group">
                     <label for="mixed">Venda Mista?*</label>
@@ -110,7 +109,7 @@
                 </div>
                 <div class="col-2 d-flex flex-column form-group">
                     <label for="date">Data*</label>
-                    <input disabled class="form-control" value="{{sale.date|date:'Y-m-d'}}">
+                    <input disabled class="form-control" value="{{sale.date|date:'d/m/Y'}}">
                 </div>
                 <div class="col-2"></div>
                 <div class="col-4 d-flex flex-column form-group">

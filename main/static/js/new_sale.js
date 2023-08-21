@@ -98,21 +98,25 @@ window.onload = (e) => {
 
         //Funções
     function selectService(e){
-        document.getElementById("price").setAttribute("value", document.getElementById(`${currentType}${e.target.value}`).getAttribute("data-price"))
-        document.getElementById("sessions").setAttribute("value", document.getElementById(`${currentType}${e.target.value}`).getAttribute("data-sessions"))
-        document.getElementById("price").dispatchEvent(change)
+        document.getElementById("price").value= document.getElementById(`${currentType}${e.target.value}`).getAttribute("data-price")
+        document.getElementById("sessions").value= document.getElementById(`${currentType}${e.target.value}`).getAttribute("data-sessions")
         if(e.target.id=="plan") document.getElementById("sessions").readOnly=true 
         else document.getElementById("sessions").readOnly=false;
+        priceCalc();
     }
 
     function changeSaleType(e){
         document.getElementById(currentType).hidden=true;
-        document.getElementById(e.target.value).querySelector("select").required=false;
+        document.getElementById(currentType).querySelector("select").required=false;
+        document.getElementById(currentType).querySelector("select").value="";
         document.getElementById(e.target.value).hidden=false;
         document.getElementById(e.target.value).querySelector("select").required=true;
         currentType = e.target.value;
+        
         if(currentType=="3") document.getElementById("sessions_label").innerHTML="Quantidade*"
         else document.getElementById("sessions_label").innerHTML="Qtd. de Sessões*"
+
+        document.getElementById(e.target.value).querySelector("select").dispatchEvent(change);
 
         document.getElementById(currentType).querySelector("select").value=""
     }
@@ -133,14 +137,3 @@ window.onload = (e) => {
         }
     }
 }
-
-// function doSomething() {
-//     alert("I'm done resizing for the moment");
-// };
-
-// var resizeTimer;
-// $(window).resize(function() {
-//     clearTimeout(resizeTimer);
-//     resizeTimer = setTimeout(doSomething, 100);
-//     doSomething();
-// });
