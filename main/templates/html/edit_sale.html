@@ -11,13 +11,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     {% block scripts %}
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="{% static 'js/edit_sale.js' %}"></script>
     {% endblock %}
 </head>
 <body>
     {% block body %}
     <div class="container-fluid">
-        <form action="{% url 'edit_sale' sale.pk %}" method="post" class="box bg-primary"> 
+        <form action="{% url 'edit_sale' sale.pk %}" method="post" class="box bg-secondary"> 
             {% csrf_token %}
             <div class="col row">
                 <h1 class="col align-self-center">Venda (Edição)</h1>
@@ -50,15 +53,15 @@
                         {% endfor %}
                     </select>
                 </div>
-                <div class="col-3 d-flex flex-column form-group">
+                <!-- <div class="col-3 d-flex flex-column form-group">
                     <label for="status">Status*</label>
                     <select class="custom-select" name="status" id="status">
                         {% for status in status_list %}
                         <option value="{{status.pk}}" {% if status.pk == sale.status.pk %} selected {% endif %}>{{status.name}}</option>
                         {% endfor %}
                     </select>
-                </div>
-                <div class="col-3 d-flex flex-column form-group">
+                </div> -->
+                <div class="col-6 d-flex flex-column form-group">
                     <label for="sale_origin">Origem da Venda*</label>
                     <select class="custom-select" name="sale_origin" id="sale_origin">
                         {% for o in origin_list %}
@@ -128,18 +131,19 @@
                     <label for="payment_type">Forma de Pagamento*</label>
                     <select class="custom-select" class="form-select"   id="payment_type" name="payment_type">
                         {% for payment in payment_type_list %}
-                        <option value="{{payment.pk}}" {% if payment.pk == sale.payment_type.pk %} selected {% endif %}>{{payment.name}}</option>
+                        <option data-tax="{{payment.has_tax}}" value="{{payment.pk}}" {% if payment.pk == sale.payment_type.pk %} selected {% endif %}>{{payment.name}}</option>
                         {% endfor %} 
                     </select>
                 </div>
-                <div class="col-6 d-flex flex-column form-group">
-                    <!-- <label for="Unidade">Forma de Pagamento 2*</label>
-                    <select class="custom-select"   id="Unidade" name="unit">
-                        {% for unit in unit_list %}
-                        <option value="{{unit.pk}}">{{unit.name}}</option>
-                        {% endfor %}
-                    </select> -->
-                </div>  
+                <div id="taxDiv" class="col-6 form-check form-group" hidden>
+                    <label for="tax">Tipo de Cartão*</label>
+                    <select class="custom-select" id="tax" name="tax">
+                        <option value="" disabled selected>Selecione...</option>
+                        {% for tax in tax_list %}
+                        <option data-id="{{tax.payment_type.pk}}" value="{{tax.pk}}">{{tax.name}}</option>
+                        {% endfor %} 
+                    </select>
+                </div> 
             </div>
             <div class="col row justify-content-lg-around justify-content-lg-between py-2">
                 <div class="col-4 d-flex flex-column form-group">
@@ -147,7 +151,7 @@
                     <textarea  class="form-control" name="obs" id="OBS" cols="20" rows="4">{{sale.obs}}</textarea>
                 </div>
                 <div class="col-2 d-flex flex-column form-group">
-                    <label for="date">Data*</label>
+                    <label for="date">Data da Venda*</label>
                     <input class="form-control" value="{{sale.date|date:'Y-m-d'}}" required id="date" name="date" type="date">
                 </div>
                 <div class="col-2"></div>

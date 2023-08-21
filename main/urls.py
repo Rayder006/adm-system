@@ -24,5 +24,6 @@ urlpatterns = [
     path("schedule/", views.ScheduleList, name="schedule_list"),
     path("schedule/new", views.CreateSchedule, name="new_schedule"),
     path("schedule/<int:schedule_id>", views.EditSchedule, name="edit_schedule"),
-    path("schedule/<int:schedule_id>/", views.DeleteSchedule, name="delete_schedule")
+    path("schedule/<int:schedule_id>/", views.DeleteSchedule, name="delete_schedule"),
+    path("schedule/service_filter/<person_id>", views.ServiceAjax, name="service_ajax"),
 ]

@@ -17,7 +17,7 @@
 <body>
     {% block body %}
     <div class="container-fluid">
-        <form action="{% url 'new_invoice' %}" method="post" class="box bg-primary"> 
+        <form action="{% url 'new_invoice' %}" method="post" class="box bg-secondary"> 
             {% csrf_token %}
             <div class="col row">
                 <h1 class="col align-self-center">Despesa (Cadastro)</h1>
@@ -44,8 +44,8 @@
                     <input class="form-control" required  id="Lançamento" name="release_date" type="date">
                 </div>
                 <div class="col-3 d-flex flex-column form-group">
-                    <label for="Pagamento">Data de Pagamento*</label>
-                    <input class="form-control" required  id="Pagamento" name="payment_date" type="date">
+                    <label for="Pagamento">Data de Vencimento*</label>
+                    <input class="form-control" required  id="Pagamento" name="due_date" type="date">
                 </div>
                 <div class="col-3 d-flex flex-column form-group">
                     <label for="Nascimento">Valor*</label>

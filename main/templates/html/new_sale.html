@@ -20,7 +20,7 @@
 <body>
     {% block body %}
     <div class="container-fluid">
-        <form action="{% url 'new_sale' %}" method="post" class="box bg-primary"> 
+        <form action="{% url 'new_sale' %}" method="post" class="box bg-secondary"> 
             {% csrf_token %}
             <div class="col row">
                 <h1 class="col align-self-center">Venda (Cadastro)</h1>
@@ -56,7 +56,7 @@
                         {% endfor %}
                     </select>
                 </div>
-                <div class="col-3  form-group">
+                <!-- <div class="col-3  form-group">
                     <label for="status">Status*</label>
                     <select class="custom-select" required name="status" id="status">
                         <option value="" selected hidden>Selecione</option>
@@ -64,8 +64,8 @@
                         <option value="{{status.pk}}">{{status.name}}</option>
                         {% endfor %}
                     </select>
-                </div>
-                <div class="col-3  form-group">
+                </div> -->
+                <div class="col-6  form-group">
                     <label for="sale_origin">Origem da Venda*</label>
                     <select class="custom-select" required name="sale_origin" id="sale_origin">
                         <option value="" selected hidden>Selecione</option>
@@ -145,7 +145,7 @@
                     </select>
                 </div>
                 <div id="taxDiv" class="col-6 form-check form-group" hidden>
-                    <label for="tax">Taxa*</label>
+                    <label for="tax">Tipo de Cartão*</label>
                     <select class="custom-select" id="tax" name="tax">
                         <option value="" disabled selected>Selecione...</option>
                         {% for tax in tax_list %}
@@ -160,7 +160,7 @@
                     <textarea  class="form-control" name="obs" id="OBS" cols="20" rows="4"></textarea>
                 </div>
                 <div class="col-2  form-group">
-                    <label for="date">Data*</label>
+                    <label for="date">Data da Venda*</label>
                     <input class="form-control" required id="date" name="date" type="date">
                 </div>
                 <div class="col-2"></div>

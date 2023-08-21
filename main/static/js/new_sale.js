@@ -23,6 +23,9 @@ window.onload = (e) => {
             if($("#payment_type").find(':selected').data('tax')=="True"){
                 $("#taxDiv").attr("hidden", false);
                 if(!is_taxSelect) $("#tax").select2();
+                $("#tax").select2('open');
+                if($("#payment_type").val()==1) $(".select2-search__field").val("Crédito")
+                else $(".select2-search__field").val("Débito")
                 is_taxSelect = true;
             } 
             else {
@@ -98,14 +101,20 @@ window.onload = (e) => {
         document.getElementById("price").setAttribute("value", document.getElementById(`${currentType}${e.target.value}`).getAttribute("data-price"))
         document.getElementById("sessions").setAttribute("value", document.getElementById(`${currentType}${e.target.value}`).getAttribute("data-sessions"))
         document.getElementById("price").dispatchEvent(change)
+        if(e.target.id=="plan") document.getElementById("sessions").readOnly=true 
+        else document.getElementById("sessions").readOnly=false;
     }
 
     function changeSaleType(e){
         document.getElementById(currentType).hidden=true;
-        document.getElementById(e.target.value).hidden=false
+        document.getElementById(e.target.value).querySelector("select").required=false;
+        document.getElementById(e.target.value).hidden=false;
+        document.getElementById(e.target.value).querySelector("select").required=true;
         currentType = e.target.value;
         if(currentType=="3") document.getElementById("sessions_label").innerHTML="Quantidade*"
         else document.getElementById("sessions_label").innerHTML="Qtd. de Sessões*"
+
+        document.getElementById(currentType).querySelector("select").value=""
     }
 
     function priceCalc(e){

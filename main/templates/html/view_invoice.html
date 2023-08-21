@@ -17,7 +17,7 @@
 <body>
     {% block body %}
     <div class="container-fluid">
-        <form id="deleteForm" action="{% url 'view_invoice' invoice.pk%}" method="post" class="box bg-primary"> 
+        <form id="deleteForm" action="{% url 'view_invoice' invoice.pk%}" method="post" class="box bg-secondary"> 
             {% csrf_token %}
             <div class="col row">
                 <h1 class="col align-self-center">Despesa (Visualização)</h1>

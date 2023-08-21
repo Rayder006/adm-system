@@ -264,7 +264,7 @@ def NewInvoice(request):
             # payment_type = get_or_none(PaymentType, request.POST.get("payment_type")), 
             description = request.POST.get("description"), 
             release_date = request.POST.get("release_date"), 
-            payment_date = request.POST.get("payment_date"), 
+            due_date = request.POST.get("due_date"),  #atenção !!
             cost = request.POST.get("cost"),
             recurring = eval(request.POST.get("recurring")), 
             recurring_qtd = int(request.POST.get("recurring_qtd")), 
@@ -278,7 +278,7 @@ def NewInvoice(request):
 
         return redirect(reverse('list_invoice'))
 
-    invoice_type_list = Account.objects.all()
+    invoice_type_list = Account.objects.filter(is_expense=True)
     supplier_list = Supplier.objects.all()
     payment_type_list = PaymentType.objects.all()
 
@@ -302,7 +302,7 @@ def EditInvoice(request, invoice_id):
         invoice.payment_type = get_or_none(PaymentType, request.POST.get("payment_type")), 
         invoice.description = request.POST.get("description")
         invoice.release_date = request.POST.get("release_date")
-        invoice.payment_date = request.POST.get("payment_date")
+        invoice.due_date = request.POST.get("due_date")
         invoice.cost = request.POST.get("cost")
         invoice.recurring = eval(request.POST.get("recurring"))
         invoice.recurring_qtd = int(request.POST.get("recurring_qtd"))
@@ -315,7 +315,7 @@ def EditInvoice(request, invoice_id):
 
     invoice = Invoice.objects.get(pk=invoice_id)
     supplier_list = Supplier.objects.all()
-    invoice_type_list = Account.objects.all()
+    invoice_type_list = Account.objects.filter(is_expense=True)
 
     time = ""
     if invoice.recurring_time == '7':
@@ -414,6 +414,7 @@ def NewSale(request):
                 recurring = False,
                 recurring_qtd = 0,
                 recurring_time = 0,
+                generator_sale = Sale.objects.get(pk=s.id),
                 obs = "Despesa com cartão de débito" if tax.payment_type.pk ==  1 else "Despesa com cartão de crédito"
             )
             print(i.__dict__)
@@ -500,6 +501,28 @@ def EditSale(request, sale_id):
         s.final_price = request.POST.get("final_price")
         print(s.__dict__)
         s.save()
+
+        try:
+            invoice = Invoice.object.get(generator_sale__id=s.id)
+            console.log("invoice existe!")
+            invoice.invoice_type = account
+            invoice.supplier = None
+            invoice.payment_type = None
+            invoice.description = account.commentary
+            invoice.release_date = datetime.datetime.today()
+            invoice.payment_date = None
+            invoice.cost = (Decimal(float(request.POST.get("final_price")))) * (tax.tax/100)
+            invoice.paid = False
+            invoice.recurring = False
+            invoice.recurring_qtd = 0
+            invoice.recurring_time = 0
+            invoice.generator_sale = Sale.objects.get(pk=s.id)
+            invoice.obs = "Despesa com cartão de débito" if tax.payment_type.pk ==  1 else "Despesa com cartão de crédito"
+            console.log(invoice)
+            invoice.save()
+        except:
+            pass 
+            
 
         return redirect(reverse('list_sale'))
 
@@ -634,3 +657,14 @@ def PayInvoiceGroup(request):
         'error': 'Método não permitido'
     }
     return JsonResponse(response_data, status=405)
+
+def ServiceAjax(request, person_id):
+    service_list = []
+    sale_list = Sale.objects.filter(client__pk=person_id)
+    for sale in sale_list:
+        print(sale.__dict__)
+        service_list.append({
+            "service":Service.object.get(pk=sale.service_id).name,
+        })
+
+    return JsonResponse(service_list, safe=False)

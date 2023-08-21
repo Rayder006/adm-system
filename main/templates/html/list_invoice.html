@@ -20,7 +20,7 @@
 
 {% block body %}
     <div class="container-fluid">
-        <div class="bg-primary box">
+        <div class="bg-secondary box">
             <div class="row">
                 <h1 class="text-light">Despesas</h1>
             </div>
@@ -38,6 +38,7 @@
                             <th scope="col">Valor</th>
                             <th scope="col">Fornecedor</th>
                             <th scope="col">Lançamento</th>
+                            <th scope="col">Vencimento</th>
                             <th scope="col">Pagamento</th>
                             <th>A pagar?</th>
                             <th scope="col" class="acoes">Ações</th>
@@ -52,6 +53,7 @@
                             <td>{{i.cost}}</td>
                             <td>{{i.supplier}}</td>
                             <td>{{i.release_date|date:'d/m/Y'}}</td>
+                            <td>{{i.due_date|date:'d/m/Y'}}</td>
                             <td>{{i.payment_date|date:'d/m/Y'}}</td>
                             <td>{% if i.paid %} Não {%else %} Sim {% endif %}</td>
                             <td>

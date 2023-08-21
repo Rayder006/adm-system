@@ -5,6 +5,9 @@ window.onload = (e) => {
   const container = document.getElementById('calendar');
   const events = JSON.parse(document.getElementById('data-el').textContent); 
   const events_map = new Map();
+  const serviceSelect2 = $("#service").select2({
+    dropdownParent: $('#creationModal')
+  });
   const calendar = new Calendar(container, {
     defaultView: 'week',
     week:{
@@ -61,6 +64,40 @@ window.onload = (e) => {
 
 
     //Event Handlers
+  document.getElementById("client").addEventListener(
+    "change", (e) => {
+      console.log("carregando vendas do cliente: " + e.target.value)
+      $.ajax({
+        url:"service_filter/" + e.target.value,
+        method:"GET",
+        dataType:"json",
+        success: function(data){
+          console.log(data)
+        }
+      })
+
+    }
+   )
+
+  document.getElementById("clientCheck").addEventListener(
+    "change", (e) => {
+      if(e.target.checked){
+        document.getElementById("_client-div").hidden=false;
+        document.getElementById("client-div").hidden=true;
+        document.getElementById("_client").setAttribute("required", true);
+        document.getElementById("client").setAttribute("required", false);
+        document.getElementById("client").value="";
+        document.getElementById("client").dispatchEvent(new Event("change"));
+      } else {
+        document.getElementById("_client-div").hidden=true;
+        document.getElementById("client-div").hidden=false;
+        document.getElementById("_client").setAttribute("required", false);
+        document.getElementById("client").setAttribute("required", true);
+        document.getElementById("client").value="";
+        document.getElementById("client").dispatchEvent(new Event("change"));
+      }
+    }
+  )
   document.getElementById("editButton").addEventListener(
     "click", (e) => {
       document.getElementById("modalForm").setAttribute("action", `${document.getElementById("modalForm").getAttribute("edit-url")}${lastEdit}`)

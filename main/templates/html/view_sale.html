@@ -17,7 +17,7 @@
 <body>
     {% block body %}
     <div class="container-fluid">
-        <form id="saleForm" action="{% url 'view_sale' sale.pk %}" method="post" class="box bg-primary">
+        <form id="saleForm" action="{% url 'view_sale' sale.pk %}" method="post" class="box bg-secondary">
             {% csrf_token %} 
             <div class="col row">
                 <h1 class="col align-self-center">Venda (Visualização)</h1>

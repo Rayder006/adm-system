@@ -18,7 +18,7 @@
     {% block body %}
     <div class="container-fluid">
         <!-- para voltar, apague o "row" a seguir e os "cols" de suas divs-filho imediatas -->
-        <form id="personForm" action="{% url 'view_person' person.pk %}" method="post" class="box bg-primary"> 
+        <form id="personForm" action="{% url 'view_person' person.pk %}" method="post" class="box bg-secondary"> 
             {% csrf_token %}
             <input type="hidden" name="pk" id="pk" value={{person.pk}}>
             <div class="col row">

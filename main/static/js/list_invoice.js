@@ -46,10 +46,11 @@ $(document).ready( function () {
                         action: function ( e, dt, node, config ) {
                             var dados = table.rows({ selected: true });
                             if(confirm(`Tem certeza que deseja pagar ${dados.count()} Contas?`)==true){
+                                console.log(dados.data())
                                 dados = dados.data();
                                 ids = []
                                 dados.each(function(data) {
-                                    ids.push(data[8])
+                                    ids.push(data[9])
                                 });
                                 payInvoiceFunction(ids);
                             }
@@ -74,8 +75,9 @@ $(document).ready( function () {
                     return data;
                 }
             },    
-            { "type": "date" }, //Fornecedor
             { "type": "date" }, //Lançamento
+            { "type": "date" }, //Vencimento
+            { "type": "date" }, //Pagamento
             { "type": "string" }, //Pagamento
             { "type": "string" }, //A Pagar?
             { "orderable":false }, //Ações
