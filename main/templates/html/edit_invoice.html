@@ -11,6 +11,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Despesa</title>
     {% block scripts %}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.min.js"></script>
     <script src="{% static 'js/edit_invoice.js' %}"></script>
     {% endblock %}
 </head>
@@ -47,8 +49,8 @@
                     <input class="form-control" required value="{{invoice.due_date|date:'Y-m-d'}}" id="Pagamento" name="due_date" type="date">
                 </div>
                 <div class="col-4 d-flex flex-column form-group">
-                    <label for="Nascimento">Valor*</label>
-                    <input class="form-control" required value="{{invoice.cost}}" id="Nascimento" name="cost" type="number">
+                    <label for="cost">Valor*</label>
+                    <input class="form-control" required value="{{invoice.cost}}" id="cost" name="cost" type="text">
                 </div>
                 <!-- <div class="col-3 d-flex flex-column form-group">
                     <label for="paid">Pago?*</label>

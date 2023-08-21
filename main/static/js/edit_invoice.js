@@ -1,3 +1,14 @@
+$(document).ready(function() {
+    $('#cost').inputmask("numeric", {
+      radixPoint: ",",
+      groupSeparator: ",",
+      digits: 2,
+      autoGroup: true,
+      prefix: 'R$ ',
+      placeholder: "0"
+    });
+});
+
 window.onload = (event) => {
     if(document.getElementById("Recorrencia").getAttribute("value")=="True"){
         document.getElementById("qtd_div").style.visibility = "visible";
