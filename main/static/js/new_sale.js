@@ -2,7 +2,8 @@ window.onload = (e) => {
     let discount_type = "1"; 
     let currentType= "1";
     var change = new Event('change');
-    let is_taxSelect =false;
+    let is_taxSelect1 =false;
+    let is_taxSelect2 =false;
     const options = [];
     const paymentSelect = $("#payment_type").select2();
     const taxSelect = $("#tax").select2();
@@ -17,22 +18,99 @@ window.onload = (e) => {
 
 
         //Event Handlers
+    $("#form").on(
+        "submit", function (event){
+            if($("#mixed").value == "True") {
+                if(Number($("#price").value) + Number($("#price2").value) == Number($("#final_price").value)) {
+                    if(parseInt($("#installments").value) == 0 || parseInt($("#installments2").value) == 0) {
+                        window.alert("Não é permitido cadastrar 0 parcelas!");
+                        return false;
+                    } else {
+                        return true()
+                    }
+                } else {
+                    window.alert("Soma dos preços diferente do valor final!");
+                    return false;
+                }
+            } else {
+                if(Number($("#price").value) != Number($("#final_price"))) alert("Valor diferente do valor final!");
+                else {
+                    if(parseInt($("#installments").value) == 0) {
+                        window.alert("Não é permitido cadastrar 0 parcelas!");
+                        return false;
+                    }
+                    else return true;
+                }
+            }
+        }
+    )
+
+    $("#mixed").on(
+        "change", function (e) {
+            if(e.currentTarget.value=="True") {
+                $("#paymentDiv2")[0].hidden = false
+                $("#payment_type2").select2();
+                $("#payment_type2")[0].required = true
+                
+            } else {
+                $("#paymentDiv2")[0].hidden = true
+                $("#payment_type2")[0].required = false
+                $("#payment_type2")[0].value = ""
+                $("#tax2")[0].value = ""
+                $("#price2")[0].value = ""
+                $("#installments2")[0].value = ""
+                $("#payment_type2").select2('destroy');
+            }
+        }
+    )
+
+    $("#payment_type2").on(
+        "change", function () {
+            console.log()
+            if($("#payment_type2").find(':selected').data('tax')=="True"){
+                $(".taxDiv2").attr("hidden", false);
+                $(".taxDiv2").attr("required", true)
+                if(!is_taxSelect2) $("#tax2").select2();
+                $("#tax2").select2('open');
+                if($("#payment_type2").val()==1) $(".select2-search__field").val("Crédito")
+                else $(".select2-search__field").val("Débito")
+                $("#installments2")[0].val(1);
+                is_taxSelect2 = true;
+                $("#installments2")[0].required = true
+            } 
+            else {
+                $(".taxDiv2").attr("hidden", true);
+                $(".taxDiv2").attr("required", false)
+                $("#tax2").val(null);
+                $("#installments2").val(null);
+                if(is_taxSelect2) $("#tax2").select2('destroy');
+                is_taxSelect2 = false;
+                $("#installments2")[0].required = false
+            }
+        }
+    )
+
     $("#payment_type").on(
         "change", function () {
             console.log()
             if($("#payment_type").find(':selected').data('tax')=="True"){
-                $("#taxDiv").attr("hidden", false);
-                if(!is_taxSelect) $("#tax").select2();
+                $(".taxDiv").attr("hidden", false);
+                if(!is_taxSelect1) $("#tax").select2();
                 $("#tax").select2('open');
                 if($("#payment_type").val()==1) $(".select2-search__field").val("Crédito")
                 else $(".select2-search__field").val("Débito")
-                is_taxSelect = true;
+                $("#installments").val(1);
+                is_taxSelect1 = true;
+                $("#installments")[0].required = true
             } 
             else {
-                $("#taxDiv").attr("hidden", true);
+                $(".taxDiv").attr("hidden", true);
                 $("#tax").val(null);
-                if(is_taxSelect) $("#tax").select2('destroy');
-                is_taxSelect = false;
+                $("#price").val(null);
+                $("#installments").val(null);
+                if(is_taxSelect1) $("#tax").select2('destroy');
+                is_taxSelect1 = false;
+                $("#installments")[0].required = false
             }
         }
     )

@@ -379,16 +379,18 @@ def NewSale(request):
             value = request.POST.get("product")
 
         payment_type = get_or_none(PaymentType, request.POST.get("payment_type"))
+        payment_type2 = get_or_none(PaymentType, request.POST.get("payment_type2"))
 
         s = Sale(
             sale_type = get_or_none(SaleType, request.POST.get("sale_type")),
             client = get_or_none(Person, request.POST.get("client")),
             seller = get_or_none(Employee, request.POST.get("seller")),
-            status = get_or_none(SaleStatus, request.POST.get("status")),
             payment_type = payment_type,
+            status = SaleStatus.objects.get(pk=1),
             service = get_or_none(SaleService, value),
             discount = request.POST.get("discount"),
             sessions = request.POST.get("sessions"),
+            counter=0,
             discount_is_percent = True if request.POST.get("discount") == "percent" else False,
             obs = request.POST.get("obs"),
             date = request.POST.get("date"),
@@ -401,6 +403,27 @@ def NewSale(request):
         if payment_type.has_tax:
             tax = get_or_none(Tax, request.POST.get("tax"))
             account = Account.objects.get(pk=118) if tax.payment_type.pk ==  1 else Account.objects.get(pk=117)  # Account 117 == despesa com cartãod e credito; account 118 == despesa com cartão de débito
+            i = Invoice(
+                invoice_type = account,
+                supplier = None,
+                payment_type = None,
+                description = account.commentary,
+                release_date = datetime.datetime.today(),
+                payment_date = None,
+                cost = (Decimal(float(request.POST.get("final_price")))) * (tax.tax/100),
+                paid = False,
+                recurring = False,
+                recurring_qtd = 0,
+                recurring_time = 0,
+                generator_sale = Sale.objects.get(pk=s.id),
+                obs = "Despesa com cartão de débito" if tax.payment_type.pk ==  1 else "Despesa com cartão de crédito"
+            )
+            print(i.__dict__)
+            i.save()
+
+        if payment_type2.has_tax:
+            tax = get_or_none(Tax, request.POST.get("tax2"))
+            account = Account.objects.get(pk=118) if tax.payment_type2.pk ==  1 else Account.objects.get(pk=117)  # Account 117 == despesa com cartãod e credito; account 118 == despesa com cartão de débito
             i = Invoice(
                 invoice_type = account,
                 supplier = None,
@@ -490,9 +513,9 @@ def EditSale(request, sale_id):
         s.sale_type = get_or_none(SaleType, request.POST.get("sale_type"))
         s.client = get_or_none(Person, request.POST.get("client"))
         s.seller = get_or_none(Employee, request.POST.get("seller"))
-        s.status = get_or_none(SaleStatus, request.POST.get("status"))
+        s.status = SaleStatus.objects.get(pk=1)
         s.payment_type = get_or_none(PaymentType, request.POST.get("payment_type"))
-        s.service = get_or_none(Service, value)
+        s.service = get_or_none(SaleService, value)
         s.discount = request.POST.get("discount")
         s.sessions = request.POST.get("sessions")
         s.obs = request.POST.get("obs")

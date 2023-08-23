@@ -20,7 +20,7 @@
 <body>
     {% block body %}
     <div class="container-fluid">
-        <form action="{% url 'new_sale' %}" method="post" class="box bg-secondary"> 
+        <form action="{% url 'new_sale' %}" method="post" id="form" class="box bg-secondary"> 
             {% csrf_token %}
             <div class="col row">
                 <h1 class="col align-self-center">Venda (Cadastro)</h1>
@@ -127,15 +127,14 @@
                 </div>
                 <div class="col-3 d-flex form-check flex-column form-group">
                     <label for="mixed">Venda Mista?*</label>
-                    <select class="custom-select" disabled class="form-select"  id="mixed" name="mixed">
-                        <!-- <option value="" selected hidden>Selecione</option> -->
+                    <select class="custom-select" class="form-select"  id="mixed" name="mixed">
                         <option value="True">Sim</option>  
                         <option value="False" selected>Não</option> 
                     </select>
                 </div>
             </div>
             <div class="col row py-2"> 
-                <div class="col-6 form-check form-group">
+                <div class="col-3 form-check form-group" >
                     <label for="payment_type">Forma de Pagamento*</label>
                     <select class="custom-select" required id="payment_type" name="payment_type">
                         <option value="" disabled hidden selected>Selecione...</option>
@@ -144,7 +143,11 @@
                         {% endfor %} 
                     </select>
                 </div>
-                <div id="taxDiv" class="col-6 form-check form-group" hidden>
+                <div class="col-3 form-group">
+                    <label for="price1">Valor*</label>
+                    <input class="form-control" name="price1" id="price1" type="number" min="0" required>
+                </div>
+                <div class="col-3 form-check form-group taxDiv" hidden>
                     <label for="tax">Tipo de Cartão*</label>
                     <select class="custom-select" id="tax" name="tax">
                         <option value="" disabled selected>Selecione...</option>
@@ -152,6 +155,38 @@
                         <option data-id="{{tax.payment_type.pk}}" value="{{tax.pk}}">{{tax.name}}</option>
                         {% endfor %} 
                     </select>
+                </div>
+                <div class="col-3 form-group taxDiv"  hidden>
+                    <label for="installments">Parcelas*</label>
+                    <input class="form-control" type="number" id="installments" name="installments" min="1" max="12" value="1">
+                </div>
+            </div>
+            <div id="paymentDiv2" class="col row py-2" hidden> 
+                <div class="col-3 form-check form-group">
+                    <label for="payment_type2">2ª Forma de Pagamento*</label>
+                    <select class="custom-select" id="payment_type2" name="payment_type2">
+                        <option value="" disabled hidden selected>Selecione...</option>
+                        {% for payment in payment_type_list %}
+                        <option data-tax="{{payment.has_tax}}" value="{{payment.pk}}">{{payment.name}}</option>
+                        {% endfor %} 
+                    </select>
+                </div>
+                <div class="col-3 form-group">
+                    <label for="price2">2º Valor*</label>
+                    <input class="form-control" name="price2" id="price2" type="number" min="0">
+                </div>
+                <div class="col-3 form-check form-group taxDiv2" hidden>
+                    <label for="tax2">2º Tipo de Cartão*</label>
+                    <select class="custom-select" id="tax2" name="tax2">
+                        <option value="" disabled selected>Selecione...</option>
+                        {% for tax in tax_list %}
+                        <option data-id="{{tax.payment_type.pk}}" value="{{tax.pk}}">{{tax.name}}</option>
+                        {% endfor %} 
+                    </select>
+                </div>
+                <div class="col-3 form-group taxDiv2" hidden>
+                    <label for="installments2">2ª Parcelas*</label>
+                    <input class="form-control" id="installments2" name="installments2" type="number" min="1" max="12" value="1">
                 </div>
             </div>
             <div class="col row py-2">
