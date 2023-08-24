@@ -89,7 +89,22 @@ $(document).ready( function () {
             }
         }
     });
+
+    // $(".cancelButton").on(
+    //     "click", function (e) {
+    //         console.log(e);
+    //         cancelSale()
+    //     }
+    // )
 });
+
+function contract(e){
+    console.log(e.getAttribute("data-url"));
+    if(confirm("Tem certeza que deseja emitir este Contrato?\nApós a emissão, esta venda não poderá mais ser editada!")==true){
+        window.open(e.getAttribute("data-url"), "_blank");
+        return window.location.reload();
+    }
+}
 
 function deleteSale(e){
     console.log(e);
@@ -97,6 +112,27 @@ function deleteSale(e){
         document.getElementById("deleteForm-" + e.getAttribute("s_pk")).submit();
     }
     
+}
+
+function cancelSale(e){
+    console.log(e)
+    if(confirm("Tem certeza que deseja cancelar a Venda?")==true){
+        $.ajax({
+            url: e.getAttribute("data-url"), // Substitua pela URL correta
+            type: 'POST',
+            headers: {
+                "X-CSRFToken": e.getAttribute("data-csrf") // Inclui o token CSRF no cabeçalho
+            },
+            dataType: "json", // Especifica o tipo de dados esperado na resposta
+            success: function(data) {
+                console.log(data); // Exibe a resposta da view
+                // Atualize a tabela ou realize outras ações após marcar as contas como pagas
+            },
+            error: function(xhr, status, error) {
+                console.error(xhr.responseText); // Exibe detalhes do erro
+            }
+        });
+    }
 }
 
 function renderData(data, type, row){

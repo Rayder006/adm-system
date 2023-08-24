@@ -3,21 +3,23 @@
 <head>
     <meta charset="UTF-8">
     {% load static %}
+    <link href="https://cdn.datatables.net/v/dt/jq-3.7.0/jszip-3.10.1/dt-1.13.6/b-2.4.1/b-colvis-2.4.1/b-html5-2.4.1/b-print-2.4.1/cr-1.7.0/date-1.5.1/r-2.5.0/rr-1.4.1/sc-2.2.0/sb-1.5.0/sp-2.2.0/sl-1.7.0/sr-1.3.0/datatables.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="https://uicdn.toast.com/calendar/latest/toastui-calendar.min.css" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/v/dt/jq-3.7.0/jszip-3.10.1/dt-1.13.6/b-2.4.1/b-colvis-2.4.1/b-html5-2.4.1/b-print-2.4.1/cr-1.7.0/date-1.5.1/r-2.5.0/rr-1.4.1/sc-2.2.0/sb-1.5.0/sp-2.2.0/sl-1.7.0/sr-1.3.0/datatables.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
     <script src="https://kit.fontawesome.com/abd2ed3d51.js" crossorigin="anonymous"></script>
-    <script src="{% static 'js/list_schedule.js' %}"></script>  
     <script src="https://uicdn.toast.com/calendar/latest/toastui-calendar.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
+    <script src="{% static 'js/list_schedule.js' %}"></script> 
+    <script>let csrf_token= "{{csrf_token}}"</script>
     <title>Agendamentos</title>
 </head>
 <body>
-    {{ event_list|json_script:"data-el" }}
+    {{ event_list|json_script:"event_list" }}
+    {{ service_list|json_script:"service_list" }}
     <nav class="navbar navbar-expand-lg bg-body-dark navbar-dark bg-dark">
         <div class="container-fluid">
             <a class="navbar-brand" href="{% url 'index' %}">Logo</a>
@@ -35,8 +37,8 @@
                     <li><a class="dropdown-item" target="_blank" href="/admin/">Painel de Administrador</a></li>
                     {% endif %}
                     <li><a class="dropdown-item" href="{% url 'list_person' %}">Clientes</a></li>
-                    <li><a class="dropdown-item" href="{% url 'list_invoice' %}">Despesa</a></li>
-                    <li><a class="dropdown-item" href="{% url 'list_sale' %}">Receita</a></li>
+                    <li><a class="dropdown-item" href="{% url 'list_invoice' %}">Contas a Pagar</a></li>
+                    <li><a class="dropdown-item" href="{% url 'list_sale' %}">Vendas</a></li>
                     <li><hr class="dropdown-divider"></li>
                     <li><a class="dropdown-item" href="{% url 'schedule_list' %}">Agenda</a></li>
                     <li><a class="dropdown-item" href="{% url 'test' %}">Teste</a></li>
@@ -59,11 +61,11 @@
 
 
 
-      <div class="modal fade" id="creationModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="creationModalLabel" aria-hidden="true">
+    <div class="modal fade" id="creationModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="creationModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="creationModalLabel">Modal title</h1>
+                    <h1 class="modal-title fs-5" id="creationModalLabel">Agendamento</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -86,10 +88,7 @@
                                 <div class="col-md-3 form-group">
                                     <label class="col-form-label" for="status">Status*</label>
                                     <select class="form-select" required id="status" name="status">
-                                        <option value="" disabled selected>Selecione</option>
-                                        {% for status in status_list %}
-                                        <option value="{{status.pk}}">{{status.name}}</option>
-                                        {% endfor %}
+                                        <option value="1" disabled selected>Novo</option>
                                     </select>
                                 </div>
                             </div>
@@ -122,20 +121,13 @@
                                 </div>
                                 <div class="col-md-4 form-group d-flex flex-column">
                                     <label class="col-form-label" for="service">Serviço*</label>
-                                    <select required id="service" name="service">
+                                    <select required id="service" required name="service">
                                         <option value="" disabled selected>Selecione</option>
-                                        {% for service in service_list %}
-                                        <option value="{{service.pk}}">{{service.name}}</option>
-                                        {% endfor %}
                                     </select>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-2 form-group">
-                                    <label class="col-form-label" for="sessions">Qtd. Sessões</label>
-                                    <input class="form-control" type="number" id="sessions" name="sessions" min="0" value="0">
-                                </div>
-                                <div class="col-md-2 form-group">
+                                <div class="col-md-4 form-group">
                                     <label class="col-form-label" for="room">Sala</label>
                                     <input class="form-control" type="text" id="room" name="room">
                                 </div>
@@ -161,12 +153,53 @@
                     <button type="button" class="btn btn-primary" id="submitCreation">Salvar</button>
                 </div>
                 <div class="modal-footer" id="secondaryFooter" hidden>
-                    <button type="button" class="btn btn-primary" id="editButton">Editar</button>
+                    <!-- <button type="button" class="btn btn-primary" id="editButton">Editar</button> -->
                     <button type="button" class="btn btn-danger" id="deleteButton">Apagar</button>
                 </div>
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="confirmModalLabel">Confirmar Presença</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <table id="confirmTable">
+                        <thead>
+                            <tr>
+                                <th>Agendamento</th>
+                                <th>Cliente</th>
+                                <th>Dia</th>
+                                <th>Início</th>
+                                <th>Final</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for s in confirm_list %}
+                            <tr>
+                                <td>{{s.id}}</td>
+                                <td>{{s.client.name}}</td>
+                                <td>{{s.date|date:"Y-m-d"}}</td>
+                                <td>{{s.start}}</td>
+                                <td>{{s.end}}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+              <button type="button" id="confirmButton" class="btn btn-primary">Confirmar</button>
+            </div>
+          </div>
+        </div>
+      </div>
 
     <div class="container-fluid py-2" >
         <div class="row">
@@ -201,18 +234,18 @@
         </div>
     </div>
     
-    <div class="d-flex flex-column justify-content-center pl-5 py-1 bg-primary" >
-        <!-- <div class="form-check form-check-inline mx-1">
+    <!-- <div class="d-flex flex-column justify-content-center pl-5 py-1 bg-primary" >
+        <div class="form-check form-check-inline mx-1">
             <input class="form-check-input" type="checkbox" id="{{e.pk}}" value="{{e.pk}}">
             <label class="form-check-label" for="{{e.pk}}">Teste</label>
-        </div> -->
+        </div>
         {% for e in employee_list %}
         <div class="form-check form-check-inline mx-1">
             <input class="form-check-input" type="checkbox" id="{{e.pk}}" value="{{e.pk}}">
             <label class="form-check-label" for="{{e.pk}}">{{e.name}}</label>
         </div>
         {% endfor %}
-    </div>
+    </div> -->
     <div class="d-flex flex-row align-items-center justify-content-center">
         <h1 id="month"></h1>
     </div>

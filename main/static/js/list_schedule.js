@@ -3,11 +3,14 @@ window.onload = (e) => {
   const creationModal = new bootstrap.Modal(document.getElementById('creationModal'), {backdrop:'static'})
   const Calendar = tui.Calendar;
   const container = document.getElementById('calendar');
-  const events = JSON.parse(document.getElementById('data-el').textContent); 
+  const events = JSON.parse(document.getElementById('event_list').textContent); 
+  const services = JSON.parse(document.getElementById('service_list').textContent); 
   const events_map = new Map();
-  const serviceSelect2 = $("#service").select2({
-    dropdownParent: $('#creationModal')
-  });
+  const service_map = new Map();
+  const eventList = [];
+  const serviceSelect2 = $("#service").select2({dropdownParent: $('#creationModal')});
+  const meses = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho" , "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+  const confirmModal = new bootstrap.Modal(document.getElementById('confirmModal'))
   const calendar = new Calendar(container, {
     defaultView: 'week',
     week:{
@@ -37,45 +40,101 @@ window.onload = (e) => {
     useCreationPopup: false,
     useDetailPopup: false,
   });
-
-  const meses = [
-    "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
-    "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
-  ];
-
   var lastEdit;
 
+    //Inicializa a datatable de confirmação 
+  let table = $('#confirmTable').DataTable({
+    orderable:false,
+    dom: 't',
+    select: {
+      style: 'multi+shift'
+    },
+  });
+  if(table.rows()>0) confirmModal.show();
+
     //carrega os eventos do Banco de Dados
-  for(let i=0;i<events.length;i++){ 
-    let id;
-    (events[i].professional_id) ? id = events[i].professional_id : id = i; 
-    events_map.set(events[i].id, events[i]);
-    calendar.createEvents([
-      {
-        id: events[i].id,
-        calendarId: id,
-        title: events[i].title,
-        start: `${events[i].date}T${events[i].start}`,
-        end: `${events[i].date}T${events[i].end}`
-      },
-    ]);
+  for (const event of events) {
+    events_map.set(event.id, event)
+
+    const eventObject = {
+      id: event.id,
+      title: event.title,
+      start: `${event.date}T${event.start}`,
+      end: `${event.date}T${event.end}`
+    };
+    eventList.push(eventObject);
   }
+  calendar.createEvents(eventList);
+
+    //Popula o map de serviços
+  for (i=0;i<services.length;i++) {
+    console.log(services[i])
+    service_map.set(services[i].pk, services[i].name)
+  }
+
+    //Adiciona o nome do mês na página
   document.getElementById("month").textContent=`${meses[calendar.getDate().getMonth()]}/${calendar.getDate().getFullYear()}`;
 
 
     //Event Handlers
+  $("#confirmButton").on(
+    "click", function (e){
+      var dados = table.rows({ selected: true }).data();
+      var ids= []
+      console.log(dados)
+      dados.each(function (data) {
+        ids.push(data[0]);
+      });
+      if(ids.length==0) {
+        confirmModal.hide();
+        return;
+      }
+
+      $.ajax({
+        url:"confirm/",
+        method:"POST",
+        headers: {
+          "X-CSRFToken": csrf_token // Inclui o token CSRF no cabeçalho
+        },  
+        data: {
+          ids:ids
+        },
+        dataType:"json",
+        success: function(data){
+          window.location.reload();
+        },
+      })
+    }
+  )
+
   document.getElementById("client").addEventListener(
     "change", (e) => {
-      console.log("carregando vendas do cliente: " + e.target.value)
+      console.log("carregando vendas do cliente: " + e.target.options[e.target.selectedIndex].textContent)
       $.ajax({
         url:"service_filter/" + e.target.value,
         method:"GET",
         dataType:"json",
         success: function(data){
           console.log(data)
-        }
-      })
+          $("#service").empty()
+          data.forEach(item => {
+            option = new Option(item.service, item.service_id, false, false);
+            $(option).attr('data-sale-id', item.sale_id);
+            $('#service').append(option);
+          });
 
+          $('#service').append(new Option("Avaliação", -1));
+          $('#service').append(new Option("Cortesia", -2));
+        },
+         error: function (data) {
+          console.log("Erro" + data);
+
+          $("#service").empty()
+          $('#service').append(new Option("Avaliação", -1));
+          $('#service').append(new Option("Cortesia", -2));
+         }
+      })
+      $("#_client").val(e.target.options[e.target.selectedIndex].textContent)
     }
    )
 
@@ -84,29 +143,23 @@ window.onload = (e) => {
       if(e.target.checked){
         document.getElementById("_client-div").hidden=false;
         document.getElementById("client-div").hidden=true;
-        document.getElementById("_client").setAttribute("required", true);
-        document.getElementById("client").setAttribute("required", false);
-        document.getElementById("client").value="";
+        document.getElementById("_client").required= true;
+        document.getElementById("client").required= false;
+        document.getElementById("client").value= null;
         document.getElementById("client").dispatchEvent(new Event("change"));
       } else {
         document.getElementById("_client-div").hidden=true;
         document.getElementById("client-div").hidden=false;
-        document.getElementById("_client").setAttribute("required", false);
-        document.getElementById("client").setAttribute("required", true);
+        document.getElementById("_client").required= false;
+        document.getElementById("_client").value = null;
+        document.getElementById("client").required= true;
         document.getElementById("client").value="";
         document.getElementById("client").dispatchEvent(new Event("change"));
       }
     }
   )
-  document.getElementById("editButton").addEventListener(
-    "click", (e) => {
-      document.getElementById("modalForm").setAttribute("action", `${document.getElementById("modalForm").getAttribute("edit-url")}${lastEdit}`)
-      document.getElementById("primaryFooter").hidden=false;
-      document.getElementById("secondaryFooter").hidden=true;
-      allowEditing();
-    }
-  )
-  
+
+
   document.getElementById("prev").addEventListener(
     "click", (e) => {
       calendar.prev()
@@ -143,13 +196,30 @@ window.onload = (e) => {
       }
     }
   )
-  
+
   document.getElementById("submitCreation").addEventListener(
     "click", (e) => {
       console.log(document.getElementById("modalForm").getAttribute("action"))
+      const requiredInputs = document.getElementById("modalForm").querySelectorAll("input[required], select[required]");
+
+      // Verifique se todos os campos required estão preenchidos
+      for (const input of requiredInputs) {
+        if (!input.value.trim()) {
+            alert("Por favor, preencha todos os campos obrigatórios: " + input.getAttribute("name"));
+            e.preventDefault(); // Impede o envio do formulário
+            return;
+          }
+      }
+
+      const sale_input = document.createElement("input");
+      sale_input.setAttribute("type", "hidden");
+      sale_input.setAttribute("name", "sale");
+      sale_input.setAttribute("value", $("#service").find(":selected").data("sale-id"));
+
+      document.getElementById("modalForm").appendChild(sale_input);
+
       document.getElementById("modalForm").submit();
-    }
-  );
+    });
 
   calendar.on({
     'selectDateTime': function teste(e) {  
@@ -182,7 +252,6 @@ window.onload = (e) => {
 
   //Funções
   function openCreationModal(e, isCreation){
-    console.log('clickEvent', e);
     if(isCreation==="create"){
       document.getElementById("modalForm").setAttribute("action", document.getElementById("modalForm").getAttribute("create-url"));
 
@@ -193,8 +262,8 @@ window.onload = (e) => {
       document.getElementById("start").readOnly = false;
       document.getElementById("end").readOnly = false;
       document.getElementById("obs").readOnly = false;
-      document.getElementById("sessions").readOnly = false;
       document.getElementById("room").readOnly = false;
+      document.getElementById("clientCheck").removeAttribute("disabled", '');
       document.getElementById("equipment").removeAttribute("disabled");
       document.getElementById("status").removeAttribute("disabled");
       document.getElementById("professional").removeAttribute("disabled");
@@ -203,7 +272,7 @@ window.onload = (e) => {
 
       let start = new Date(e.start)
       let end = new Date(e.end)
-      let year = String(start.getFullYear()+1900);
+      let year = String(start.getFullYear());
       let month = start.getMonth()+1;
       let day = start.getDate();
 
@@ -226,18 +295,32 @@ window.onload = (e) => {
     else if (isCreation==="edit"){
       lastEdit = e.event.id;
       e = events_map.get(e.event.id);
+      console.log(e)
       document.getElementById("primaryFooter").hidden=true;
       document.getElementById("secondaryFooter").hidden=false;
 
       document.getElementById("equipment").value = e.equipment_id;
-      document.getElementById("status").value= e.status_id;
+      if(e.status=="1"){
+        document.getElementById("status").append(new Option("Novo", 1, true, true))
+        document.getElementById("status").value = 1;
+      } else {
+        document.getElementById("status").append(new Option("Confirmado", 2, true, true))
+        document.getElementById("status").value = 2;
+      }
+      
       document.getElementById("professional").value= e.professional_id;
-      document.getElementById("client").value= e.client_id;
+      document.getElementById("client").value= e.client;
       document.getElementById("service").value= e.service_id;
+      console.log(service_map.get(e.sale_id))
+      if(service_map.get(e.sale_id)) {
+        $('#service').append(new Option(service_map.get(e.sale_id), null, true, true));
+      } else {
+        console.log(e.is_courtesy);
+        (e.is_courtesy) ? $('#service').append(new Option("Cortesia", -2, true, true)) : $('#service').append(new Option("Avaliação", -1, true, true)); 
+      }
       document.getElementById("date").setAttribute("value", e.date);
       document.getElementById("start").setAttribute("value", e.start);
       document.getElementById("end").setAttribute("value", e.end);
-      document.getElementById("sessions").setAttribute("value", e.sessions);
       document.getElementById("room").setAttribute("value", e.room);
       document.getElementById("obs").setAttribute("value", e.obs);
       
@@ -245,8 +328,8 @@ window.onload = (e) => {
       document.getElementById("start").readOnly = true;
       document.getElementById("end").readOnly = true;
       document.getElementById("obs").readOnly = true;
-      document.getElementById("sessions").readOnly = true;
       document.getElementById("room").readOnly = true;
+      document.getElementById("clientCheck").setAttribute("disabled", '');
       document.getElementById("equipment").setAttribute("disabled", '');
       document.getElementById("status").setAttribute("disabled", '');
       document.getElementById("professional").setAttribute("disabled", '');
@@ -261,7 +344,6 @@ window.onload = (e) => {
     document.getElementById("start").readOnly = false;
     document.getElementById("end").readOnly = false;
     document.getElementById("obs").readOnly = false;
-    document.getElementById("sessions").readOnly = false;
     document.getElementById("room").readOnly = false;
     document.getElementById("equipment").removeAttribute("disabled");
     document.getElementById("status").removeAttribute("disabled");

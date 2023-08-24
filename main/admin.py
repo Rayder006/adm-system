@@ -14,3 +14,5 @@ admin.site.register(AccountType)
 admin.site.register(SaleService)
 admin.site.register(ScheduleEvent)
 admin.site.register(Sale)
+admin.site.register(Invoice)
+

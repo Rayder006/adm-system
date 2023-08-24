@@ -188,18 +188,17 @@ class SaleOrigin(models.Model):
 class ScheduleEvent(models.Model): 
     title = models.CharField(max_length=20)
     professional = models.ForeignKey("Employee", on_delete=models.CASCADE, null=True, blank=True)
-    client = models.ForeignKey("Person", on_delete=models.CASCADE, null=True, blank=True)
-    _client = models.CharField(max_length=50, null=True, blank=True)
+    client = models.CharField(max_length=50, null=True, blank=True)
     category = models.CharField(max_length=10, default="time")
     date = models.DateField(null=True, blank=True)
     start = models.TimeField(null=True, blank=True)
     end = models.TimeField(null=True, blank=True)
-    status = models.ForeignKey("SaleStatus", on_delete=models.SET_NULL, blank=True, null=True) #SaleStatus pois os status são os mesmos.
-    service = models.ForeignKey("SaleService", on_delete=models.SET_NULL, blank=True, null=True)
-    sessions = models.IntegerField(null=True, blank=True,)
+    sale = models.ForeignKey("Sale", on_delete=models.SET_NULL, blank=True, null=True)
+    status = models.IntegerField()
     room = models.CharField(max_length=20, null=True, blank=True)
     equipment = models.ForeignKey("Equipment", on_delete=models.CASCADE, null=True, blank=True)
     obs = models.CharField(max_length=50, null=True, blank=True)
+    is_courtesy = models.BooleanField(default=False)
 
 class ScheduleStatus(models.Model):
     name = models.CharField(max_length=15)

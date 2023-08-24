@@ -1,20 +1,20 @@
 [
-    {
-      "model": "main.paymenttype",
-      "pk": 1,
-      "fields": {
-        "name": "Cartão de Crédito",
-        "has_tax": true,
-        "taxa": 10
-      }
-    },
-    {
-      "model": "main.paymenttype",
-      "pk": 2,
-      "fields": {
-        "name": "Cartão de Débito",
-        "has_tax": true,
-        "taxa": 10
-      }
+  {
+    "model": "main.paymenttype",
+    "pk": 1,
+    "fields": {
+      "name": "Cartão de Crédito",
+      "has_tax": true,
+      "taxa": 10
     }
+  },
+  {
+    "model": "main.paymenttype",
+    "pk": 2,
+    "fields": {
+      "name": "Cartão de Débito",
+      "has_tax": true,
+      "taxa": 10
+    }
+  }
 ]

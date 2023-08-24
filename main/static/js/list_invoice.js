@@ -1,10 +1,7 @@
 $(document).ready( function () {
-    $.fn.dataTable.moment( 'dd/mm/YY' );
-
     let table = $('#table').DataTable({
         scrollX: false,
         scroller:true,
-        
         scrollY:400,
         select: {
             style: 'multi+shift'
@@ -127,21 +124,6 @@ $(document).ready( function () {
         }
     });
 });
-
-function getCSRFToken() {
-    var cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        var cookies = document.cookie.split(';');
-        for (var i = 0; i < cookies.length; i++) {
-            var cookie = cookies[i].trim();
-            if (cookie.substring(0, 'csrftoken'.length + 1) === ('csrftoken' + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring('csrftoken'.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-}
 
 function payInvoiceFunction(ids, payment_date) {
     $.ajax({

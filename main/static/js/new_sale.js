@@ -18,29 +18,27 @@ window.onload = (e) => {
 
 
         //Event Handlers
+    $("#final_price").on(
+        "change", function (e){
+            if($("#mixed").val()=="True"){
+                $("#price2").val(Number($("#final_price").val())-Number($("#price1").val()));
+            } else {
+                $("#price2").val(0);
+                $("#price1").val($("#final_price").val());
+            }
+        }
+    )
+    
+    $("#price1").on(
+        "change", function (e) {
+            $("#price2").val(Number($("#final_price").val())-Number($("#price1").val()))
+        }
+    )
+
     $("#form").on(
         "submit", function (event){
-            if($("#mixed").value == "True") {
-                if(Number($("#price").value) + Number($("#price2").value) == Number($("#final_price").value)) {
-                    if(parseInt($("#installments").value) == 0 || parseInt($("#installments2").value) == 0) {
-                        window.alert("Não é permitido cadastrar 0 parcelas!");
-                        return false;
-                    } else {
-                        return true()
-                    }
-                } else {
-                    window.alert("Soma dos preços diferente do valor final!");
-                    return false;
-                }
-            } else {
-                if(Number($("#price").value) != Number($("#final_price"))) alert("Valor diferente do valor final!");
-                else {
-                    if(parseInt($("#installments").value) == 0) {
-                        window.alert("Não é permitido cadastrar 0 parcelas!");
-                        return false;
-                    }
-                    else return true;
-                }
+            if(Number($("#price1")) + Number($("#price2"))!=Number($("#final_price"))){
+                if(window.confirm("Preço diferente do preço final. Deseja Continuar?")==false) return false
             }
         }
     )
@@ -51,15 +49,18 @@ window.onload = (e) => {
                 $("#paymentDiv2")[0].hidden = false
                 $("#payment_type2").select2();
                 $("#payment_type2")[0].required = true
-                
+                $("#price1").attr("readonly", false)
             } else {
                 $("#paymentDiv2")[0].hidden = true
                 $("#payment_type2")[0].required = false
                 $("#payment_type2")[0].value = ""
                 $("#tax2")[0].value = ""
-                $("#price2")[0].value = ""
-                $("#installments2")[0].value = ""
+                $("#price2")[0].value = "0"
+                $("#installments2")[0].value = "1"
                 $("#payment_type2").select2('destroy');
+                $("#price1").attr("readonly", true)
+                $("#price1").val($("#final_price").val())
+                $("#price1").trigger("change");
             }
         }
     )
@@ -106,7 +107,6 @@ window.onload = (e) => {
             else {
                 $(".taxDiv").attr("hidden", true);
                 $("#tax").val(null);
-                $("#price").val(null);
                 $("#installments").val(null);
                 if(is_taxSelect1) $("#tax").select2('destroy');
                 is_taxSelect1 = false;
@@ -181,6 +181,11 @@ window.onload = (e) => {
         if(e.target.id=="plan") document.getElementById("sessions").readOnly=true 
         else document.getElementById("sessions").readOnly=false;
         priceCalc();
+        if($("#mixed").val()=="False") {
+            $("#price1").val($("#final_price").val());
+            $("#price1").trigger("change");
+        }
+        else $("#price2").val(Number($("#final_price"))-Number($("#price1").val()))
     }
 
     function changeSaleType(e){
@@ -197,6 +202,8 @@ window.onload = (e) => {
         document.getElementById(e.target.value).querySelector("select").dispatchEvent(change);
 
         document.getElementById(currentType).querySelector("select").value=""
+        if(currentType=="1") $("#sessions").attr("readonly", true) 
+        else $("#sessions").attr("readonly", false) 
     }
 
     function priceCalc(e){
@@ -212,6 +219,7 @@ window.onload = (e) => {
                 final_price=Number(price-discount).toFixed(2);
             } 
             document.getElementById("final_price").value = final_price;
+            $("#final_price").trigger("change")
         }
     }
 }

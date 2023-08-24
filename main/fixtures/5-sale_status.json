@@ -10,7 +10,7 @@
         "model": "main.salestatus",
         "pk": 2,
         "fields":{
-            "name": "Pendente"
+            "name": "Em Aberto"
         }
     },
     {
@@ -25,6 +25,13 @@
         "pk": 4,
         "fields":{
             "name": "Cancelado"
+        }
+    },
+    {
+        "model": "main.salestatus",
+        "pk": 5,
+        "fields":{
+            "name": "Concluído"
         }
     }
 ]

@@ -5,7 +5,8 @@ from . import views
 urlpatterns = [
     path("", views.index, name="index"),
     path("test", views.Test, name="test"),
-    path("contrato/<int:sale_id>", views.TesteContrato, name="contrato"),
+    path("contrato/<int:sale_id>", views.SaleContract, name="sale_contract"),
+    path("contrato/cancel/<int:sale_id>", views.SaleContract, name="cancel_contract"),
     path("login/", views.LoginView, name="login"),
     path("logout/", views.LogoutView, name="logout"),
     path("person/", views.ListPerson, name="list_person"),
@@ -18,6 +19,7 @@ urlpatterns = [
     path("invoice/edit/<int:invoice_id>", views.EditInvoice, name="edit_invoice"),
     path("invoice/<int:invoice_id>", views.ViewInvoice, name="view_invoice"),
     path("payment/", views.ListSale, name="list_sale"),
+    path("payment/cancel/<int:sale_id>", views.CancelSale, name="cancel_sale"),
     path("payment/<int:sale_id>", views.ViewSale, name="view_sale"),
     path("payment/new", views.NewSale, name="new_sale"),
     path("payment/edit/<int:sale_id>", views.EditSale, name="edit_sale"),
@@ -26,4 +28,6 @@ urlpatterns = [
     path("schedule/<int:schedule_id>", views.EditSchedule, name="edit_schedule"),
     path("schedule/<int:schedule_id>/", views.DeleteSchedule, name="delete_schedule"),
     path("schedule/service_filter/<person_id>", views.ServiceAjax, name="service_ajax"),
+    path("schedule/confirm/", views.ConfirmScheduleAjax, name="confirm_ajax"),
+    path("receivable/", views.ListReceivable, name="list_receivable"),
 ]

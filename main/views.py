@@ -5,7 +5,9 @@ from django.http import HttpResponse, JsonResponse
 from django.template.loader import get_template
 from django.contrib.auth.models import User
 from django.core import serializers
+from django.utils import timezone
 from django.urls import reverse
+from django.db.models import Q
 from decimal import Decimal
 from .functions import *
 from .models import *
@@ -36,18 +38,19 @@ def get_or_none(classmodel, classmodel_id):
 def user_is_staff(user):
     return user.groups.filter(name='Financeiro').exists() or user.is_superuser
 
-def TesteContrato(request, sale_id):
-
-    return render(request, 'contrato.html', {"sale":Sale.objects.get(pk=sale_id), "user":request.user})
+def SaleContract(request, sale_id):
+    sale=Sale.objects.get(pk=sale_id)
+    sale.status=SaleStatus.objects.get(pk=2)
+    sale.save()
+    if sale.sale_type.pk == 4:
+        return render(request, 'contrato2.html', {"sale":sale, "user":request.user})
+    else:
+        return render(request, 'contrato1.html', {"sale":sale, "user":request.user})
 
 def Test(request):
-    account = Account.objects.all()
-
-    context = {
-        "account" : account
-    }
+    sale=Sale.objects.get(pk=23)
     
-    return render(request, "html/test.html", context)
+    return render(request, 'contrato2.html', {"sale":sale, "user":request.user})
 
 def LoginView(request):
     context = {}
@@ -166,9 +169,7 @@ def NewPerson(request):
             cpf = request.POST.get("cpf"),
             birth_date = request.POST.get("birth_date"),
             gender = Gender.objects.get(pk=request.POST.get("gender")),
-            phone = request.POST.get("phone"),
             cellphone = request.POST.get("cellphone"),
-            email = request.POST.get("email"),
             cep = request.POST.get("cep"),
             address = request.POST.get("address"),
             city = request.POST.get("city"),
@@ -195,7 +196,7 @@ def NewPerson(request):
 @login_required(login_url="/login/")
 @user_passes_test(user_is_staff, login_url="login")
 def ListInvoice(request):
-    invoice_list = Invoice.objects.all()
+    invoice_list = Invoice.objects.filter(invoice_type__is_expense=True)
 
     context = {
         "perms":request.user.get_all_permissions(),
@@ -380,6 +381,7 @@ def NewSale(request):
 
         payment_type = get_or_none(PaymentType, request.POST.get("payment_type"))
         payment_type2 = get_or_none(PaymentType, request.POST.get("payment_type2"))
+        service = get_or_none(SaleService, value)
 
         s = Sale(
             sale_type = get_or_none(SaleType, request.POST.get("sale_type")),
@@ -387,11 +389,12 @@ def NewSale(request):
             seller = get_or_none(Employee, request.POST.get("seller")),
             payment_type = payment_type,
             status = SaleStatus.objects.get(pk=1),
-            service = get_or_none(SaleService, value),
-            discount = request.POST.get("discount"),
+            service = service,
+            discount = service.price - Decimal(request.POST.get("final_price")) if request.POST.get("sale_type")=="1" else (service.price * Decimal(request.POST.get("sessions"))) - Decimal(request.POST.get("final_price")),
             sessions = request.POST.get("sessions"),
             counter=0,
-            discount_is_percent = True if request.POST.get("discount") == "percent" else False,
+            price1=request.POST.get("price1"),
+            price2=Decimal(request.POST.get("final_price")) - Decimal(request.POST.get("price1")),
             obs = request.POST.get("obs"),
             date = request.POST.get("date"),
             origin = get_or_none(SaleOrigin, request.POST.get("sale_origin")),
@@ -402,7 +405,7 @@ def NewSale(request):
         
         if payment_type.has_tax:
             tax = get_or_none(Tax, request.POST.get("tax"))
-            account = Account.objects.get(pk=118) if tax.payment_type.pk ==  1 else Account.objects.get(pk=117)  # Account 117 == despesa com cartãod e credito; account 118 == despesa com cartão de débito
+            account = Account.objects.get(pk=118) if tax.payment_type.pk ==  1 else Account.objects.get(pk=117)  # Account 117 == despesa com cartão de credito; account 118 == despesa com cartão de débito
             i = Invoice(
                 invoice_type = account,
                 supplier = None,
@@ -410,37 +413,42 @@ def NewSale(request):
                 description = account.commentary,
                 release_date = datetime.datetime.today(),
                 payment_date = None,
-                cost = (Decimal(float(request.POST.get("final_price")))) * (tax.tax/100),
+                cost = (Decimal(float(request.POST.get("price1")))) * (tax.tax/100),
                 paid = False,
                 recurring = False,
-                recurring_qtd = 0,
-                recurring_time = 0,
+                recurring_qtd = request.POST.get("installments1"),
+                recurring_time = 30,
                 generator_sale = Sale.objects.get(pk=s.id),
                 obs = "Despesa com cartão de débito" if tax.payment_type.pk ==  1 else "Despesa com cartão de crédito"
             )
             print(i.__dict__)
             i.save()
+            if i.recurring_qtd > 0:
+                createRecurringInvoice(i.pk)
 
-        if payment_type2.has_tax:
-            tax = get_or_none(Tax, request.POST.get("tax2"))
-            account = Account.objects.get(pk=118) if tax.payment_type2.pk ==  1 else Account.objects.get(pk=117)  # Account 117 == despesa com cartãod e credito; account 118 == despesa com cartão de débito
-            i = Invoice(
-                invoice_type = account,
-                supplier = None,
-                payment_type = None,
-                description = account.commentary,
-                release_date = datetime.datetime.today(),
-                payment_date = None,
-                cost = (Decimal(float(request.POST.get("final_price")))) * (tax.tax/100),
-                paid = False,
-                recurring = False,
-                recurring_qtd = 0,
-                recurring_time = 0,
-                generator_sale = Sale.objects.get(pk=s.id),
-                obs = "Despesa com cartão de débito" if tax.payment_type.pk ==  1 else "Despesa com cartão de crédito"
-            )
-            print(i.__dict__)
-            i.save()
+        if payment_type2:
+            if payment_type2.has_tax:
+                tax = get_or_none(Tax, request.POST.get("tax2"))
+                account = Account.objects.get(pk=118) if tax.payment_type2.pk ==  1 else Account.objects.get(pk=117)  # Account 117 == despesa com cartão de credito; account 118 == despesa com cartão de débito
+                i = Invoice(
+                    invoice_type = account,
+                    supplier = None,
+                    payment_type = None,
+                    description = account.commentary,
+                    release_date = datetime.datetime.today(),
+                    payment_date = None,
+                    cost = (Decimal(float(request.POST.get("price2")))) * (tax.tax/100),
+                    paid = False,
+                    recurring = False,
+                    recurring_qtd = request.POST.get("installments2"),
+                    recurring_time = 30,
+                    generator_sale = Sale.objects.get(pk=s.id),
+                    obs = "Despesa com cartão de débito" if tax.payment_type.pk ==  1 else "Despesa com cartão de crédito"
+                )
+                print(i.__dict__)
+                i.save()
+                if i.recurring_qtd>0:
+                    createRecurringInvoice(i.pk)
 
 
         return redirect(reverse("list_sale"))
@@ -496,6 +504,10 @@ def ViewSale(request, sale_id):
 @login_required(login_url="/login/")
 @user_passes_test(user_is_staff, login_url="login")
 def EditSale(request, sale_id):
+    sale=Sale.objects.get(pk=sale_id)
+    if sale.status.pk!=1:
+        return redirect(reverse("list_sale"))
+
     if(request.method=="POST"):
         value = ""
         if request.POST.get("sale_type") == "1":
@@ -509,20 +521,20 @@ def EditSale(request, sale_id):
 
         service_value = value[len(request.POST.get("sale_type")):]
         
-        s=Sale.objects.get(pk=sale_id)
-        s.sale_type = get_or_none(SaleType, request.POST.get("sale_type"))
-        s.client = get_or_none(Person, request.POST.get("client"))
-        s.seller = get_or_none(Employee, request.POST.get("seller"))
-        s.status = SaleStatus.objects.get(pk=1)
-        s.payment_type = get_or_none(PaymentType, request.POST.get("payment_type"))
-        s.service = get_or_none(SaleService, value)
-        s.discount = request.POST.get("discount")
-        s.sessions = request.POST.get("sessions")
-        s.obs = request.POST.get("obs")
-        s.date = request.POST.get("date")
-        s.final_price = request.POST.get("final_price")
-        print(s.__dict__)
-        s.save()
+        sale=Sale.objects.get(pk=sale_id)
+        sale.sale_type = get_or_none(SaleType, request.POST.get("sale_type"))
+        sale.client = get_or_none(Person, request.POST.get("client"))
+        sale.seller = get_or_none(Employee, request.POST.get("seller"))
+        sale.status = SaleStatus.objects.get(pk=1)
+        sale.payment_type = get_or_none(PaymentType, request.POST.get("payment_type"))
+        sale.service = get_or_none(SaleService, value)
+        sale.discount = request.POST.get("discount")
+        sale.sessions = request.POST.get("sessions")
+        sale.obs = request.POST.get("obs")
+        sale.date = request.POST.get("date")
+        sale.final_price = request.POST.get("final_price")
+        print(sale.__dict__)
+        sale.save()
 
         try:
             invoice = Invoice.object.get(generator_sale__id=s.id)
@@ -548,7 +560,6 @@ def EditSale(request, sale_id):
 
         return redirect(reverse('list_sale'))
 
-    sale=Sale.objects.get(pk=sale_id)
     client_list = Person.objects.all()
     sale_type_list = SaleType.objects.all()
     seller_list = Employee.objects.all()
@@ -579,13 +590,24 @@ def EditSale(request, sale_id):
 
 @login_required(login_url="/login/")
 def ScheduleList(request):
+
+    momento_atual = timezone.now()
+
     status_list = SaleStatus.objects.all()
     professional_list = Employee.objects.all()
     client_list = Person.objects.all()
-    service_list = SaleService.objects.all()
+    service_list = []
     equipment_list = Equipment.objects.all()
+    # event_list = list(ScheduleEvent.objects.filter(status=1).values())
     event_list = list(ScheduleEvent.objects.all().values())
     employee_list = Employee.objects.all()
+    confirm_list = ScheduleEvent.objects.filter(Q(date__lt=momento_atual) & Q(status=1))
+
+    for sale in Sale.objects.filter(status__pk=3):
+        service_list.append({
+            "pk":sale.id,
+            "name":sale.service.name
+        })
 
     context = {
         "status_list" : status_list,
@@ -595,33 +617,37 @@ def ScheduleList(request):
         "equipment_list" : equipment_list,
         "event_list" : event_list,
         "employee_list":employee_list,
-        "username":request.user
+        "username":request.user,
+        "confirm_list":confirm_list
     }
 
     return render(request, "html/list_schedule.html", context)
 
 def CreateSchedule(request):
     if request.method == "POST":
-        print("\n\n\n")
-        print(request.POST)
-        print("\n\n\n")
+        sale = get_or_none(Sale, request.POST.get("sale"))
         schedule = ScheduleEvent(
             title = "Agendamento",
             professional = get_or_none(Employee, request.POST.get("professional")),
-            client = get_or_none(Person, request.POST.get("client")),
+            client = request.POST.get("client"),
             category = "default",
             date = request.POST.get("date"),
             start = request.POST.get("start"),
             end = request.POST.get("end"),
-            status = get_or_none(SaleStatus, request.POST.get("status")),
-            service = get_or_none(SaleService, request.POST.get("service")),
-            sessions = request.POST.get("sessions"),
+            status = 1,
+            sale = sale,
             room = request.POST.get("room"),
             equipment = get_or_none(Equipment, request.POST.get("equipment")),
-            obs = request.POST.get("obs")
+            obs = request.POST.get("obs"),
+            is_courtesy = True if request.POST.get("service")=="-2" else False
         )
-        print(schedule.__dict__)
+        print(request.POST.get("service"))
         schedule.save()
+        try: 
+            sale.status=SaleStatus.objects.get(pk=3)
+            sale.save()
+        except Exception as e:
+            pass
 
     return redirect(reverse('schedule_list'))
 
@@ -656,6 +682,8 @@ def DeleteSchedule(request, schedule_id):
         print("\n\n\n")
 
         schedule=ScheduleEvent.objects.get(pk=schedule_id)
+        schedule.sale.status=SaleStatus.objects.get(pk=2)
+        schedule.sale.save()
         schedule.delete()
 
     return redirect(reverse('schedule_list'))
@@ -696,11 +724,61 @@ def PayInvoiceGroup(request):
 
 def ServiceAjax(request, person_id):
     service_list = []
-    sale_list = Sale.objects.filter(client__pk=person_id)
+    sale_list = Sale.objects.filter(Q(client__pk=person_id) & Q(status__id=2) & Q(service__isnull=False))
     for sale in sale_list:
-        print(sale.__dict__)
+        print(f"ID da Venda: {sale.id}")
+        print(f"Serviço: {sale.service.name}")
+        print(f"ID do Serviço: {sale.service.id}")
         service_list.append({
-            "service":Service.object.get(pk=sale.service_id).name,
+            "sale_id":sale.id,
+            "service":sale.service.name,
+            "service_id":sale.service.id
         })
 
     return JsonResponse(service_list, safe=False)
+
+
+def ConfirmScheduleAjax(request):
+    if request.method == "POST":
+        ids = request.POST.getlist("ids[]")
+        confirmed_list = []
+        for i in ids:
+            s = ScheduleEvent.objects.get(pk=i)
+            s.status = 2
+            confirmed_list.append(s.id)
+            if s.sale is not None:
+                s.sale.counter+=1
+                if s.sale.counter == s.sale.sessions:
+                    s.sale.status = SaleStatus.objects.get(pk=5) #pk==5 é o status Concluído
+                else:
+                    s.sale.status = SaleStatus.objects.get(pk=2)
+                s.sale.save()
+            s.save()
+
+        return JsonResponse(confirmed_list, safe=False)
+
+
+@login_required(login_url="/login/")
+@user_passes_test(user_is_staff, login_url="login")
+def ListReceivable(request):
+    invoice_list = Invoice.objects.filter(invoice_type__is_expense=False)
+
+    context = {
+        "perms":request.user.get_all_permissions(),
+        "username" : request.user,
+        "invoice_list" : invoice_list
+    }
+
+    return render(request, "html/list_receivable.html", context)
+
+
+@login_required(login_url="/login/")
+@user_passes_test(user_is_staff, login_url="login")
+def CancelSale(request, sale_id):
+    if request.method==POST:
+        sale = Sale.objects.get(pk=sale_id)
+        sale.status=SaleStatus.objects.get(pk=4)
+        sale.save()
+        return JsonResponse({"success": "FUNCIONOU"})
+
+    return redirect(reverse("list_sale"))

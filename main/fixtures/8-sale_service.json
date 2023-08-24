@@ -1,0 +1,1332 @@
+[
+    {
+        "model":"main.saleservice",
+        "pk":1,
+        "fields": {
+            "service_type": 1,
+            "name": "BELEZA INFINITY",
+            "price": 39.9,
+            "sessions": 12
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":2,
+        "fields": {
+            "service_type": 1,
+            "name": "CLUBE DO BOTOX",
+            "price": 212.9,
+            "sessions": 12
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":3,
+        "fields": {
+            "service_type": 4,
+            "name": "MENSAL - 1X SEMANA",
+            "price": 213.33,
+            "sessions": 4
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":4,
+        "fields": {
+            "service_type": 4,
+            "name": "MENSAL - 2X SEMANA",
+            "price": 300,
+            "sessions": 8
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":5,
+        "fields": {
+            "service_type": 4,
+            "name": "MENSAL - 3X SEMANA",
+            "price": 360,
+            "sessions": 12
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":6,
+        "fields": {
+            "service_type": 4,
+            "name": "MENSAL - 4X SEMANA",
+            "price": 420,
+            "sessions": 16
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":7,
+        "fields": {
+            "service_type": 4,
+            "name": "MENSAL - 5X SEMANA",
+            "price": 480,
+            "sessions": 20
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":8,
+        "fields": {
+            "service_type": 4,
+            "name": "TRIMESTRAL - 1X SEMANA",
+            "price": 544,
+            "sessions": 12
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":9,
+        "fields": {
+            "service_type": 4,
+            "name": "TRIMESTRAL - 2X SEMANA",
+            "price": 747,
+            "sessions": 24
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":10,
+        "fields": {
+            "service_type": 4,
+            "name": "TRIMESTRAL - 3X SEMANA",
+            "price": 874.8,
+            "sessions": 36
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":11,
+        "fields": {
+            "service_type": 4,
+            "name": "TRIMESTRAL - 4X SEMANA",
+            "price": 934.8,
+            "sessions": 48
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":12,
+        "fields": {
+            "service_type": 4,
+            "name": "TRIMESTRAL - 5X SEMANA",
+            "price": 994.8,
+            "sessions": 60
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":13,
+        "fields": {
+            "service_type": 3,
+            "name": "MANICURE MÃO",
+            "price": 26.53,
+            "sessions": 1
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":14,
+        "fields": {
+            "service_type": 3,
+            "name": "MANICURE PÉ",
+            "price": 26.53,
+            "sessions": 1
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":15,
+        "fields": {
+            "service_type": 3,
+            "name": "MANICURE PÉ + MÃO",
+            "price": 53.2,
+            "sessions": 1
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":16,
+        "fields": {
+            "service_type": 3,
+            "name": "BARRIGA SLIM - SESSÃO AVULSA",
+            "price": 266.53,
+            "sessions": 1
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":17,
+        "fields": {
+            "service_type": 3,
+            "name": "COSTAS SLIM - SESSÃO AVULSA",
+            "price": 266.53,
+            "sessions": 1
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":18,
+        "fields": {
+            "service_type": 3,
+            "name": "PERNAS SLIM - SESSÃO AVULSA",
+            "price": 266.53,
+            "sessions": 1
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":19,
+        "fields": {
+            "service_type": 3,
+            "name": "BRAÇOS SLIM - SESSÃO AVULSA",
+            "price": 266.53,
+            "sessions": 1
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":20,
+        "fields": {
+            "service_type": 3,
+            "name": "BARRIGA SLIM - 5 SESSÕES",
+            "price": 239.97,
+            "sessions": 5
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":21,
+        "fields": {
+            "service_type": 3,
+            "name": "COSTAS SLIM - 5 SESSÕES",
+            "price": 239.97,
+            "sessions": 5
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":22,
+        "fields": {
+            "service_type": 3,
+            "name": "PERNAS SLIM - 5 SESSÕES",
+            "price": 239.97,
+            "sessions": 5
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":23,
+        "fields": {
+            "service_type": 3,
+            "name": "BRAÇOS SLIM - 5 SESSÕES",
+            "price": 239.97,
+            "sessions": 5
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":24,
+        "fields": {
+            "service_type": 3,
+            "name": "BARRIGA SLIM - 10 SESSÕES",
+            "price": 213.2,
+            "sessions": 10
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":25,
+        "fields": {
+            "service_type": 3,
+            "name": "COSTAS SLIM - 10 SESSÕES",
+            "price": 213.2,
+            "sessions": 10
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":26,
+        "fields": {
+            "service_type": 3,
+            "name": "PERNAS SLIM - 10 SESSÕES",
+            "price": 213.2,
+            "sessions": 10
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":27,
+        "fields": {
+            "service_type": 3,
+            "name": "BRAÇOS SLIM - 10 SESSÕES",
+            "price": 213.2,
+            "sessions": 10
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":28,
+        "fields": {
+            "service_type": 3,
+            "name": "LED SHAPE - SESSÃO AVULSA",
+            "price": 333.2,
+            "sessions": 1
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":29,
+        "fields": {
+            "service_type": 3,
+            "name": "LED SHAPE - 5 SESSÕES",
+            "price": 266.64,
+            "sessions": 5
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":30,
+        "fields": {
+            "service_type": 3,
+            "name": "LED SHAPE - 10 SESSÕES",
+            "price": 239.87,
+            "sessions": 10
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":31,
+        "fields": {
+            "service_type": 3,
+            "name": "FOTODEPILAÇÃO BUÇO - SESSÃO AVULSA",
+            "price": 93.2,
+            "sessions": 1
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":32,
+        "fields": {
+            "service_type": 3,
+            "name": "FOTODEPILAÇÃO ROSTO - SESSÃO AVULSA",
+            "price": 93.2,
+            "sessions": 1
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":33,
+        "fields": {
+            "service_type": 3,
+            "name": "FOTODEPILAÇÃO AXILA - SESSÃO AVULSA",
+            "price": 93.2,
+            "sessions": 1
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":34,
+        "fields": {
+            "service_type": 3,
+            "name": "FOTODEPILAÇÃO BARBA - SESSÃO AVULSA",
+            "price": 93.2,
+            "sessions": 1
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":35,
+        "fields": {
+            "service_type": 3,
+            "name": "FOTODEPILAÇÃO BRAÇO - SESSÃO AVULSA",
+            "price": 119.87,
+            "sessions": 1
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":36,
+        "fields": {
+            "service_type": 3,
+            "name": "FOTODEPILAÇÃO NUCA - SESSÃO AVULSA",
+            "price": 93.2,
+            "sessions": 1
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":37,
+        "fields": {
+            "service_type": 3,
+            "name": "FOTODEPILAÇÃO VIRILHA - SESSÃO AVULSA",
+            "price": 93.2,
+            "sessions": 1
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":38,
+        "fields": {
+            "service_type": 3,
+            "name": "FOTODEPILAÇÃO PERIANAL - SESSÃO AVULSA",
+            "price": 93.2,
+            "sessions": 1
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":39,
+        "fields": {
+            "service_type": 3,
+            "name": "FOTODEPILAÇÃO PEITO - SESSÃO AVULSA",
+            "price": 119.87,
+            "sessions": 1
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":40,
+        "fields": {
+            "service_type": 3,
+            "name": "FOTODEPILAÇÃO TORAX - SESSÃO AVULSA",
+            "price": 119.87,
+            "sessions": 1
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":41,
+        "fields": {
+            "service_type": 3,
+            "name": "FOTODEPILAÇÃO COSTAS - SESSÃO AVULSA",
+            "price": 119.87,
+            "sessions": 1
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":42,
+        "fields": {
+            "service_type": 3,
+            "name": "FOTODEPILAÇÃO GLÚTEOS - SESSÃO AVULSA",
+            "price": 119.87,
+            "sessions": 1
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":43,
+        "fields": {
+            "service_type": 3,
+            "name": "FOTODEPILAÇÃO BUÇO - 10 SESSÕES",
+            "price": 66.65,
+            "sessions": 10
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":44,
+        "fields": {
+            "service_type": 3,
+            "name": "FOTODEPILAÇÃO ROSTO - 10 SESSÕES",
+            "price": 66.65,
+            "sessions": 10
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":45,
+        "fields": {
+            "service_type": 3,
+            "name": "FOTODEPILAÇÃO AXILA - 10 SESSÕES",
+            "price": 66.65,
+            "sessions": 10
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":46,
+        "fields": {
+            "service_type": 3,
+            "name": "FOTODEPILAÇÃO BARBA - 10 SESSÕES",
+            "price": 66.65,
+            "sessions": 10
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":47,
+        "fields": {
+            "service_type": 3,
+            "name": "FOTODEPILAÇÃO BRAÇO - 10 SESSÕES",
+            "price": 79.99,
+            "sessions": 10
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":48,
+        "fields": {
+            "service_type": 3,
+            "name": "FOTODEPILAÇÃO NUCA - 10 SESSÕES",
+            "price": 66.65,
+            "sessions": 10
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":49,
+        "fields": {
+            "service_type": 3,
+            "name": "FOTODEPILAÇÃO VIRILHA - 10 SESSÕES",
+            "price": 66.65,
+            "sessions": 10
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":50,
+        "fields": {
+            "service_type": 3,
+            "name": "FOTODEPILAÇÃO PERIANAL - 10 SESSÕES",
+            "price": 66.65,
+            "sessions": 10
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":51,
+        "fields": {
+            "service_type": 3,
+            "name": "FOTODEPILAÇÃO PEITO - 10 SESSÕES",
+            "price": 79.99,
+            "sessions": 10
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":52,
+        "fields": {
+            "service_type": 3,
+            "name": "FOTODEPILAÇÃO TORAX - 10 SESSÕES",
+            "price": 79.99,
+            "sessions": 10
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":53,
+        "fields": {
+            "service_type": 3,
+            "name": "FOTODEPILAÇÃO COSTAS - 10 SESSÕES",
+            "price": 79.99,
+            "sessions": 10
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":54,
+        "fields": {
+            "service_type": 3,
+            "name": "FOTODEPILAÇÃO GLÚTEOS - 10 SESSÕES",
+            "price": 79.99,
+            "sessions": 10
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":55,
+        "fields": {
+            "service_type": 3,
+            "name": "LIPO SEM CORTE - SESSÃO AVULSA",
+            "price": 466.53,
+            "sessions": 1
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":56,
+        "fields": {
+            "service_type": 3,
+            "name": "LIPO SEM CORTE - 5 SESSÕES",
+            "price": 346.53,
+            "sessions": 5
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":57,
+        "fields": {
+            "service_type": 3,
+            "name": "LIPO SEM CORTE - 10 SESSÕES",
+            "price": 319.87,
+            "sessions": 10
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":58,
+        "fields": {
+            "service_type": 3,
+            "name": "LIMPEZA DE PELE - SESSÃO AVULSA",
+            "price": 199.87,
+            "sessions": 1
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":59,
+        "fields": {
+            "service_type": 3,
+            "name": "PEELING - SESSÃO AVULSA",
+            "price": 199.87,
+            "sessions": 1
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":60,
+        "fields": {
+            "service_type": 3,
+            "name": "CLAREAMENTO AXILA - SESSÃO AVULSA",
+            "price": 186.53,
+            "sessions": 1
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":61,
+        "fields": {
+            "service_type": 3,
+            "name": "CLAREAMENTO VIRILHA - SESSÃO AVULSA",
+            "price": 199.87,
+            "sessions": 1
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":62,
+        "fields": {
+            "service_type": 3,
+            "name": "CLAREAMENTO ENTRE COXAS - SESSÃO AVULSA",
+            "price": 199.87,
+            "sessions": 1
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":63,
+        "fields": {
+            "service_type": 3,
+            "name": "CLAREAMENTO ÍNTIMO - SESSÃO AVULSA",
+            "price": 199.87,
+            "sessions": 1
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":64,
+        "fields": {
+            "service_type": 3,
+            "name": "CLAREAMENTO AXILA - 5 SESSÕES",
+            "price": 149.23,
+            "sessions": 5
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":65,
+        "fields": {
+            "service_type": 3,
+            "name": "CLAREAMENTO VIRILHA - 5 SESSÕES",
+            "price": 159.89,
+            "sessions": 5
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":66,
+        "fields": {
+            "service_type": 3,
+            "name": "CLAREAMENTO ENTRE COXAS - 5 SESSÕES",
+            "price": 159.89,
+            "sessions": 5
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":67,
+        "fields": {
+            "service_type": 3,
+            "name": "CLAREAMENTO ÍNTIMO - 5 SESSÕES",
+            "price": 159.89,
+            "sessions": 5
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":68,
+        "fields": {
+            "service_type": 3,
+            "name": "CLAREAMENTO AXILA - 10 SESSÕES",
+            "price": 121.25,
+            "sessions": 10
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":69,
+        "fields": {
+            "service_type": 3,
+            "name": "CLAREAMENTO VIRILHA - 10 SESSÕES",
+            "price": 129.91,
+            "sessions": 10
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":70,
+        "fields": {
+            "service_type": 3,
+            "name": "CLAREAMENTO ENTRE COXAS - 10 SESSÕES",
+            "price": 129.91,
+            "sessions": 10
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":71,
+        "fields": {
+            "service_type": 3,
+            "name": "CLAREAMENTO ÍNTIMO - 10 SESSÕES",
+            "price": 129.91,
+            "sessions": 10
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":72,
+        "fields": {
+            "service_type": 3,
+            "name": "DRENAGEM - SESSÃO AVULSA",
+            "price": 186.53,
+            "sessions": 1
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":73,
+        "fields": {
+            "service_type": 3,
+            "name": "DRENAGEM - 5 SESSÕES",
+            "price": 159.97,
+            "sessions": 5
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":74,
+        "fields": {
+            "service_type": 3,
+            "name": "DRENAGEM - 10 SESSÕES",
+            "price": 133.2,
+            "sessions": 10
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":75,
+        "fields": {
+            "service_type": 3,
+            "name": "MASSAGEM RELAXANTE - SESSÃO AVULSA",
+            "price": 186.53,
+            "sessions": 1
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":76,
+        "fields": {
+            "service_type": 3,
+            "name": "MASSAGEM RELAXANTE - 5 SESSÕES",
+            "price": 159.97,
+            "sessions": 5
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":77,
+        "fields": {
+            "service_type": 3,
+            "name": "MASSAGEM RELAXANTE - 10 SESSÕES",
+            "price": 133.2,
+            "sessions": 10
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":78,
+        "fields": {
+            "service_type": 3,
+            "name": "HERUS HIFU FULL FACE - SESSÃO AVULSA",
+            "price": 3133.20,
+            "sessions": 1
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":79,
+        "fields": {
+            "service_type": 3,
+            "name": "HERUS HIFU ROSTO - SESSÃO AVULSA",
+            "price": 2932.00,
+            "sessions": 1
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":80,
+        "fields": {
+            "service_type": 3,
+            "name": "HERUS HIFU ROSTO + PAPADA - SESSÃO AVULSA",
+            "price": 4000.00,
+            "sessions": 1
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":81,
+        "fields": {
+            "service_type": 3,
+            "name": "HERUS HIFU PAPADA + PESCOÇO - SESSÃO AVULSA",
+            "price": 4533.20,
+            "sessions": 1
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":82,
+        "fields": {
+            "service_type": 3,
+            "name": "HERUS HIFU ROSTO + PAPADA + PESCOÇO - SESSÃO AVULSA",
+            "price": 5332.00,
+            "sessions": 1
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":83,
+        "fields": {
+            "service_type": 3,
+            "name": "ENZIMAS GORDURA LOCALIZADA - SESSÃO AVULSA",
+            "price": 316,
+            "sessions": 1
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":84,
+        "fields": {
+            "service_type": 3,
+            "name": "ENZIMAS CAPILAR - SESSÃO AVULSA",
+            "price": 316,
+            "sessions": 1
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":85,
+        "fields": {
+            "service_type": 3,
+            "name": "ENZIMAS PAPADA - SESSÃO AVULSA",
+            "price": 316,
+            "sessions": 1
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":86,
+        "fields": {
+            "service_type": 3,
+            "name": "ENZIMAS LOW CARB - SESSÃO AVULSA",
+            "price": 316,
+            "sessions": 1
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":87,
+        "fields": {
+            "service_type": 3,
+            "name": "ENZIMAS DEFINIÇÃO - SESSÃO AVULSA",
+            "price": 316,
+            "sessions": 1
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":88,
+        "fields": {
+            "service_type": 3,
+            "name": "ENZIMAS GORDURA LOCALIZADA - 5 SESSÕES",
+            "price": 221.31,
+            "sessions": 5
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":89,
+        "fields": {
+            "service_type": 3,
+            "name": "ENZIMAS CAPILAR - 5 SESSÕES",
+            "price": 221.31,
+            "sessions": 5
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":80,
+        "fields": {
+            "service_type": 3,
+            "name": "ENZIMAS PAPADA - 5 SESSÕES",
+            "price": 221.31,
+            "sessions": 5
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":81,
+        "fields": {
+            "service_type": 3,
+            "name": "ENZIMAS LOW CARB - 5 SESSÕES",
+            "price": 221.31,
+            "sessions": 5
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":82,
+        "fields": {
+            "service_type": 3,
+            "name": "ENZIMAS DEFINIÇÃO - 5 SESSÕES",
+            "price": 221.31,
+            "sessions": 5
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":83,
+        "fields": {
+            "service_type": 3,
+            "name": "ENZIMAS GORDURA LOCALIZADA - 10 SESSÕES",
+            "price": 221.31,
+            "sessions": 10
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":84,
+        "fields": {
+            "service_type": 3,
+            "name": "ENZIMAS CAPILAR - 10 SESSÕES",
+            "price": 221.31,
+            "sessions": 10
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":85,
+        "fields": {
+            "service_type": 3,
+            "name": "ENZIMAS PAPADA - 10 SESSÕES",
+            "price": 221.31,
+            "sessions": 10
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":86,
+        "fields": {
+            "service_type": 3,
+            "name": "ENZIMAS LOW CARB - 10 SESSÕES",
+            "price": 221.31,
+            "sessions": 10
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":87,
+        "fields": {
+            "service_type": 3,
+            "name": "ENZIMAS DEFINIÇÃO - 10 SESSÕES",
+            "price": 221.31,
+            "sessions": 10
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":88,
+        "fields": {
+            "service_type": 3,
+            "name": "PREENCHEDOR RENNOVA LIFT - SESSÃO AVULSA",
+            "price": 933.2,
+            "sessions": 1
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":89,
+        "fields": {
+            "service_type": 3,
+            "name": "PREENCHEDOR RENNOVA ULTRA VOLUME - SESSÃO AVULSA",
+            "price": 1733.20,
+            "sessions": 1
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":100,
+        "fields": {
+            "service_type": 3,
+            "name": "PREENCHEDOR RENNOVA PLUS LIDO - SESSÃO AVULSA",
+            "price": 1599.87,
+            "sessions": 1
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":101,
+        "fields": {
+            "service_type": 3,
+            "name": "PREENCHEDOR RENNOVA LIPS LIDO - SESSÃO AVULSA",
+            "price": 1466.53,
+            "sessions": 1
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":102,
+        "fields": {
+            "service_type": 3,
+            "name": "PREENCHEDOR RESTYLANE KYSSE - SESSÃO AVULSA",
+            "price": 1599.87,
+            "sessions": 1
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":103,
+        "fields": {
+            "service_type": 3,
+            "name": "PREENCHEDOR RESTYLANE - SESSÃO AVULSA",
+            "price": 1466.53,
+            "sessions": 1
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":104,
+        "fields": {
+            "service_type": 3,
+            "name": "PREENCHEDOR RESTYLANE LYFT - SESSÃO AVULSA",
+            "price": 1599.87,
+            "sessions": 1
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":105,
+        "fields": {
+            "service_type": 3,
+            "name": "BIOESTIMULADOR SCULPTRA - SESSÃO AVULSA",
+            "price": 3999.87,
+            "sessions": 1
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":106,
+        "fields": {
+            "service_type": 3,
+            "name": "BIOESTIMULADOR ELLEVA - SESSÃO AVULSA",
+            "price": 3999.87,
+            "sessions": 1
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":107,
+        "fields": {
+            "service_type": 3,
+            "name": "PEIM - SESSÃO AVULSA",
+            "price": 260,
+            "sessions": 1
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":108,
+        "fields": {
+            "service_type": 3,
+            "name": "PEIM - 5 SESSÕES",
+            "price": 221.2,
+            "sessions": 5
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":109,
+        "fields": {
+            "service_type": 3,
+            "name": "PEIM - 10 SESSÕES",
+            "price": 199.87,
+            "sessions": 10
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":110,
+        "fields": {
+            "service_type": 3,
+            "name": "CORRENTE RUSSA - 5 SESSÕES",
+            "price": 106.53,
+            "sessions": 5
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":111,
+        "fields": {
+            "service_type": 3,
+            "name": "CORRENTE RUSSA - 10 SESSÕES",
+            "price": 93.2,
+            "sessions": 10
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":112,
+        "fields": {
+            "service_type": 3,
+            "name": "RÁDIO FREQUÊNCIA - 5 SESSÕES",
+            "price": 119.97,
+            "sessions": 5
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":113,
+        "fields": {
+            "service_type": 3,
+            "name": "RÁDIO FREQUÊNCIA - 10 SESSÕES",
+            "price": 89.33,
+            "sessions": 10
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":114,
+        "fields": {
+            "service_type": 3,
+            "name": "MICROAGULHAMENTO - SESSÃO AVULSA",
+            "price": 333.2,
+            "sessions": 1
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":115,
+        "fields": {
+            "service_type": 3,
+            "name": "MICROAGULHAMENTO - 5 SESSÕES",
+            "price": 199.87,
+            "sessions": 5
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":116,
+        "fields": {
+            "service_type": 3,
+            "name": "MICROAGULHAMENTO - 10 SESSÕES",
+            "price": 173.2,
+            "sessions": 10
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":117,
+        "fields": {
+            "service_type": 3,
+            "name": "STRILL - SESSÃO AVULSA",
+            "price": 159.87,
+            "sessions": 1
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":118,
+        "fields": {
+            "service_type": 3,
+            "name": "STRILL - 5 SESSÕES",
+            "price": 146.53,
+            "sessions": 5
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":119,
+        "fields": {
+            "service_type": 3,
+            "name": "STRILL - 10 SESSÕES",
+            "price": 133.2,
+            "sessions": 10
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":120,
+        "fields": {
+            "service_type": 3,
+            "name": "BOTOX + RETOQUE - SESSÃO AVULSA",
+            "price": 1332.00,
+            "sessions": 1
+        }
+    },
+    
+    {
+        "model":"main.saleservice",
+        "pk":121,
+        "fields": {
+            "service_type": 3,
+            "name": "HERUS HIFU FULL FACE + BIOESTIMULADOR - SESSÃO AVULSA",
+            "price": 4532.00,
+            "sessions": 1
+        }
+    }
+   ]
