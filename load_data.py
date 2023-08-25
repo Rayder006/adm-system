@@ -1,5 +1,5 @@
+from django.core.management import call_command
 import os
-import subprocess
 
 def load_fixtures():
     fixtures_dir = "./main/fixtures/"
@@ -7,8 +7,7 @@ def load_fixtures():
 
     for fixture in fixtures:
         fixture_path = os.path.join(fixtures_dir, fixture)
-        cmd = f"python manage.py loaddata {fixture_path}"
-        subprocess.run(cmd, shell=True)
+        call_command("loaddata", fixture_path)
 
 if __name__ == "__main__":
     load_fixtures()
