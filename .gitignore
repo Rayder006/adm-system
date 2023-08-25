@@ -2,10 +2,13 @@
 *.log
 *.pot
 *.pyc
+**.pyc
 __pycache__
 db.sqlite3
 media
 /main/migrations/
+/main/__pycache__/
+/mysite/__pycache__/
 
 # Backup files # 
 *.bak 
