@@ -48,7 +48,7 @@ $(document).ready( function () {
                                 dados = dados.data();
                                 ids = []
                                 dados.each(function(data) {
-                                    if(data[7]=="Não" || !pass){
+                                    if(data[7]=="Sim" || !pass){
                                         if(confirm("Uma ou mais dessas contas já está paga. Deseja alterar a data?")==false) return;
                                         else pass=true;
                                     }
@@ -71,15 +71,47 @@ $(document).ready( function () {
             {                     //Valor
                 "render": function(data, type, row) {
                     if (type === 'display' || type === 'filter') {
-                        return `R$${data}`;
+                        const formCurrency = new Intl.NumberFormat('pt-BR', {
+                            style: 'currency',
+                            currency: 'BRL',
+                            minimumFractionDigits: 2
+                        })
+                        return formCurrency.format(data);
                     }
                     return data;
                 }
-            },    
-            { "type": "date" }, //Lançamento
-            { "type": "date" }, //Vencimento
-            { "type": "date" }, //Pagamento
-            { "type": "string" }, //Pagamento
+            },
+            { "type": "string" },   //Fornecedor                  
+            {                       //Lançamento
+                "type":"date",
+                "render": function(data,type,row){
+                    if(type==="display" || type ==="filter"){
+                        return data;
+                    }
+                    let date = new Date(data);
+                    return date;
+                }
+            }, 
+            {                   //Vencimento
+                "type":"date",
+                "render": function(data,type,row){
+                    if(type==="display" || type ==="filter"){
+                        return data;
+                    }
+                    let date = new Date(data);
+                    return date;
+                }
+            },  
+            {                  //Pagamento
+                "type":"date",
+                "render": function(data,type,row){
+                    if(type==="display" || type ==="filter"){
+                        return data;
+                    }
+                    let date = new Date(data);
+                    return date;
+                }
+            },  
             { "type": "string" }, //A Pagar?
             { "orderable":false }, //Ações
             null

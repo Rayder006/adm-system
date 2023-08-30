@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     {% load static %}
+    {% load admin_urls %}
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
@@ -17,47 +18,55 @@
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-secondary">
-        <a class="navbar-brand" href="{% url 'index' %}"><span><img src="{% static 'images/logo.png' %}" height="64px"></span></a>
-      
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Páginas
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    {% if 'admin.add_logentry' in perms %}
-                    <a class="dropdown-item" target="_blank" href="/admin/">Painel de Administrador</a>
-                    {% endif %}
-                    <a class="dropdown-item" href="{% url 'list_person' %}">Clientes</a>
-                    {% if 'main.view_person' in perms %}
-                    <a class="dropdown-item" href="{% url 'list_invoice' %}">Contas a Pagar</a>
-                    <a class="dropdown-item" href="{% url 'list_receivable' %}">Contas a Receber</a>
-                    <a class="dropdown-item" href="{% url 'list_sale' %}">Vendas</a>
-                    {% endif %}
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="{% url 'schedule_list' %}">Agendamentos</a>
-                    <a class="dropdown-item" href="#">Funcionários</a>
-                    <a class="dropdown-item" href="{% url 'test' %}">Teste</a> 
-                </div>
+            <ul class="navbar-nav mr-auto align-items-center">
+                <li class="nav-item active">
+                    <a class="navbar-brand" href="{% url 'index' %}"><img src="{% static 'images/logo.png' %}" height="64px"></a>
                 </li>
-            </ul>
-            <ul class="navbar-nav navbar-brand">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle text-danger" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        {% if username.first_name %} {{username.first_name}} {{username.last_name}} {% else %} {{username}} {% endif %}
+                <li class="nav-item dropdow">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Cadastro
                     </a>
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="{% url 'logout' %}">Log Out</a>  
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{% url 'list_person' %}">Cliente</a>
+                        <a class="dropdown-item" href="{% url 'admin:main_employee_changelist' %}">Funcionário</a>
+                        <a class="dropdown-item" href="{% url 'admin:main_supplier_changelist' %}">Fornecedor</a>
                     </div>
                 </li>
-            </ul>
-            <a class="navbar-brand" href="#"></a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Financeiro
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{% url 'list_invoice' %}">Contas a Pagar</a>
+                        <a class="dropdown-item" href="{% url 'list_receivable' %}">Contas a Receber</a>
+                        <a class="dropdown-item" href="{% url 'admin:main_tax_changelist' %}">Cadastro Financeiro</a>
+                        <!-- <a class="dropdown-item" href="#" disabled>Fluxo de Caixa</a>
+                        <a class="dropdown-item" href="#" disabled>Conciliação Bancária</a> -->
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'schedule_list' %}">Agendamento</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'list_sale' %}">Vendas</a>
+                </li>
+          </ul>
+          <ul class="navbar-nav my-2 my-lg-0">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        {% if user.first_name %} {{user.first_name}} {{user.last_name}} {% else %} {{user.username}} {% endif %}
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                        {% if user.is_superuser %}
+                            <a class="dropdown-item" href="#">Adicionar Meta</a>
+                        {% endif %}          
+                        <a class="dropdown-item" href="{% url 'logout' %}">Sair</a>
+                    </div>
+                </li>
+          </ul>
         </div>
-      </nav>
-
-
-
+    </nav>
     {% block body %}
     {% endblock %}
     {% block footer %}

@@ -19,6 +19,7 @@
 </head>
 <body>
     {% block body %}
+    {{ tax_list|json_script:"tax_list" }}
     <div class="container-fluid">
         <form action="{% url 'new_sale' %}" method="post" id="form" class="box bg-secondary"> 
             {% csrf_token %}
@@ -41,7 +42,7 @@
                     <select class="custom-select" required name="sale_type" id="sale_type">
                         <option value="" selected hidden>Selecione</option>
                         {% for type in sale_type_list %}
-                        <option value="{{type.pk}}">Venda de {{type.name}}</option>
+                        <option value="{{type.pk}}">{{type.name}}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -56,15 +57,6 @@
                         {% endfor %}
                     </select>
                 </div>
-                <!-- <div class="col-3  form-group">
-                    <label for="status">Status*</label>
-                    <select class="custom-select" required name="status" id="status">
-                        <option value="" selected hidden>Selecione</option>
-                        {% for status in status_list %}
-                        <option value="{{status.pk}}">{{status.name}}</option>
-                        {% endfor %}
-                    </select>
-                </div> -->
                 <div class="col-6  form-group">
                     <label for="sale_origin">Origem da Venda*</label>
                     <select class="custom-select" required name="sale_origin" id="sale_origin">
@@ -76,31 +68,10 @@
                 </div>
             </div>
             <div class="col row py-2">
-                <div id="1" class="col-6 flex-column form-group">
-                    <label for="plan" id="plan_label">Plano*</label>
-                    <select class="custom-select" required id="plan" name="plan">
-                        <option value="" selected hidden>Selecione</option>
-                        {% for plan in plan_list %}
-                        <option data-price="{{plan.price}}" data-sessions="{{plan.sessions}}" id="{{plan.service_type.pk}}{{plan.pk}}" value="{{plan.pk}}">{{plan.name}}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div id="2" class="col-6 flex-column form-group" hidden>
-                    <label for="service" id="service_label">Serviço*</label>
-                    <select class="custom-select" id="service" name="service">
-                        <option value="" selected hidden>Selecione</option>
-                        {% for service in service_list %}
-                        <option data-price="{{service.price}}" data-sessions="{{service.sessions}}" id="{{service.service_type.pk}}{{service.pk}}" value="{{service.pk}}">{{service.name}}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div id="3" class="col-6 flex-column form-group" hidden>
-                    <label for="product" id="product_label">Produto*</label>
-                    <select class="custom-select" id="product" name="product">
-                        <option value="" selected hidden>Selecione</option>
-                        {% for product in product_list %}
-                        <option data-price="{{product.price}}" data-sessions="{{product.sessions}}" id="{{product.service_type.pk}}{{product.pk}}" value="{{product.pk}}">{{product.name}}</option>
-                        {% endfor %}
+                <div id="service_div" class="col-6 flex-column form-group">
+                    <label for="service" id="service_label">Plano*</label>
+                    <select class="custom-select" required id="service" name="service">
+                        <option value="" selected hidden>Selecione o Tipo de Venda</option>
                     </select>
                 </div>
                 <div class="col-3  form-group">
@@ -116,20 +87,20 @@
                 <div class="col-6  form-group">
                     <label for="discount_type">Tipo de Desconto*</label>
                     <select class="custom-select" value="1" id="discount_type" name="discount_type">
-                        <option value="real">Reais (R$)</option>
-                        <option value="percent">Porcentagem (%)</option>
+                        <option value="1">Reais (R$)</option>
+                        <option value="2">Porcentagem (%)</option>
                     </select>
                 </div>
                 <div class="col-3  form-group">
                     <label for="discount">Desconto*</label>
-                    <input class="form-control" required id="discount" name="discount" placeholder="0" value="0">
+                    <input class="form-control" type="number" required id="discount" name="discount" placeholder="0" value="0" step="0.01">
                     <small id="discountTip"></small>
                 </div>
                 <div class="col-3 d-flex form-check flex-column form-group">
                     <label for="mixed">Venda Mista?*</label>
                     <select class="custom-select" class="form-select"  id="mixed" name="mixed">
-                        <option value="True">Sim</option>  
-                        <option value="False" selected>Não</option> 
+                        <option value="1">Sim</option>  
+                        <option value="0" selected>Não</option> 
                     </select>
                 </div>
             </div>
@@ -149,44 +120,44 @@
                 </div>
                 <div class="col-3 form-check form-group taxDiv" hidden>
                     <label for="tax">Tipo de Cartão*</label>
-                    <select class="custom-select" id="tax" name="tax">
+                    <select class="custom-select taxInput" id="tax" name="tax">
                         <option value="" disabled selected>Selecione...</option>
                         {% for tax in tax_list %}
                         <option data-id="{{tax.payment_type.pk}}" value="{{tax.pk}}">{{tax.name}}</option>
                         {% endfor %} 
                     </select>
                 </div>
-                <div class="col-3 form-group taxDiv"  hidden>
+                <div class="col-3 form-group taxDiv" hidden>
                     <label for="installments">Parcelas*</label>
-                    <input class="form-control" type="number" id="installments" name="installments" min="1" max="12" value="1">
+                    <input class="form-control taxInput" type="number" id="installments1" name="installments1" min="1" max="12" default="1">
                 </div>
             </div>
-            <div id="paymentDiv2" class="col row py-2" hidden> 
-                <div class="col-3 form-check form-group">
+            <div class="col row py-2"> 
+                <div class="col-3 form-check form-group payment2" hidden>
                     <label for="payment_type2">2ª Forma de Pagamento*</label>
-                    <select class="custom-select" id="payment_type2" name="payment_type2">
+                    <select class="custom-select paymentInput2" id="payment_type2" name="payment_type2">
                         <option value="" disabled hidden selected>Selecione...</option>
                         {% for payment in payment_type_list %}
                         <option data-tax="{{payment.has_tax}}" value="{{payment.pk}}">{{payment.name}}</option>
                         {% endfor %} 
                     </select>
                 </div>
-                <div class="col-3 form-group">
+                <div class="col-3 form-group payment2" hidden>
                     <label for="price2">2º Valor*</label>
-                    <input class="form-control" readonly name="price2" id="price2" type="number" min="0">
+                    <input class="form-control paymentInput2" readonly name="price2" id="price2" type="number" min="0">
                 </div>
                 <div class="col-3 form-check form-group taxDiv2" hidden>
-                    <label for="tax2">2º Tipo de Cartão*</label>
-                    <select class="custom-select" id="tax2" name="tax2">
+                    <label for="tax2">Tipo de Cartão*</label>
+                    <select class="custom-select taxInput2" id="tax2" name="tax2">
                         <option value="" disabled selected>Selecione...</option>
                         {% for tax in tax_list %}
                         <option data-id="{{tax.payment_type.pk}}" value="{{tax.pk}}">{{tax.name}}</option>
                         {% endfor %} 
                     </select>
                 </div>
-                <div class="col-3 form-group taxDiv2" hidden>
-                    <label for="installments2">2ª Parcelas*</label>
-                    <input class="form-control" id="installments2" name="installments2" type="number" min="1" max="12" value="1">
+                <div class="col-3 form-group taxDiv2"  hidden>
+                    <label for="installments2">Parcelas*</label>
+                    <input class="form-control taxInput2" type="number" id="installments2" name="installments2" min="1" max="12" default="1">
                 </div>
             </div>
             <div class="col row py-2">
@@ -194,11 +165,10 @@
                     <label for="OBS">Observações</label>
                     <textarea  class="form-control" name="obs" id="OBS" cols="20" rows="4"></textarea>
                 </div>
-                <div class="col-2  form-group">
+                <div class="col-4  form-group">
                     <label for="date">Data da Venda*</label>
                     <input class="form-control" required id="date" name="date" type="date">
                 </div>
-                <div class="col-2"></div>
                 <div class="col-4  form-group">
                     <label for="final_price">Preço Final</label>
                     <input class="form-control" step="0.01" readonly id="final_price" name="final_price">

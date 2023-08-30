@@ -14,15 +14,16 @@ from .models import *
 
 
 def createRecurringInvoice(inv_pk):
-    recurring_time = Invoice.objects.get(pk=inv_pk).recurring_time
     inv = Invoice.objects.get(pk=inv_pk)
+    recurring_time = Invoice.objects.get(pk=inv_pk).recurring_time
+    
     for i in range(0, inv.recurring_qtd):
         inv_ = inv
         inv_.pk = None
         inv_.recurring_qtd -= 1
         print(inv_.release_date)
         inv_.release_date = inv_.release_date + datetime.timedelta(days=inv_.recurring_time)
-        inv_.payment_date = inv_.payment_date + datetime.timedelta(days=inv_.recurring_time)
+        inv_.due_date = inv_.due_date + datetime.timedelta(days=inv_.recurring_time)
 
         inv_.save()
         inv=inv_
@@ -43,9 +44,9 @@ def SaleContract(request, sale_id):
     sale.status=SaleStatus.objects.get(pk=2)
     sale.save()
     if sale.sale_type.pk == 4:
-        return render(request, 'contrato2.html', {"sale":sale, "user":request.user})
+        return render(request, 'contracts/contrato2.html', {"sale":sale, "user":request.user})
     else:
-        return render(request, 'contrato1.html', {"sale":sale, "user":request.user})
+        return render(request, 'contracts/contrato1.html', {"sale":sale, "user":request.user})
 
 def Test(request):
     sale=Sale.objects.get(pk=23)
@@ -258,15 +259,14 @@ def ViewInvoice(request, invoice_id):
 def NewInvoice(request):
     if request.method == "POST":
         print(request.POST)
+        cost = request.POST.get("cost")[3:].replace(".", "").replace(",", ".")
         i = Invoice(
             invoice_type = get_or_none(Account, request.POST.get("invoice_type")), 
-            supplier=get_or_none(Supplier, request.POST.get("supplier")),
-            # unit = get_or_none(Unit, request.POST.get("unit")), 
-            # payment_type = get_or_none(PaymentType, request.POST.get("payment_type")), 
+            supplier=get_or_none(Supplier, request.POST.get("supplier")), 
             description = request.POST.get("description"), 
             release_date = request.POST.get("release_date"), 
             due_date = request.POST.get("due_date"),  #atenção !!
-            cost = request.POST.get("cost"),
+            cost = cost,
             recurring = eval(request.POST.get("recurring")), 
             recurring_qtd = int(request.POST.get("recurring_qtd")), 
             recurring_time = int(request.POST.get("recurring_time")) if request.POST.get("recurring_time") else None, 
@@ -296,11 +296,15 @@ def NewInvoice(request):
 @login_required(login_url="/login/")
 @user_passes_test(user_is_staff, login_url="login")
 def EditInvoice(request, invoice_id):
+
+    invoice = Invoice.objects.get(pk=invoice_id)
+    if invoice.invoice_type.is_expense==False:
+        return redirect(reverse("list_receivable"))
+
     if request.method == "POST":
         print("\n\n")
         print(request.POST)
         print("\n\n")
-        invoice = Invoice.objects.get(pk=invoice_id)
         invoice.invoice_type = get_or_none(Account, request.POST.get("invoice_type"))
         invoice.payment_type = get_or_none(PaymentType, request.POST.get("payment_type"))
         invoice.description = request.POST.get("description")
@@ -316,7 +320,6 @@ def EditInvoice(request, invoice_id):
 
         return redirect(reverse('list_invoice'))
 
-    invoice = Invoice.objects.get(pk=invoice_id)
     supplier_list = Supplier.objects.all()
     invoice_type_list = Account.objects.filter(is_expense=True)
 
@@ -369,87 +372,95 @@ def ListSale(request):
 @user_passes_test(user_is_staff, login_url="login")
 def NewSale(request):
     if request.method == "POST":
-        value = ""
-        if request.POST.get("sale_type") == "1":
-            value = request.POST.get("plan")
+        print(request.POST)
 
-        elif request.POST.get("sale_type") == "2":
-            value = request.POST.get("service")
-
-        else:
-            value = request.POST.get("product")
-
+        service = SaleService.objects.get(pk=request.POST.get("service"))
+        final_price = Decimal(request.POST.get("final_price"))
+        discount = final_price
+        discount -= service.price * service.sessions
         payment_type = get_or_none(PaymentType, request.POST.get("payment_type"))
-        payment_type2 = get_or_none(PaymentType, request.POST.get("payment_type2"))
-        service = get_or_none(SaleService, value)
+        payment_type2 = None if request.POST.get("mixed") == 0 else get_or_none(PaymentType, request.POST.get("payment_type"))
+        installments1=int(request.POST.get("installments1"))
+        installments2=int(request.POST.get("installments1"))
+        mixed = request.POST.get("mixed")==1
+        price1 = Decimal(request.POST.get("price1"))
+        price2 = Decimal(request.POST.get("price2")) if mixed==1 else None
+
 
         s = Sale(
-            sale_type = get_or_none(SaleType, request.POST.get("sale_type")),
             client = get_or_none(Person, request.POST.get("client")),
             seller = get_or_none(Employee, request.POST.get("seller")),
-            payment_type = payment_type,
-            status = SaleStatus.objects.get(pk=1),
+            status = SaleStatus.objects.get(pk=1), # novo
+            origin = get_or_none(SaleOrigin, request.POST.get("origin")),
             service = service,
-            discount = service.price - Decimal(request.POST.get("final_price")) if request.POST.get("sale_type")=="1" else (service.price * Decimal(request.POST.get("sessions"))) - Decimal(request.POST.get("final_price")),
+            payment_type = payment_type,
+            payment_type2 = payment_type2,
+            discount = discount,
             sessions = request.POST.get("sessions"),
-            counter=0,
-            price1=request.POST.get("price1"),
-            price2=Decimal(request.POST.get("final_price")) - Decimal(request.POST.get("price1")),
             obs = request.POST.get("obs"),
-            date = request.POST.get("date"),
-            origin = get_or_none(SaleOrigin, request.POST.get("sale_origin")),
-            final_price = request.POST.get("final_price")
+            release_date = datetime.datetime.today(),
+            counter = 0,
+            price1 = price1,
+            price2 = 0 if request.POST.get("mixed") == 0 else price2,
+            installments1 = installments1,
+            installments2 = 0 if request.POST.get("mixed") == 0 else installments2,
+            final_price = final_price
         )
-        print(s.__dict__)
+
         s.save()
-        
+        s=Sale.objects.get(pk=s.id)
+        print(s.__dict__)
+
+        price1 /= installments1
+        if mixed:
+            price2 /= installments2
+
+
         if payment_type.has_tax:
-            tax = get_or_none(Tax, request.POST.get("tax"))
-            account = Account.objects.get(pk=118) if tax.payment_type.pk ==  1 else Account.objects.get(pk=117)  # Account 117 == despesa com cartão de credito; account 118 == despesa com cartão de débito
+            tax = Tax.objects.get(pk=request.POST.get("tax"))
+            cost = (Decimal(request.POST.get("price1"))*(tax.tax/100))/installments1
             i = Invoice(
-                invoice_type = account,
+                invoice_type = Account.objects.get(pk=117) if payment_type.pk==1 else Account.objects.get(pk=118), # 117 == crédito; 118 == débito
                 supplier = None,
-                payment_type = None,
-                description = account.commentary,
+                payment_type = payment_type,
+                generator_sale = s,
+                description = "Despesa Gerada Automáticamente",
                 release_date = datetime.datetime.today(),
+                due_date = datetime.datetime.today() + datetime.timedelta(days=int(30)),
                 payment_date = None,
-                cost = (Decimal(float(request.POST.get("price1")))) * (tax.tax/100),
+                cost = cost,
                 paid = False,
-                recurring = False,
-                recurring_qtd = request.POST.get("installments1"),
+                recurring = True,
+                recurring_qtd = installments1-1,
                 recurring_time = 30,
-                generator_sale = Sale.objects.get(pk=s.id),
-                obs = "Despesa com cartão de débito" if tax.payment_type.pk ==  1 else "Despesa com cartão de crédito"
+                obs = "Despesa Gerada Automáticamente"
             )
-            print(i.__dict__)
+
             i.save()
-            if i.recurring_qtd > 0:
-                createRecurringInvoice(i.pk)
+            price1-=cost
+            createRecurringInvoice(i.pk)
 
-        if payment_type2:
-            if payment_type2.has_tax:
-                tax = get_or_none(Tax, request.POST.get("tax2"))
-                account = Account.objects.get(pk=118) if tax.payment_type2.pk ==  1 else Account.objects.get(pk=117)  # Account 117 == despesa com cartão de credito; account 118 == despesa com cartão de débito
-                i = Invoice(
-                    invoice_type = account,
-                    supplier = None,
-                    payment_type = None,
-                    description = account.commentary,
-                    release_date = datetime.datetime.today(),
-                    payment_date = None,
-                    cost = (Decimal(float(request.POST.get("price2")))) * (tax.tax/100),
-                    paid = False,
-                    recurring = False,
-                    recurring_qtd = request.POST.get("installments2"),
-                    recurring_time = 30,
-                    generator_sale = Sale.objects.get(pk=s.id),
-                    obs = "Despesa com cartão de débito" if tax.payment_type.pk ==  1 else "Despesa com cartão de crédito"
-                )
-                print(i.__dict__)
-                i.save()
-                if i.recurring_qtd>0:
-                    createRecurringInvoice(i.pk)
+        i = Invoice(
+            invoice_type = s.service.account,
+            supplier = None,
+            payment_type = payment_type,
+            generator_sale = s,
+            description = "Receita Gerada Automáticamente",
+            release_date = datetime.datetime.today(),
+            due_date = datetime.datetime.today()+datetime.timedelta(days=30),
+            payment_date = None,
+            cost = price1,
+            paid = False,
+            recurring = True,
+            recurring_qtd = installments1-1,
+            recurring_time = 30,
+            obs = "Receita Gerada Automáticamente"
+        ) 
+        i.save()
 
+        createRecurringInvoice(i.pk)
+
+        
 
         return redirect(reverse("list_sale"))
 
@@ -463,8 +474,7 @@ def NewSale(request):
     service_list = SaleService.objects.filter(service_type__pk=2)
     product_list = SaleService.objects.filter(service_type__pk=3)
     origin_list = SaleOrigin.objects.all()
-    tax_list = Tax.objects.all()
-    tax_json = list(Tax.objects.all())
+    tax_list = list(Tax.objects.all().values())
 
     context = {
         "perms":request.user.get_all_permissions(),
@@ -508,7 +518,7 @@ def EditSale(request, sale_id):
     if sale.status.pk!=1:
         return redirect(reverse("list_sale"))
 
-    if(request.method=="POST"):
+    if request.method=="POST":
         value = ""
         if request.POST.get("sale_type") == "1":
             service_post_value = request.POST.get("plan")
@@ -591,7 +601,7 @@ def EditSale(request, sale_id):
 @login_required(login_url="/login/")
 def ScheduleList(request):
 
-    momento_atual = timezone.now()
+    print(timezone.now())
 
     status_list = SaleStatus.objects.all()
     professional_list = Employee.objects.all()
@@ -601,7 +611,7 @@ def ScheduleList(request):
     # event_list = list(ScheduleEvent.objects.filter(status=1).values())
     event_list = list(ScheduleEvent.objects.all().values())
     employee_list = Employee.objects.all()
-    confirm_list = ScheduleEvent.objects.filter(Q(date__lt=momento_atual) & Q(status=1))
+    confirm_list = ScheduleEvent.objects.filter(Q(status=1) & Q(date__lt=timezone.localtime().date()) | Q(date=timezone.localtime().date(), end__lt=timezone.localtime().time()))
 
     for sale in Sale.objects.filter(status__pk=3):
         service_list.append({
@@ -629,7 +639,8 @@ def CreateSchedule(request):
         schedule = ScheduleEvent(
             title = "Agendamento",
             professional = get_or_none(Employee, request.POST.get("professional")),
-            client = request.POST.get("client"),
+            client = request.POST.get("_client"),
+            phone = sale.client.cellphone if sale is not None  else request.POST.get("phone"),
             category = "default",
             date = request.POST.get("date"),
             start = request.POST.get("start"),
@@ -651,30 +662,6 @@ def CreateSchedule(request):
 
     return redirect(reverse('schedule_list'))
 
-def EditSchedule(request, schedule_id):
-    if request.method=="POST":
-        print("\n\n\n")
-        print(request.POST)
-        print("\n\n\n")
-
-        schedule=ScheduleEvent.objects.get(pk=schedule_id)
-
-        schedule.professional = get_or_none(Employee, request.POST.get("professional"))
-        schedule.client = get_or_none(Person, request.POST.get("client"))
-        schedule.date = request.POST.get("date")
-        schedule.start = request.POST.get("start")
-        schedule.end = request.POST.get("end")
-        schedule.status = get_or_none(SaleStatus, request.POST.get("status"))
-        schedule.service = get_or_none(SaleService, request.POST.get("service"))
-        schedule.sessions = request.POST.get("sessions")
-        schedule.room = request.POST.get("room")
-        schedule.equipment = get_or_none(Equipment, request.POST.get("equipment"))
-        schedule.obs = request.POST.get("obs")
-
-        schedule.save()
-        
-    return redirect(reverse('schedule_list'))
-
 def DeleteSchedule(request, schedule_id):
     if request.method=="POST":
         print("\n\n\n")
@@ -682,8 +669,13 @@ def DeleteSchedule(request, schedule_id):
         print("\n\n\n")
 
         schedule=ScheduleEvent.objects.get(pk=schedule_id)
-        schedule.sale.status=SaleStatus.objects.get(pk=2)
-        schedule.sale.save()
+        try:
+            schedule.sale.status=SaleStatus.objects.get(pk=2)
+            schedule.sale.save()
+        except Exception as e:
+            print(e)
+            pass
+
         schedule.delete()
 
     return redirect(reverse('schedule_list'))
@@ -742,6 +734,7 @@ def ConfirmScheduleAjax(request):
     if request.method == "POST":
         ids = request.POST.getlist("ids[]")
         confirmed_list = []
+        print(ids)
         for i in ids:
             s = ScheduleEvent.objects.get(pk=i)
             s.status = 2
@@ -775,10 +768,69 @@ def ListReceivable(request):
 @login_required(login_url="/login/")
 @user_passes_test(user_is_staff, login_url="login")
 def CancelSale(request, sale_id):
-    if request.method==POST:
+    if request.method=="POST":
         sale = Sale.objects.get(pk=sale_id)
         sale.status=SaleStatus.objects.get(pk=4)
         sale.save()
         return JsonResponse({"success": "FUNCIONOU"})
 
     return redirect(reverse("list_sale"))
+
+def saleServiceAjax(request, type_id):
+    services = list(SaleService.objects.filter(service_type__id=type_id).values())
+
+    return JsonResponse(services, safe=False)
+    
+def ReceiveInvoiceGroup(request):
+    if request.method == "POST":
+        ids = request.POST.getlist('ids[]')
+        value = Decimal(request.POST.get("value"))
+        payment_date=request.POST.get("payment_date")
+        if payment_date !="":
+            dia, mes, ano = payment_date.split('/')
+            if len(ano) == 2:
+                ano = '20' + ano  # ano é no século 21
+            payment_date = f'{ano}-{mes.zfill(2)}-{dia.zfill(2)}'
+        else:
+            payment_date=datetime.date.today()
+
+        for idx in ids:
+            try:
+                i = Invoice.objects.get(pk=idx)
+                i.paid = True
+                i.payment_date = payment_date
+
+                i.save()
+            except Invoice.DoesNotExist:
+                pass  # Lidar com o caso de ID inválido
+
+            if value < i.cost:
+                inv = Invoice(
+                    invoice_type = Account.objects.get(pk=112),
+                    supplier = None,
+                    payment_type = None,
+                    generator_sale = i.generator_sale,
+                    description = "Abatimento de Receita Adiantada",
+                    release_date = datetime.datetime.today(),
+                    due_date = payment_date,
+                    payment_date = payment_date,
+                    cost = i.cost-value,
+                    paid = True,
+                    recurring = False,
+                    recurring_qtd = 0,
+                    recurring_time = 0,
+                    obs = "Abatimento de Receita Adiantada"
+                )
+
+                inv.save()
+
+        response_data = {
+            'success': True,
+            'message': 'Contas marcadas como pagas com sucesso.'
+        }
+        return JsonResponse(response_data)
+
+    response_data = {
+        'error': 'Método não permitido'
+    }
+    return JsonResponse(response_data, status=405)

@@ -50,7 +50,7 @@ window.onload = (e) => {
       style: 'multi+shift'
     },
   });
-  if(table.rows()>0) confirmModal.show();
+  if(table.rows().data().length > 0)confirmModal.show();
 
     //carrega os eventos do Banco de Dados
   for (const event of events) {
@@ -65,6 +65,8 @@ window.onload = (e) => {
     eventList.push(eventObject);
   }
   calendar.createEvents(eventList);
+    //inicializa a mascara de celular
+  $('#phone').inputmask();
 
     //Popula o map de serviços
   for (i=0;i<services.length;i++) {
@@ -134,7 +136,9 @@ window.onload = (e) => {
           $('#service').append(new Option("Cortesia", -2));
          }
       })
+      console.log(e.target.options[e.target.selectedIndex])
       $("#_client").val(e.target.options[e.target.selectedIndex].textContent)
+      $("#phone").val(e.target.options[e.target.selectedIndex].getAttribute("data-phone"))
     }
    )
 
@@ -146,8 +150,12 @@ window.onload = (e) => {
         document.getElementById("_client").required= true;
         document.getElementById("client").required= false;
         document.getElementById("client").value= null;
+        document.getElementById("_client").value= null;
+        document.getElementById("phone").readOnly = false;
+        document.getElementById("phone").value= null;
         document.getElementById("client").dispatchEvent(new Event("change"));
       } else {
+        document.getElementById("phone").readOnly=true;
         document.getElementById("_client-div").hidden=true;
         document.getElementById("client-div").hidden=false;
         document.getElementById("_client").required= false;
@@ -253,6 +261,8 @@ window.onload = (e) => {
   //Funções
   function openCreationModal(e, isCreation){
     if(isCreation==="create"){
+      $("#status").empty()
+      $("#status").append($("<option>", {value: "1", text: "Novo"}))
       document.getElementById("modalForm").setAttribute("action", document.getElementById("modalForm").getAttribute("create-url"));
 
       document.getElementById("primaryFooter").hidden=false;
@@ -263,12 +273,16 @@ window.onload = (e) => {
       document.getElementById("end").readOnly = false;
       document.getElementById("obs").readOnly = false;
       document.getElementById("room").readOnly = false;
+      document.getElementById("_client").readOnly = false;
+      document.getElementById("_client-div").hidden = true;
+      document.getElementById("client-div").hidden = false;
       document.getElementById("clientCheck").removeAttribute("disabled", '');
       document.getElementById("equipment").removeAttribute("disabled");
       document.getElementById("status").removeAttribute("disabled");
       document.getElementById("professional").removeAttribute("disabled");
       document.getElementById("client").removeAttribute("disabled");
       document.getElementById("service").removeAttribute("disabled");
+      document.getElementById("phone").value="";
 
       let start = new Date(e.start)
       let end = new Date(e.end)
@@ -293,6 +307,7 @@ window.onload = (e) => {
 
     } 
     else if (isCreation==="edit"){
+      $("#status").empty()
       lastEdit = e.event.id;
       e = events_map.get(e.event.id);
       console.log(e)
@@ -309,7 +324,10 @@ window.onload = (e) => {
       }
       
       document.getElementById("professional").value= e.professional_id;
-      document.getElementById("client").value= e.client;
+      document.getElementById("client-div").hidden= true;
+      document.getElementById("_client-div").hidden= false;
+      document.getElementById("_client").readOnly= true;
+      document.getElementById("_client").value= e.client;
       document.getElementById("service").value= e.service_id;
       console.log(service_map.get(e.sale_id))
       if(service_map.get(e.sale_id)) {
@@ -335,20 +353,8 @@ window.onload = (e) => {
       document.getElementById("professional").setAttribute("disabled", '');
       document.getElementById("client").setAttribute("disabled", '');
       document.getElementById("service").setAttribute("disabled", '');
+      document.getElementById("phone").value=e.phone
       }
     creationModal.show()
-  }
-
-  function allowEditing(){
-    document.getElementById("date").readOnly = false;
-    document.getElementById("start").readOnly = false;
-    document.getElementById("end").readOnly = false;
-    document.getElementById("obs").readOnly = false;
-    document.getElementById("room").readOnly = false;
-    document.getElementById("equipment").removeAttribute("disabled");
-    document.getElementById("status").removeAttribute("disabled");
-    document.getElementById("professional").removeAttribute("disabled");
-    document.getElementById("client").removeAttribute("disabled");
-    document.getElementById("service").removeAttribute("disabled");
   }
 }

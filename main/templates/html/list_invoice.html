@@ -51,7 +51,7 @@
                             <td>{{i.invoice_type.number}}</th>
                             <td>{{i.invoice_type.name}}</td>
                             <td>{{i.cost}}</td>
-                            <td>{{i.supplier}}</td>
+                            <td>{% if i.supplier %} {{i.supplier}} {% else %} Automático {% endif %}</td>
                             <td>{{i.release_date|date:'d/m/Y'}}</td>
                             <td>{{i.due_date|date:'d/m/Y'}}</td>
                             <td>{{i.payment_date|date:'d/m/Y'}}</td>

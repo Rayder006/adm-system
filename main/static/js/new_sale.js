@@ -1,225 +1,148 @@
-window.onload = (e) => {
-    let discount_type = "1"; 
-    let currentType= "1";
-    var change = new Event('change');
-    let is_taxSelect1 =false;
-    let is_taxSelect2 =false;
-    const options = [];
-    const paymentSelect = $("#payment_type").select2();
-    const taxSelect = $("#tax").select2();
-    // const clientSelect = $("#client").select2();
-    // const sellerSelect = $("#seller").select2();
-    // const originSelect = $("#sale_origin").select2();
-
-        //Initializers
-    document.getElementById("sale_type").value="1"
-    
-    
-
-
-        //Event Handlers
-    $("#final_price").on(
-        "change", function (e){
-            if($("#mixed").val()=="True"){
-                $("#price2").val(Number($("#final_price").val())-Number($("#price1").val()));
-            } else {
-                $("#price2").val(0);
-                $("#price1").val($("#final_price").val());
-            }
-        }
-    )
-    
-    $("#price1").on(
-        "change", function (e) {
-            $("#price2").val(Number($("#final_price").val())-Number($("#price1").val()))
+$(document).ready(function() {
+    const serviceSelect = $("#service").select2();
+    const taxes = JSON.parse(document.getElementById('tax_list').textContent); 
+    for(const tax of taxes){
+        console.log(tax)
+    }
+    $("#sale_type").on(
+        "change", function(e) {
+            console.log(e);
+            selectType(e);
         }
     )
 
-    $("#form").on(
-        "submit", function (event){
-            if(Number($("#price1")) + Number($("#price2"))!=Number($("#final_price"))){
-                if(window.confirm("Preço diferente do preço final. Deseja Continuar?")==false) return false
-            }
+    $("#discount").on(
+        "change", function(e){
+            calculatePrice()
+        }
+    )
+
+    $("#service").on(
+        "change", function(e) {
+            console.log(e);
+            changePrice(e);
+        }
+    )
+
+    $("#sessions").on(
+        "change", function(e){
+            calculatePrice();
         }
     )
 
     $("#mixed").on(
-        "change", function (e) {
-            if(e.currentTarget.value=="True") {
-                $("#paymentDiv2")[0].hidden = false
-                $("#payment_type2").select2();
-                $("#payment_type2")[0].required = true
-                $("#price1").attr("readonly", false)
-            } else {
-                $("#paymentDiv2")[0].hidden = true
-                $("#payment_type2")[0].required = false
-                $("#payment_type2")[0].value = ""
-                $("#tax2")[0].value = ""
-                $("#price2")[0].value = "0"
-                $("#installments2")[0].value = "1"
-                $("#payment_type2").select2('destroy');
-                $("#price1").attr("readonly", true)
-                $("#price1").val($("#final_price").val())
-                $("#price1").trigger("change");
+        "change", function(e) {
+            $(".payment2").attr("hidden", e.target.value=="0");
+            $(".paymentInput2").attr("required", e.target.value=="1");
+            $("#price1").attr("readonly", e.target.value=="0");
+            $("#price1").val($("#final_price").val())
+        }
+    )
+
+    $("#payment_type").on(
+        "change", function(e){
+            $(".taxDiv").attr("hidden", $(this).find(":selected").data("tax")=="False")
+            $(".taxInput").attr("required", !($(this).find(":selected").data("tax")=="False"))
+            $("#tax").empty();
+            $("#tax").append(new Option("Selecione", null, true, true));
+            for(const tax of taxes){
+                if(tax.payment_type_id==$(this).val()) $("#tax").append(new Option(tax.name, tax.id, false, false))
             }
         }
     )
 
     $("#payment_type2").on(
-        "change", function () {
-            console.log()
-            if($("#payment_type2").find(':selected').data('tax')=="True"){
-                $(".taxDiv2").attr("hidden", false);
-                $(".taxDiv2").attr("required", true)
-                if(!is_taxSelect2) $("#tax2").select2();
-                $("#tax2").select2('open');
-                if($("#payment_type2").val()==1) $(".select2-search__field").val("Crédito")
-                else $(".select2-search__field").val("Débito")
-                $("#installments2")[0].val(1);
-                is_taxSelect2 = true;
-                $("#installments2")[0].required = true
-            } 
-            else {
-                $(".taxDiv2").attr("hidden", true);
-                $(".taxDiv2").attr("required", false)
-                $("#tax2").val(null);
-                $("#installments2").val(null);
-                if(is_taxSelect2) $("#tax2").select2('destroy');
-                is_taxSelect2 = false;
-                $("#installments2")[0].required = false
+        "change", function(e){
+            $(".taxDiv2").attr("hidden", $(this).find(":selected").data("tax")=="False")
+            $(".taxInput2").attr("required", !($(this).find(":selected").data("tax")=="False"))
+            $("#tax2").empty();
+            $("#tax2").append(new Option("Selecione", null, true, true));
+            
+            for(const tax of taxes){
+                if(tax.payment_type_id==Number($(this).val())) $("#tax2").append(new Option(tax.name, tax.id, false, false))
             }
         }
     )
 
-    $("#payment_type").on(
-        "change", function () {
-            console.log()
-            if($("#payment_type").find(':selected').data('tax')=="True"){
-                $(".taxDiv").attr("hidden", false);
-                if(!is_taxSelect1) $("#tax").select2();
-                $("#tax").select2('open');
-                if($("#payment_type").val()==1) $(".select2-search__field").val("Crédito")
-                else $(".select2-search__field").val("Débito")
-                $("#installments").val(1);
-                is_taxSelect1 = true;
-                $("#installments")[0].required = true
-            } 
-            else {
-                $(".taxDiv").attr("hidden", true);
-                $("#tax").val(null);
-                $("#installments").val(null);
-                if(is_taxSelect1) $("#tax").select2('destroy');
-                is_taxSelect1 = false;
-                $("#installments")[0].required = false
+    $("#installments1").on(
+        "change", function(e){
+            if($(this).val()>12) $(this).val(12);
+            if($(this).val()<1) $(this).val(1);
+        }
+    )
+
+    $("#installments2").on(
+        "change", function(e){
+            if($(this).val()>12) $(this).val(12);
+            if($(this).val()<1) $(this).val(1);
+        }
+    )
+
+    $("#price1").on(
+        "change", function(e){
+            price1 = Number($("#price1").val());
+            final_price = Number($("#final_price").val());
+
+            if(price1>final_price){
+                $("#price1").val(final_price);
+                $("#price2").val(0);
+            } else {
+                $("#price2").val((final_price-price1).toFixed(2));
             }
         }
     )
 
-    $("#tax").change(function () {
-            if($(this).find(':selected').data('id')!=$("#payment_type")[0].value && $(this).val()){
-                console.log($(this).find(':selected'))
-                console.log($("#payment_type")[0].value)
-                alert("Esta taxa não pertence à forma de pagamento selecionada")
-                $("#tax").val(null).trigger('change');
-            }
-        }
-    )
-    
+        // Funções
+    function selectType(event){
+        $("#service_label").text($("#sale_type").find(":selected").text() + '*');
+        $("#service").empty()    
+        $.ajax({
+            url:"saleServiceAjax/"+event.target.value,
+            method:"GET", 
+            dataType:"json",
+            success: function(data){
+                $("#service").append(new Option("Selecione", null, true, true));
+              console.log(data)
+              for(var i=0; i<data.length;i++){
+                option = new Option(data[i].name, data[i].id, false, false);
+                $(option).data("price", data[i].price);
+                $(option).data("sessions", data[i].sessions);
 
-
-    document.getElementById("plan").addEventListener(
-        "change", function () {
-            selectService(event)
-        }
-    )
-    document.getElementById("service").addEventListener(
-        "change", function () {
-            selectService(event)
-        }
-    )
-    document.getElementById("product").addEventListener(
-        "change", function () {
-            selectService(event)
-        }
-    )
-
-    document.getElementById("sale_type").addEventListener(
-        "change", function() {
-            changeSaleType(event)
-        }
-    )
-
-    document.getElementById("discount").addEventListener(
-        "change", function() {
-            priceCalc(e)
-        }
-    )
-
-    document.getElementById("sessions").addEventListener(
-        "change", function() {
-            priceCalc(e)
-        }
-    )
-
-    document.getElementById("discount_type").addEventListener(
-        "change", function() {
-            priceCalc(e)
-        }
-    )
-
-    document.getElementById("price").addEventListener(
-        "change", function() {
-            priceCalc(e)
-        }
-    )
-
-
-        //Funções
-    function selectService(e){
-        document.getElementById("price").value= document.getElementById(`${currentType}${e.target.value}`).getAttribute("data-price")
-        document.getElementById("sessions").value= document.getElementById(`${currentType}${e.target.value}`).getAttribute("data-sessions")
-        if(e.target.id=="plan") document.getElementById("sessions").readOnly=true 
-        else document.getElementById("sessions").readOnly=false;
-        priceCalc();
-        if($("#mixed").val()=="False") {
-            $("#price1").val($("#final_price").val());
-            $("#price1").trigger("change");
-        }
-        else $("#price2").val(Number($("#final_price"))-Number($("#price1").val()))
-    }
-
-    function changeSaleType(e){
-        document.getElementById(currentType).hidden=true;
-        document.getElementById(currentType).querySelector("select").required=false;
-        document.getElementById(currentType).querySelector("select").value="";
-        document.getElementById(e.target.value).hidden=false;
-        document.getElementById(e.target.value).querySelector("select").required=true;
-        currentType = e.target.value;
+                $("#service").append(option);
+              }
+            },
+        });
         
-        if(currentType=="3") document.getElementById("sessions_label").innerHTML="Quantidade*"
-        else document.getElementById("sessions_label").innerHTML="Qtd. de Sessões*"
-
-        document.getElementById(e.target.value).querySelector("select").dispatchEvent(change);
-
-        document.getElementById(currentType).querySelector("select").value=""
-        if(currentType=="1") $("#sessions").attr("readonly", true) 
-        else $("#sessions").attr("readonly", false) 
+        if(event.target.value == "1"){
+            $("#sessions").attr("readonly", true);
+        } else {
+            $("#sessions").attr("readonly", false);
+        }
+        console.log("AAAAA")
+        return $("#service").trigger("change");  
     }
 
-    function priceCalc(e){
-        if(currentType==1) price = document.getElementById("price").value
-        else price = document.getElementById("price").value * document.getElementById("sessions").value;
-        discount = document.getElementById("discount").value;
-        discount_type = document.getElementById("discount_type");
+    function changePrice(event){
+        $("#price").val($(event.target).find(":selected").data("price"))
+        $("#sessions").val($(event.target).find(":selected").data("sessions"))
 
-        if(discount){
-            if(discount_type.value == "percent"){
-                final_price = Number(price-(discount*price)/100).toFixed(2)
-            } else if(discount_type.value == "real"){
-                final_price=Number(price-discount).toFixed(2);
-            } 
-            document.getElementById("final_price").value = final_price;
-            $("#final_price").trigger("change")
+        calculatePrice();
+    }
+
+    function calculatePrice(){
+        var price = Math.round(Number($("#price").val()) * 100);
+        var sessions = Number($("#sessions").val());
+        price = price*sessions;
+
+        
+        if($("#discount_type").val()=='1'){
+            var discount = Math.round(Number($("#discount").val()) * 100); // multiplica por 100 pra ficar em centavos
+            $("#final_price").val(((price - discount)/100).toFixed(2));
+            $("#price1").val(((price - discount)/100).toFixed(2));
+        } else {
+            var discount = Number($("#discount").val()) / 100;  // divide por 100 pra ficar em porcentagem
+            $("#final_price").val(((price-(price*discount))/100).toFixed(2));
+            $("#price1").val(((price-(price*discount))/100).toFixed(2));
         }
     }
-}
+});

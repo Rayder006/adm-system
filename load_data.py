@@ -1,5 +1,11 @@
-from django.core.management import call_command
 import os
+import django
+
+# Configurar o ambiente do Django manualmente
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "mysite.settings")
+django.setup()
+
+from django.core.management import call_command
 
 def load_fixtures():
     fixtures_dir = "./main/fixtures/"

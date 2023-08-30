@@ -5,7 +5,7 @@
     "fields": {
       "name": "Cartão de Crédito",
       "has_tax": true,
-      "taxa": 10
+      "taxa": 30
     }
   },
   {
@@ -14,7 +14,7 @@
     "fields": {
       "name": "Cartão de Débito",
       "has_tax": true,
-      "taxa": 10
+      "taxa": 30
     }
   }
 ]

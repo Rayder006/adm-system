@@ -1,3 +1,4 @@
+from django.utils import timezone
 from django.db import models
 import datetime
 # Create your models here.
@@ -48,7 +49,7 @@ class Invoice(models.Model):
     generator_sale = models.ForeignKey("Sale", null=True, blank=True, on_delete=models.CASCADE)
     description = models.CharField(max_length=200)
     release_date = models.DateField()
-    due_date = models.DateField(default=datetime.date.today())
+    due_date = models.DateField(default=timezone.now)
     payment_date = models.DateField(blank=True, null=True)
     cost = models.DecimalField(max_digits=8, decimal_places=2)
     paid = models.BooleanField(default=False)
@@ -58,20 +59,17 @@ class Invoice(models.Model):
     obs = models.CharField(max_length=200)
 
 class Sale(models.Model):
-    sale_type = models.ForeignKey("SaleType", null=True, blank=True, on_delete=models.SET_NULL) #plano, produto ou serviço
-    account = models.ForeignKey("Account", null=True, blank=True, on_delete=models.SET_NULL)
     client = models.ForeignKey("Person", null=True, blank=True, on_delete=models.CASCADE)
     seller = models.ForeignKey("Employee", null=True, blank=True, on_delete=models.SET_NULL)
     status = models.ForeignKey("SaleStatus", null=True, blank=True, on_delete=models.SET_NULL)
     origin = models.ForeignKey("SaleOrigin", null=True, blank=True, on_delete=models.SET_NULL)
     service = models.ForeignKey("SaleService", null=True, blank=True, on_delete=models.SET_NULL) #service = o que estão vendendo
     payment_type = models.ForeignKey("PaymentType", null=True, blank=True, on_delete=models.SET_NULL, related_name="payment1")
-    second_payment_type = models.ForeignKey("PaymentType", null=True, blank=True, on_delete=models.SET_NULL, related_name="payment2")
-    discount_is_percent = models.BooleanField(default=False)
+    payment_type2 = models.ForeignKey("PaymentType", null=True, blank=True, on_delete=models.SET_NULL, related_name="payment2")
     discount = models.DecimalField(null=True, blank=True, decimal_places=2, max_digits=8)
     sessions = models.IntegerField(null=True, blank=True)
     obs = models.CharField(max_length=200, null=True, blank=True)
-    date = models.DateField(null=True, blank=True)
+    release_date = models.DateField(null=True, blank=True)
     counter = models.IntegerField(default=0)
     price1 = models.DecimalField(max_digits=8, null=True, blank=True, decimal_places=2)
     price2 = models.DecimalField(max_digits=8, null=True, blank=True, decimal_places=2)
@@ -90,6 +88,8 @@ class SaleService(models.Model):
     name = models.CharField(max_length=100, verbose_name="Nome")
     price = models.DecimalField(max_digits=8, decimal_places=2, verbose_name="Preço")
     sessions = models.IntegerField(null=True, blank=True, verbose_name="Qtd. de Sessões")
+    account = models.ForeignKey("Account", null=True, blank=True, on_delete=models.SET_NULL)
+
 
     class Meta:
         verbose_name="Tipo de Venda"
@@ -191,6 +191,7 @@ class ScheduleEvent(models.Model):
     client = models.CharField(max_length=50, null=True, blank=True)
     category = models.CharField(max_length=10, default="time")
     date = models.DateField(null=True, blank=True)
+    phone = models.CharField(max_length=14, blank=True, null=True)
     start = models.TimeField(null=True, blank=True)
     end = models.TimeField(null=True, blank=True)
     sale = models.ForeignKey("Sale", on_delete=models.SET_NULL, blank=True, null=True)

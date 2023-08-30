@@ -13,6 +13,7 @@
     <script src="https://kit.fontawesome.com/abd2ed3d51.js" crossorigin="anonymous"></script>
     <script src="https://uicdn.toast.com/calendar/latest/toastui-calendar.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.min.js"></script>
     <script src="{% static 'js/list_schedule.js' %}"></script> 
     <script>let csrf_token= "{{csrf_token}}"</script>
     <title>Agendamentos</title>
@@ -103,10 +104,10 @@
                                 </div>
                                 <div id="client-div" class="col-md-3 form-group">
                                     <label class="col-form-label" for="client">Cliente*</label>
-                                    <select class="form-select" required id="client" name="client">
+                                    <select class="form-select" required id="client" name="client"> 
                                         <option value="" disabled selected>Selecione</option>
                                         {% for client in client_list %}
-                                        <option value="{{client.pk}}">{{client.name}}</option>
+                                        <option value="{{client.pk}}" data-phone="{{client.cellphone}}">{{client.name}}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
@@ -122,16 +123,21 @@
                                 <div class="col-md-4 form-group d-flex flex-column">
                                     <label class="col-form-label" for="service">Serviço*</label>
                                     <select required id="service" required name="service">
-                                        <option value="" disabled selected>Selecione</option>
+                                        <option value="-1" selected>Avaliação</option>
+                                        <option value="-2">Cortesia</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-4 form-group">
+                                <div class="col-md-3 form-group">
+                                    <label class="col-form-label" for="phone">Celular</label>
+                                    <input class="form-control" type="text" id="phone" name="phone" readonly data-inputmask="'mask': '(##)9####-####', 'definitions': {'#': {'validator': '[0-9]'}, '*':[9]}">
+                                </div>
+                                <div class="col-md-3 form-group">
                                     <label class="col-form-label" for="room">Sala</label>
                                     <input class="form-control" type="text" id="room" name="room">
                                 </div>
-                                <div class="col-md-4 form-group">
+                                <div class="col-md-3 form-group">
                                     <label class="col-form-label" for="equipment">Equipamento</label>
                                     <select class="form-select" id="equipment" name="equipment">
                                         <option value="" disabled selected>Selecione</option>
@@ -140,7 +146,7 @@
                                         {% endfor %}
                                     </select>
                                 </div>
-                                <div class="col-md-4 form-group">
+                                <div class="col-md-3 form-group">
                                     <label class="col-form-label" for="obs">Observações</label>
                                     <input class="form-control" type="textarea" name="obs" id="obs">
                                 </div>
@@ -183,10 +189,10 @@
                             {% for s in confirm_list %}
                             <tr>
                                 <td>{{s.id}}</td>
-                                <td>{{s.client.name}}</td>
-                                <td>{{s.date|date:"Y-m-d"}}</td>
-                                <td>{{s.start}}</td>
-                                <td>{{s.end}}</td>
+                                <td>{{s.client}}</td>
+                                <td>{{s.date|date:"d/m/Y"}}</td>
+                                <td>{{s.start|time:"H:i"}}</td>
+                                <td>{{s.end|time:"H:i"}}</td>
                             </tr>
                             {% endfor %}
                         </tbody>
@@ -222,12 +228,6 @@
                     <input class="form-check-input" type="radio" name="viewRadio" id="viewRadio1" value="week" checked>
                     <label class="form-check-label" for="viewRadio1">
                         Semanal
-                    </label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="viewRadio" id="viewRadio3" disabled value="option3">
-                    <label class="form-check-label" for="viewRadio3">
-                        Funcionário
                     </label>
                 </div>
             </div>
