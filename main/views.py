@@ -139,7 +139,10 @@ def LogoutView(request):
 def index(request):
     locale.setlocale(locale.LC_ALL, 'pt_BR.utf8')
     today = datetime.datetime.today()
-    meta = Meta.objects.get(mes=today.month, ano=today.year)
+    try:
+        meta = Meta.objects.get(mes=today.month, ano=today.year).valor
+    except Meta.DoesNotExist:
+        meta= Decimal(0.00)
     vendido=0
     vendas = Sale.objects.filter(release_date__month=today.month, release_date__year=today.year)
 
@@ -149,8 +152,8 @@ def index(request):
     context={
         "uteis": LeftWorkDays(),
         "vendido":locale.currency(vendido, grouping=True, symbol=False),
-        "meta":locale.currency(meta.valor, grouping=True, symbol=False),
-        "falta": locale.currency(meta.valor-vendido, grouping=True, symbol=False),
+        "meta":locale.currency(meta, grouping=True, symbol=False),
+        "falta": locale.currency(meta-vendido, grouping=True, symbol=False),
         "perms":request.user.get_all_permissions(),
         "username":request.user
     }
