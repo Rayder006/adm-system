@@ -1,0 +1,10 @@
+/* CSS personalizado para o efeito hover nos cards */
+.card {
+    transition: transform 0.3s, background-color 0.3s; /* Adiciona transições suaves */
+}
+
+.card:hover {
+    background-color: #f8f9fa; /* Light Bootstrap color */
+    transform: scale(1.05); /* Aumenta levemente o tamanho */
+    cursor: pointer;
+}

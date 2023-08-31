@@ -29,8 +29,10 @@
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="{% url 'list_person' %}">Cliente</a>
-                        <a class="dropdown-item" href="{% url 'admin:main_employee_changelist' %}">Funcionário</a>
-                        <a class="dropdown-item" href="{% url 'admin:main_supplier_changelist' %}">Fornecedor</a>
+                        {% if "admin.add_logentry" in perms %}
+                        <a class="dropdown-item" href="{% url 'admin:main_employee_changelist' %}" target="_blank">Funcionário</a>
+                        <a class="dropdown-item" href="{% url 'admin:main_supplier_changelist' %}" target="_blank">Fornecedor</a>
+                        {% endif %}
                     </div>
                 </li>
                 <li class="nav-item dropdown">
@@ -40,7 +42,7 @@
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="{% url 'list_invoice' %}">Contas a Pagar</a>
                         <a class="dropdown-item" href="{% url 'list_receivable' %}">Contas a Receber</a>
-                        <a class="dropdown-item" href="{% url 'admin:main_tax_changelist' %}">Cadastro Financeiro</a>
+                        <a class="dropdown-item" href="{% url 'admin:main_tax_changelist' %}" target="_blank">Cadastro Financeiro</a>
                         <!-- <a class="dropdown-item" href="#" disabled>Fluxo de Caixa</a>
                         <a class="dropdown-item" href="#" disabled>Conciliação Bancária</a> -->
                     </div>
@@ -59,7 +61,8 @@
                     </a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                         {% if user.is_superuser %}
-                            <a class="dropdown-item" href="#">Adicionar Meta</a>
+                            <a target="_blank" class="dropdown-item" href="{% url 'admin:index' %}">Painel de Administrador</a>
+                            <a target="_blank" class="dropdown-item" href="{% url 'admin:main_meta_changelist' %}">Adicionar Meta</a>
                         {% endif %}          
                         <a class="dropdown-item" href="{% url 'logout' %}">Sair</a>
                     </div>
@@ -70,8 +73,9 @@
     {% block body %}
     {% endblock %}
     {% block footer %}
-    <nav class="navbar navbar-expand-lg navbar-light bg-secondary mt-auto justify-content-center">
-        <a class="navbar-brand" href="#">Placeholder</a>
+    <nav class="navbar navbar-expand-lg navbar-light bg-secondary mt-auto d-flex flex-column justify-content-center">
+        <a class="navbar-brand" href="{% url 'index' %}">Beleza Pura Estética</a>
+        <small>Version 1.0.0</small>
     </nav>
     {% endblock %}
 </body>

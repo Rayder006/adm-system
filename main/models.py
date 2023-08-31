@@ -1,3 +1,4 @@
+from django.core.validators import MaxValueValidator
 from django.utils import timezone
 from django.db import models
 import datetime
@@ -70,6 +71,7 @@ class Sale(models.Model):
     sessions = models.IntegerField(null=True, blank=True)
     obs = models.CharField(max_length=200, null=True, blank=True)
     release_date = models.DateField(null=True, blank=True)
+    contract_date = models.DateTimeField(null=True, blank=True)
     counter = models.IntegerField(default=0)
     price1 = models.DecimalField(max_digits=8, null=True, blank=True, decimal_places=2)
     price2 = models.DecimalField(max_digits=8, null=True, blank=True, decimal_places=2)
@@ -206,3 +208,11 @@ class ScheduleStatus(models.Model):
 
 class Equipment(models.Model):
     name = models.CharField(max_length=40)
+
+class Meta(models.Model):
+    mes = models.PositiveIntegerField(null=True, validators=[MaxValueValidator(12)])
+    ano = models.PositiveIntegerField(null=True)
+    valor = models.DecimalField(max_digits=10, decimal_places=2, null=True)
+
+    def __str__(self):
+        return f"{self.mes}/{self.ano} - R$" + '{:.2f}'.format(self.valor)

@@ -15,4 +15,4 @@ admin.site.register(SaleService)
 admin.site.register(ScheduleEvent)
 admin.site.register(Sale)
 admin.site.register(Invoice)
-
+admin.site.register(Meta)

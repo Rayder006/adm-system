@@ -55,7 +55,7 @@
                         <tbody>
                             {% for s in sale_list %}
                             <tr>
-                                <td data-sort="YYYY-MM-DD" data-order="YYYY-MM-DD">{{s.date|date:'d/m/Y'}}</td>
+                                <td>{{s.release_date|date:'Y-m-d'}}</td>
                                 <td><a target="_blank" {% if s.client %} href="{% url 'view_person' s.client.pk %}" {% else %} href="#" {% endif %}>{{s.client}}</a></th>
                                 <td>{{s.seller}}</td>
                                 <td>{{s.status}}</td>

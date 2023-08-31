@@ -8,10 +8,39 @@ from django.core import serializers
 from django.utils import timezone
 from django.urls import reverse
 from django.db.models import Q
+from .forms import MetaForm
 from decimal import Decimal
 from .functions import *
 from .models import *
+import locale
+import calendar
 
+def LeftWorkDays():
+    hoje = datetime.datetime.now()
+    ano_atual = hoje.year
+    mes_atual = hoje.month
+    dia_atual = hoje.day
+
+    dias_uteis_totais = WorkDays(ano_atual, mes_atual)
+    dias_uteis_passados = 0
+
+    for dia in range(1, dia_atual + 1):
+        if calendar.weekday(ano_atual, mes_atual, dia) < 5:
+            dias_uteis_passados += 1
+
+    dias_uteis_restantes = dias_uteis_totais - dias_uteis_passados
+    return dias_uteis_restantes+1
+
+def WorkDays(ano, mes):
+    num_dias = calendar.monthrange(ano, mes)[1]
+    
+    dias_uteis = 0
+    
+    for dia in range(1, num_dias + 1):
+        if calendar.weekday(ano, mes, dia) < 5:  # 0 a 4 representa dias úteis (de segunda a sexta)
+            dias_uteis += 1
+            
+    return dias_uteis
 
 def createRecurringInvoice(inv_pk):
     inv = Invoice.objects.get(pk=inv_pk)
@@ -41,12 +70,36 @@ def user_is_staff(user):
 
 def SaleContract(request, sale_id):
     sale=Sale.objects.get(pk=sale_id)
-    sale.status=SaleStatus.objects.get(pk=2)
-    sale.save()
-    if sale.sale_type.pk == 4:
-        return render(request, 'contracts/contrato2.html', {"sale":sale, "user":request.user})
+    if sale.status.pk == 1:
+        sale.status=SaleStatus.objects.get(pk=2)
+        sale.contract_date = datetime.datetime.today()
+        sale.save()
+
+    due_date = (sale.release_date + datetime.timedelta(days=365)).strftime("%d/%m/%Y")
+    parcela1 = Decimal(sale.price1 / sale.installments1)
+    parcela2 = sale.price2 / sale.installments2 if sale.price2 else 0
+    today = sale.contract_date
+
+    qtd_parcelas1 = []
+
+    for i in range(1, sale.installments1):
+        qtd_parcelas1.append(i)
+
+    context = {
+        "sale":sale,
+        "user":request.user,
+        "due_date":due_date,
+        "parcela1":'{:.2f}'.format(parcela1),
+        "parcela2":'{:.2f}'.format(parcela2),
+        "qtd_parcelas1":qtd_parcelas1,
+        "today":today
+    }
+    if sale.service.service_type.pk==1: #plano
+        return render(request, 'contracts/contrato.html', context)
+    elif sale.service.service_type.pk==4: #pilates
+        return render(request, 'contracts/pilates.html', context)
     else:
-        return render(request, 'contracts/contrato1.html', {"sale":sale, "user":request.user})
+        return render(request, 'contracts/esteticos.html', context)
 
 def Test(request):
     sale=Sale.objects.get(pk=23)
@@ -84,7 +137,20 @@ def LogoutView(request):
 
 @login_required(login_url="/login/")
 def index(request):
+    locale.setlocale(locale.LC_ALL, 'pt_BR.utf8')
+    today = datetime.datetime.today()
+    meta = Meta.objects.get(mes=today.month, ano=today.year)
+    vendido=0
+    vendas = Sale.objects.filter(release_date__month=today.month, release_date__year=today.year)
+
+    for venda in vendas:
+        vendido += venda.final_price
+
     context={
+        "uteis": LeftWorkDays(),
+        "vendido":locale.currency(vendido, grouping=True, symbol=False),
+        "meta":locale.currency(meta.valor, grouping=True, symbol=False),
+        "falta": locale.currency(meta.valor-vendido, grouping=True, symbol=False),
         "perms":request.user.get_all_permissions(),
         "username":request.user
     }
@@ -376,8 +442,8 @@ def NewSale(request):
 
         service = SaleService.objects.get(pk=request.POST.get("service"))
         final_price = Decimal(request.POST.get("final_price"))
-        discount = final_price
-        discount -= service.price * service.sessions
+        discount = service.price * service.sessions
+        discount -= final_price
         payment_type = get_or_none(PaymentType, request.POST.get("payment_type"))
         payment_type2 = None if request.POST.get("mixed") == 0 else get_or_none(PaymentType, request.POST.get("payment_type"))
         installments1=int(request.POST.get("installments1"))
@@ -395,7 +461,7 @@ def NewSale(request):
             service = service,
             payment_type = payment_type,
             payment_type2 = payment_type2,
-            discount = discount,
+            discount = discount if discount>0 else discount * (-1),
             sessions = request.POST.get("sessions"),
             obs = request.POST.get("obs"),
             release_date = datetime.datetime.today(),

@@ -22,14 +22,17 @@ $(document).ready( function () {
             {
                 targets:[0],
                 type:'date',
-                // render: function(data, type){
-                //     console.log(data)
-                //     let date=data.split("/");
-                //     if(type=="display"){
-                //         return `${date[2]}/${date[1]}/${date[0]}`;
-                //     }
-                //     return new Date(date);
-                // }
+                render: function(data, type){
+                    console.log(data)
+                    let date=new Date(data);
+                    if(type=="display"){
+                        const day = String(date.getDate()).padStart(2, '0');
+                        const month = String(date.getMonth() + 1).padStart(2, '0'); // Mês é base 0
+                        const year = date.getFullYear();
+                        return `${day}/${month}/${year}`;
+                    }
+                    return date.getTime();
+                }
             }
         ],
         buttons:[

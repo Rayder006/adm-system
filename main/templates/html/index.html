@@ -1,21 +1,52 @@
 {% extends "./main.html" %}
 
+{% load static %}
+
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="..\css\main.css">  
     <title>Minha Página</title>
+    {% block scripts %}
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+    {% endblock %}
 </head>
 <body>
     {% block body %}
-    <div class="container-fluid">
-        <a href="{% url 'list_person' %}">Clientes</a>
-        <a href="{% url 'list_invoice' %}">Lançamentos</a>
-        <a href="">Inventário</a>
-        {{perms}}
-        
-    </div>
+    <main class="container mt-4 bg-secondary justify-content-center align-items-center" style="border-radius: 5px;">
+        <div class="row bg-secondary" style="border-radius: 5px;">
+            <div class="col-md-12 mb-4 pt-4 mx-10">
+                <div class="card">
+                    <div class="card-body" id="goal-div">
+                        <h5 class="card-title">Meta</h5>
+                        <p class="card-text">META: R$ {{meta}}</p>
+                        {% csrf_token %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row bg-secondary" style="border-radius: 5px;">
+            <div class="col-md-12 mb-4 mx-10">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Vendido</h5>
+                        <p class="card-text">Vendido: R$ {{vendido}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row bg-secondary" style="border-radius: 5px;">
+            <div class="col-md-12 mb-4 mx-10">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Progresso</h5>
+                        <p class="card-text">Falta para a meta: R$ {{falta}}</p>
+                        <p class="card-text">Dias úteis restantes: {{uteis}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
     {% endblock %}
 </body>
 </html>

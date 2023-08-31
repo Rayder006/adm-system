@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lista de Metas</title>
+</head>
+<body>
+    <h1>Lista de Metas</h1>
+    <ul>
+        {% for meta in metas %}
+            <li>{{ meta.mes|date:"F Y" }} - {{ meta.valor }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
