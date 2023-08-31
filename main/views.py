@@ -677,7 +677,7 @@ def ScheduleList(request):
     # event_list = list(ScheduleEvent.objects.filter(status=1).values())
     event_list = list(ScheduleEvent.objects.all().values())
     employee_list = Employee.objects.all()
-    confirm_list = ScheduleEvent.objects.filter(Q(status=1) & Q(date__lt=timezone.localtime().date()) | Q(date=timezone.localtime().date(), end__lt=timezone.localtime().time()))
+    confirm_list = ScheduleEvent.objects.filter(Q(status=1) & (Q(date__lt=timezone.localtime().date()) | Q(date=timezone.localtime().date(), end__lt=timezone.localtime().time())))
 
     for sale in Sale.objects.filter(status__pk=3):
         service_list.append({
