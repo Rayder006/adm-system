@@ -9,6 +9,7 @@ media
 /main/migrations/
 /main/__pycache__/
 /mysite/__pycache__/
+/mysite/settings.py
 
 # Backup files # 
 *.bak 
