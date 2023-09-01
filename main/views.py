@@ -95,7 +95,7 @@ def SaleContract(request, sale_id):
         "today":today
     }
     if sale.service.service_type.pk==1: #plano
-        return render(request, 'contracts/contrato.html', context)
+        return render(request, 'contracts/plano.html', context)
     elif sale.service.service_type.pk==4: #pilates
         return render(request, 'contracts/pilates.html', context)
     else:
@@ -705,8 +705,15 @@ def ScheduleList(request):
 def CreateSchedule(request):
     if request.method == "POST":
         sale = get_or_none(Sale, request.POST.get("sale"))
+        title = ""
+        is_courtesy = True if request.POST.get("service")=="-2" else False
+        if sale is not None:
+            title=sale.service.service_type.name
+        else:
+            title = "Cortesia" if is_courtesy else "Avaliação"
+
         schedule = ScheduleEvent(
-            title = "Agendamento",
+            title = title,
             professional = get_or_none(Employee, request.POST.get("professional")),
             client = request.POST.get("_client"),
             phone = sale.client.cellphone if sale is not None  else request.POST.get("phone"),
@@ -719,7 +726,7 @@ def CreateSchedule(request):
             room = request.POST.get("room"),
             equipment = get_or_none(Equipment, request.POST.get("equipment")),
             obs = request.POST.get("obs"),
-            is_courtesy = True if request.POST.get("service")=="-2" else False
+            is_courtesy = is_courtesy
         )
         print(request.POST.get("service"))
         schedule.save()

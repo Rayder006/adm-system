@@ -26,5 +26,26 @@
       "fields": {
         "name": "Pilates"
       }
-  }
+    },
+    {
+      "model": "main.saletype",
+      "pk": 5,
+      "fields": {
+        "name": "Facial"
+      }
+    },
+    {
+      "model": "main.saletype",
+      "pk": 6,
+      "fields": {
+        "name": "Corporal"
+      }
+    },
+    {
+      "model": "main.saletype",
+      "pk": 7,
+      "fields": {
+        "name": "Injetáveis"
+      }
+    }
 ]

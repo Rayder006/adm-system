@@ -55,12 +55,37 @@ window.onload = (e) => {
     //carrega os eventos do Banco de Dados
   for (const event of events) {
     events_map.set(event.id, event)
+    console.log(event);
+    var color;
+    switch(event.title){
+      case "Pilates":
+        color="#FFFF00"
+        break;
+      case "Facial":
+        color="#0000FF"
+        break;
+      case "Corporal":
+        color="#008000"
+        break;
+      case "Injetáveis":
+        color="#FF0000"
+        break;
+      case "Cortesia":
+        color="#FFA500"
+        break;
+      case "Avaliação":
+        color="#800080"
+        break;
+      default:
+        color="#FFC0CB"
+    }
 
     const eventObject = {
       id: event.id,
       title: event.title,
       start: `${event.date}T${event.start}`,
-      end: `${event.date}T${event.end}`
+      end: `${event.date}T${event.end}`,
+      backgroundColor:color
     };
     eventList.push(eventObject);
   }
