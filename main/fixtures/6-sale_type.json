@@ -10,7 +10,7 @@
       "model": "main.saletype",
       "pk": 2,
       "fields": {
-        "name": "Serviço"
+        "name": "Manicure"
       }
     },
     {
