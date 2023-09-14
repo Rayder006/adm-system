@@ -10,6 +10,7 @@ media
 /main/__pycache__/
 /mysite/__pycache__/
 /mysite/settings.py
+/staticfiles/
 
 # Backup files # 
 *.bak 
