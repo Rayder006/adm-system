@@ -27,13 +27,13 @@
             <div class="col row justify-content-lg-around justify-content-lg-between py-2">
                 <div class="col-6 d-flex flex-column form-group">
                     <label for="client">Cliente*</label>
-                    <select class="custom-select" disabled>
+                    <select disabled class="custom-select" readonly>
                         <option selected>{{sale.client.name}}</option>
                     </select>
                 </div>
                 <div class="col-6 d-flex flex-column form-group">
                     <label for="sale_type">Tipo de Venda*</label>
-                    <select class="custom-select" disabled>
+                    <select disabled class="custom-select" readonly>
                         <option selected>{{sale.service.service_type.name}}</option>
                     </select>
                 </div>
@@ -41,19 +41,13 @@
             <div class="col row justify-content-lg-around justify-content-lg-between py-2">
                 <div class="col-6 d-flex flex-column form-group">
                     <label for="seller">Vendedor*</label>
-                    <select class="custom-select" disabled>
+                    <select disabled class="custom-select" readonly>
                         <option selected>{{sale.seller.name}}</option>
                     </select>
                 </div>
-                <!-- <div class="col-3 d-flex flex-column form-group">
-                    <label for="status">Status*</label>
-                    <select class="custom-select" disabled>
-                        <option selected>{{sale.status.name}}</option>
-                    </select>
-                </div> -->
                 <div class="col-6 d-flex flex-column form-group">
                     <label for="payment_type">Origem da Venda*</label>
-                    <select class="custom-select" disabled>
+                    <select disabled class="custom-select" readonly>
                         <option selected>{{sale.payment_type.name}}</option>
                     </select>
                 </div>
@@ -61,58 +55,58 @@
             <div class="col row justify-content-lg-around justify-content-lg-between py-2">
                 <div class="col-6 d-flex flex-column form-group">
                     <label for="service">{{sale.service.service_type.name}}*</label>
-                    <select class="custom-select" disabled>
+                    <select disabled class="custom-select" readonly>
                         <option selected>{{sale.service.name}}</option>
                     </select>
                 </div>
                 <div class="col-3 d-flex flex-column form-group">
                     <label for="price">Preço</label>
-                    <input class="form-control" type="number" disabled value="{{sale.service.price}}">
+                    <input class="form-control" type="text" readonly value="{{sale.service.price}}">
                 </div>
                 <div class="col-3 d-flex flex-column form-group">
                     <label for="sessions">Quantidade*</label>
-                    <input class="form-control" disabled value="{{sale.sessions}}" type="number">
+                    <input class="form-control" readonly value="{{sale.sessions}}" type="number">
                 </div>
             </div>
             <div class="col row justify-content-lg-around justify-content-center py-2">
                 <div class="col-6 d-flex flex-column form-group">
                     <label for="discount_type">Tipo de Desconto*</label>
-                    <select class="custom-select" disabled>
+                    <select disabled class="custom-select" readonly>
                         <option selected>{% if sale.discount_is_percent %} Porcentagem (%) {% else %} Reais (R$) {% endif %}</option>
                     </select>
                 </div>
                 <div class="col-6 d-flex flex-column form-group">
                     <label for="discount">Desconto*</label>
-                    <input class="form-control" disabled value="{{sale.discount}}">
+                    <input class="form-control" readonlu y value="{{sale.discount}}">
                 </div>
             </div>
             <div class="col row  py-2">
                 <div class="col-6 d-flex flex-column form-group">
                     <label for="payment_type">Forma de Pagamento*</label>
-                    <select class="custom-select" class="form-select" disabled>
+                    <select disabled class="custom-select" class="form-select" readonly>
                         <option>{{sale.payment_type.name}}</option>
                     </select>
                 </div> 
                 <div class="col-3 d-flex flex-column form-group">
                     <label for="price1">Valor*</label>
-                    <input class="form-control" type="number" name="" id="" readonly value="{{sale.price1}}">
+                    <input class="form-control" type="text" name="" id="" readonly value="{{sale.price1}}">
                 </div> 
                 <div class="col-3 d-flex flex-column form-group">
                     <label for="payment_type">Parcelas*</label>
                     <input class="form-control" type="text" name="" id="" readonly value="{{sale.installments1}}">
                 </div> 
             </div>
-            {% if sale.payment_type2 %}
+            {% if sale.price2 %}
             <div class="col row  py-2">
                 <div class="col-6 d-flex flex-column form-group">
                     <label for="payment_type">Forma de Pagamento*</label>
-                    <select class="custom-select" class="form-select" disabled>
+                    <select disabled class="custom-select" class="form-select" readonly>
                         <option>{{sale.payment_type2.name}}</option>
                     </select>
                 </div> 
                 <div class="col-3 d-flex flex-column form-group">
                     <label for="price2">Valor*</label>
-                    <input class="form-control" type="number" name="" id="" readonly value="{{sale.price2}}">
+                    <input class="form-control" type="text" name="" id="" readonly {% if sale.price2 %} value="{{sale.price2}}" {% else %} value="0" {% endif %}>
                 </div> 
                 <div class="col-3 d-flex flex-column form-group">
                     <label for="payment_type">Parcelas*</label>
@@ -123,15 +117,15 @@
             <div class="col row justify-content-lg-around justify-content-lg-between py-2">
                 <div class="col-4 d-flex flex-column form-group">
                     <label for="OBS">Observações</label>
-                    <textarea disabled class="form-control" cols="20" rows="4">{{sale.obs}}</textarea>
+                    <textarea readonly class="form-control" cols="20" rows="4">{{sale.obs}}</textarea>
                 </div>
                 <div class="col-3 d-flex flex-column form-group">
                     <label for="date">Data*</label>
-                    <input disabled class="form-control" value="{{sale.release_date|date:'d/m/Y'}}">
+                    <input readony class="form-control" value="{{sale.release_date|date:'d/m/Y'}}">
                 </div>
                 <div class="col-5 d-flex flex-column form-group">
                     <label for="final_price">Preço Final</label>
-                    <input class="form-control" value="{{sale.final_price}}" disabled>
+                    <input class="form-control" value="{{sale.final_price}}" readonluy>
                 </div>
             </div>
             <hr width="100" class="w-100">

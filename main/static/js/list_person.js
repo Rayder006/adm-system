@@ -2,7 +2,10 @@ $(document).ready( function () {
     $('#table').DataTable({
         scroller:true,
         scrollY:400,
+        scrollX:true,
+        scrollx:true,
         select: true,
+        responsive:true,
         colReorder: true,
         searchBuilder: {
             depthLimit: 2

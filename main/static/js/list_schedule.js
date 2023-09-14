@@ -82,7 +82,7 @@ window.onload = (e) => {
 
     const eventObject = {
       id: event.id,
-      title: event.title,
+      title: event.client,
       start: `${event.date}T${event.start}`,
       end: `${event.date}T${event.end}`,
       backgroundColor:color
@@ -90,6 +90,7 @@ window.onload = (e) => {
     eventList.push(eventObject);
   }
   calendar.createEvents(eventList);
+  console.table(eventList);
     //inicializa a mascara de celular
   $('#phone').inputmask();
 

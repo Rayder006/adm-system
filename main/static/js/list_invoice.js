@@ -1,7 +1,8 @@
 $(document).ready( function () {
     let table = $('#table').DataTable({
-        scrollX: false,
+        scrollX: true,
         scroller:true,
+        responsive:true,
         scrollY:400,
         select: {
             style: 'multi+shift'
@@ -69,14 +70,15 @@ $(document).ready( function () {
             { "type": "string" }, //ID
             { "type": "string" }, //Tipo
             {                     //Valor
+                "type" : "number",
                 "render": function(data, type, row) {
-                    if (type === 'display' || type === 'filter') {
+                    if (type === 'display') {
                         const formCurrency = new Intl.NumberFormat('pt-BR', {
                             style: 'currency',
                             currency: 'BRL',
                             minimumFractionDigits: 2
                         })
-                        return formCurrency.format(data);
+                        return formCurrency.format(parseFloat(data.replace(',', '.')));
                     }
                     return data;
                 }
@@ -85,11 +87,10 @@ $(document).ready( function () {
             {                       //Lançamento
                 "type":"date",
                 "render": function(data,type,row){
-                    if(type==="display" || type ==="filter"){
+                    if(type==="display"){
                         return data;
-                    }
-                    let date = new Date(data);
-                    return date;
+                    };
+                    return new Date(data);
                 }
             }, 
             {                   //Vencimento

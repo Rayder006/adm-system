@@ -1,7 +1,9 @@
 $(document).ready( function () {
     let table = $('#table').DataTable({
-        scrollX: false,
+        scrollX:true,
+        scrollx:true,
         scroller:true,
+        responsive:true,
         scrollY:400,
         select: {
             style: 'multi+shift'

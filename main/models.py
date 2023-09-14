@@ -7,11 +7,11 @@ import datetime
 class Person(models.Model):
     name = models.CharField(max_length=50)
     cpf = models.CharField(max_length=14)
-    birth_date = models.DateField()
+    birth_date = models.DateField(null=True, blank=True)
     gender = models.ForeignKey("Gender", null=True, blank=True, on_delete=models.SET_NULL)
     # phone = models.CharField(max_length=14)
     cellphone = models.CharField(max_length=15)
-    # email = models.EmailField(max_length=128)
+    email = models.EmailField(max_length=128, null=True, blank=True)
     cep = models.CharField(max_length=9, null=True, blank=True)
     address = models.CharField(max_length=100, null=True, blank=True)
     city = models.CharField(max_length=30, null=True, blank=True)
@@ -58,6 +58,9 @@ class Invoice(models.Model):
     recurring_qtd = models.IntegerField(blank=True, null=True)
     recurring_time = models.IntegerField(blank=True, null=True)
     obs = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.release_date.strftime('%d/%m/%Y') + " - " + self.supplier.name if self.supplier else self.release_date.strftime('%d/%m/%Y') + " - Automático"
 
 class Sale(models.Model):
     client = models.ForeignKey("Person", null=True, blank=True, on_delete=models.CASCADE)
@@ -167,8 +170,8 @@ class Service(models.Model):
 class Supplier(models.Model):
     name = models.CharField(max_length=40, verbose_name="Nome Fantasia", default="")
     cnpj = models.CharField(max_length=40, verbose_name="CNPJ", default="")
-    address = models.CharField(max_length=40, verbose_name="Endereço", default="")
-    cep = models.CharField(max_length=40, verbose_name="CEP", default="")
+    address = models.CharField(max_length=40, verbose_name="Endereço", default="", null=True, blank=True)
+    cep = models.CharField(max_length=40, verbose_name="CEP", default="", null=True, blank=True)
 
     def __str__(self):
         return self.name

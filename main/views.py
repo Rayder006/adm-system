@@ -71,7 +71,11 @@ def user_is_staff(user):
 def SaleContract(request, sale_id):
     sale=Sale.objects.get(pk=sale_id)
     if sale.status.pk == 1:
-        sale.status=SaleStatus.objects.get(pk=2)
+        sale.status = SaleStatus.objects.get(pk=2)
+        sale.contract_date = datetime.datetime.today()
+        sale.save()
+    
+    if sale.contract_date is None:
         sale.contract_date = datetime.datetime.today()
         sale.save()
 
@@ -82,7 +86,7 @@ def SaleContract(request, sale_id):
 
     qtd_parcelas1 = []
 
-    for i in range(1, sale.installments1):
+    for i in range(1, sale.installments1+1):
         qtd_parcelas1.append(i)
 
     context = {
@@ -449,8 +453,8 @@ def NewSale(request):
         discount -= final_price
         payment_type = get_or_none(PaymentType, request.POST.get("payment_type"))
         payment_type2 = None if request.POST.get("mixed") == 0 else get_or_none(PaymentType, request.POST.get("payment_type"))
-        installments1=int(request.POST.get("installments1"))
-        installments2=int(request.POST.get("installments1"))
+        installments1=int(request.POST.get("installments1")) if request.POST.get("installments1") else 1
+        installments2=int(request.POST.get("installments2")) if request.POST.get("installments2") else 0
         mixed = request.POST.get("mixed")==1
         price1 = Decimal(request.POST.get("price1"))
         price2 = Decimal(request.POST.get("price2")) if mixed==1 else None
@@ -460,14 +464,14 @@ def NewSale(request):
             client = get_or_none(Person, request.POST.get("client")),
             seller = get_or_none(Employee, request.POST.get("seller")),
             status = SaleStatus.objects.get(pk=1), # novo
-            origin = get_or_none(SaleOrigin, request.POST.get("origin")),
+            origin = get_or_none(SaleOrigin, request.POST.get("sale_origin")),
             service = service,
             payment_type = payment_type,
             payment_type2 = payment_type2,
             discount = discount if discount>0 else discount * (-1),
             sessions = request.POST.get("sessions"),
             obs = request.POST.get("obs"),
-            release_date = datetime.datetime.today(),
+            release_date = request.POST.get("date"),
             counter = 0,
             price1 = price1,
             price2 = 0 if request.POST.get("mixed") == 0 else price2,
@@ -705,19 +709,19 @@ def ScheduleList(request):
 def CreateSchedule(request):
     if request.method == "POST":
         sale = get_or_none(Sale, request.POST.get("sale"))
-        title = ""
+        category = ""
         is_courtesy = True if request.POST.get("service")=="-2" else False
         if sale is not None:
-            title=sale.service.service_type.name
+            category=sale.service.service_type.name
         else:
-            title = "Cortesia" if is_courtesy else "Avaliação"
+            category = "Cortesia" if is_courtesy else "Avaliação"
 
         schedule = ScheduleEvent(
-            title = title,
+            title = category,
             professional = get_or_none(Employee, request.POST.get("professional")),
             client = request.POST.get("_client"),
             phone = sale.client.cellphone if sale is not None  else request.POST.get("phone"),
-            category = "default",
+            category = category,
             date = request.POST.get("date"),
             start = request.POST.get("start"),
             end = request.POST.get("end"),

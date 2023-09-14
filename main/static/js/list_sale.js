@@ -2,6 +2,9 @@ $(document).ready( function () {
     $('#table').DataTable({
         scroller:true,
         scrollY:400,
+        scrollX:true,
+        scrollx:true,
+        responsive:true,
         select: {
             style: 'multi+shift'
         },
@@ -23,9 +26,12 @@ $(document).ready( function () {
                 targets:[0],
                 type:'date',
                 render: function(data, type){
-                    console.log(data)
-                    let date=new Date(data);
+                    let partes = data.split('-');
+                    let fusoHorarioLocal = new Date().getTimezoneOffset() / 60;
+
+                    let date = new Date(Date.UTC(parseInt(partes[0]), parseInt(partes[1]) - 1, parseInt(partes[2]), fusoHorarioLocal));
                     if(type=="display"){
+                        console.log("String: " + data + "\nObjeto Date: " + date);
                         const day = String(date.getDate()).padStart(2, '0');
                         const month = String(date.getMonth() + 1).padStart(2, '0'); // Mês é base 0
                         const year = date.getFullYear();
@@ -111,7 +117,7 @@ function contract(e){
 
 function deleteSale(e){
     console.log(e);
-    if(confirm("Tem certeza que deseja deletar o registro da venda?") == true){
+    if(confirm("Tem certeza que deseja deletar o registro da venda?\nISSO NÃO PODE SER REVERTIDO!") == true){
         document.getElementById("deleteForm-" + e.getAttribute("s_pk")).submit();
     }
     
@@ -129,6 +135,7 @@ function cancelSale(e){
             dataType: "json", // Especifica o tipo de dados esperado na resposta
             success: function(data) {
                 console.log(data); // Exibe a resposta da view
+                window.location.reload();
                 // Atualize a tabela ou realize outras ações após marcar as contas como pagas
             },
             error: function(xhr, status, error) {
