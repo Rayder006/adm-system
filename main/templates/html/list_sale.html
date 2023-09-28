@@ -45,10 +45,12 @@
                                 <th scope="col">Cliente</th>
                                 <th scope="col">Vendedor</th>
                                 <th scope="col">Status</th>
+                                <th scope="col">Sessões</th>
+                                <th scope="col">Disponíveis</th>
                                 <th scope="col">Valor</th>
                                 <th scope="col">Tipo</th>
                                 <th scope="col">Origem</th>
-                                <th scope="col">Forma de Pagamento</th>
+                                <th scope="col">Forma de Pag.</th>
                                 <th scope="col">Ações</th>
                             </tr>
                         </thead>
@@ -59,6 +61,8 @@
                                 <td><a target="_blank" {% if s.client %} href="{% url 'view_person' s.client.pk %}" {% else %} href="#" {% endif %}>{{s.client}}</a></th>
                                 <td>{{s.seller}}</td>
                                 <td>{{s.status}}</td>
+                                <td>{{s.sessions}}</td>
+                                <td>{{s.available}}</td>
                                 <td>R${{s.final_price}}</td>
                                 <td>{{s.service.service_type.name}}</td>
                                 <td>{{s.origin.name}}</td>
@@ -74,7 +78,7 @@
                                     {% endif %}
 
                                     {% if s.status.pk == 3 %}
-                                        <a href="javascript:void(0)" s_pk="{{s.pk}}" onclick="deleteSale(this)"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                                    <a href="javascript:void(0)" s_pk="{{s.pk}}" onclick="deleteSale(this)"><i class="fa fa-trash" aria-hidden="true"></i></a>
                                     {% elif s.status.pk == 4 %}
                                     <a href="javascript:void(0)" s_pk="{{s.pk}}" class="text-danger"><i class="fa fa-trash" aria-hidden="true"></i></a>
                                     {% else %}

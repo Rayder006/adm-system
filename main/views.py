@@ -445,6 +445,8 @@ def EditInvoice(request, invoice_id):
 @user_passes_test(user_is_staff, login_url="login")
 def ListSale(request):
     sale_list = Sale.objects.all()
+    for sale in sale_list:
+        sale.available=sale.sessions-sale.counter
     context = {
         "perms":request.user.get_all_permissions(),
         "username" : request.user,
@@ -592,7 +594,8 @@ def ViewSale(request, sale_id):
     context = {
         "perms":request.user.get_all_permissions(),
         "username" : request.user,
-        "sale" : sale
+        "sale" : sale,
+        "available":sale.sessions-sale.counter
     }
     return render(request, "html/view_sale.html", context)
 
