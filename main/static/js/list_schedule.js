@@ -9,7 +9,7 @@ window.onload = (e) => {
   const events_map = new Map();
   const service_map = new Map();
   const eventList = [];
-  const calendarList = []
+  const calendarList = [];
   const serviceSelect2 = $("#service")
   const clientSelect2 = $("#client")
   const meses = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho" , "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
@@ -67,25 +67,25 @@ window.onload = (e) => {
     var color;
     switch(event.title){
       case "Pilates":
-        color="#FFFF00"
+        color="#fce8a5"
         break;
       case "Facial":
-        color="#0000FF"
+        color="#a5e1e9"
         break;
       case "Corporal":
-        color="#008000"
+        color="#d5edb9"
         break;
       case "Injetáveis":
-        color="#FF0000"
+        color="#ffc296"
         break;
       case "Cortesia":
-        color="#FFA500"
+        color="#c4bdf3"
         break;
       case "Avaliação":
-        color="#800080"
+        color="#f8cadc"
         break;
       default:
-        color="#FFC0CB"
+        color="#ff8ad2"
     }
 
     const eventObject = {
