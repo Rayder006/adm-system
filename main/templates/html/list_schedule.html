@@ -56,8 +56,8 @@
 
 
 
-    <div class="modal fade" id="creationModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="creationModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
+    <div class="modal fade" id="creationModal" tabindex="-1" aria-labelledby="creationModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="creationModalLabel">Agendamento</h1>
@@ -88,7 +88,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-1 form-group">
+                                <div class="col-md-1 form-group  d-flex flex-column">
                                     <label class="col-form-label form-check-label" for="clientCheck">Novo</label>
                                     <input class="form-check-input" type="checkbox" id="clientCheck">
                                 </div>
@@ -96,13 +96,20 @@
                                     <label class="col-form-label" for="_client">Cliente*</label>
                                     <input class="form-control" type="text" id="_client" name="_client">
                                 </div>
-                                <div id="client-div" class="col-md-3 form-group">
+                                <div id="client-div" class="col-md-3 form-group d-flex flex-column">
                                     <label class="col-form-label" for="client">Cliente*</label>
                                     <select class="form-select" required id="client" name="client"> 
                                         <option value="" disabled selected>Selecione</option>
                                         {% for client in client_list %}
                                         <option value="{{client.pk}}" data-phone="{{client.cellphone}}">{{client.name}}</option>
                                         {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-md-4 form-group d-flex flex-column">
+                                    <label class="col-form-label" for="service">Serviço*</label>
+                                    <select required id="service" required name="service">
+                                        <option value="-1" selected>Avaliação</option>
+                                        <option value="-2">Cortesia</option>
                                     </select>
                                 </div>
                                 <div class="col-md-4 form-group">
@@ -114,24 +121,17 @@
                                         {% endfor %}
                                     </select>
                                 </div>
-                                <div class="col-md-4 form-group d-flex flex-column">
-                                    <label class="col-form-label" for="service">Serviço*</label>
-                                    <select required id="service" required name="service">
-                                        <option value="-1" selected>Avaliação</option>
-                                        <option value="-2">Cortesia</option>
-                                    </select>
-                                </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-3 form-group">
-                                    <label class="col-form-label" for="phone">Celular</label>
-                                    <input class="form-control" type="text" id="phone" name="phone" readonly data-inputmask="'mask': '(##)9####-####', 'definitions': {'#': {'validator': '[0-9]'}, '*':[9]}">
-                                </div>
-                                <div class="col-md-3 form-group">
+                                <div class="col-md-1 form-group">
                                     <label class="col-form-label" for="room">Sala</label>
                                     <input class="form-control" type="text" id="room" name="room">
                                 </div>
                                 <div class="col-md-3 form-group">
+                                    <label class="col-form-label" for="phone">Celular</label>
+                                    <input class="form-control" type="text" id="phone" name="phone" readonly data-inputmask="'mask': '(##)9####-####', 'definitions': {'#': {'validator': '[0-9]'}, '*':[9]}">
+                                </div>
+                                <div class="col-md-2 form-group">
                                     <label class="col-form-label" for="equipment">Equipamento</label>
                                     <select class="form-select" id="equipment" name="equipment">
                                         <option value="" disabled selected>Selecione</option>
@@ -140,7 +140,7 @@
                                         {% endfor %}
                                     </select>
                                 </div>
-                                <div class="col-md-3 form-group">
+                                <div class="col-md-6 form-group">
                                     <label class="col-form-label" for="obs">Observações</label>
                                     <input class="form-control" type="textarea" name="obs" id="obs">
                                 </div>
@@ -160,7 +160,7 @@
         </div>
     </div>
 
-    <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+    <div class="modal fade" data-bs-backdrop="static" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl">
           <div class="modal-content">
             <div class="modal-header">
@@ -194,8 +194,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-              <button type="button" id="confirmButton" class="btn btn-primary">Confirmar</button>
+              <button type="button" class="btn btn-danger" id="unconfirmButton">Não Compareceu</button>
+              <button type="button" class="btn btn-success" id="confirmButton">Compareceu</button>
             </div>
           </div>
         </div>
@@ -225,6 +225,14 @@
                     </label>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <div class="container-fluid py-2 bg-warning">
+        <div id="checkbox-group">
+            {% for e in employee_list %}
+            <input type="checkbox" name="{{e.id}}" id="{{e.id}}" data-name="{{e.name}}" checked> {{e.name}}
+            {% endfor %}
         </div>
     </div>
     

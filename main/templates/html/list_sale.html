@@ -38,7 +38,7 @@
                 </div>
                 <hr width="100" class="w-100">
                 <div class="row bg-light p-3" style="border-radius: 5px;">
-                    <table id="table" class="table bg-light text-dark">
+                    <table id="table" class="table bg-light text-dark display responsive nowrap" width="100%">
                         <thead>
                             <tr>
                                 <th scope="col">data</th>
@@ -73,9 +73,9 @@
                                         <a href="javascript:void(0)" class="text-danger"><i class="fa fa-pencil" aria-hidden="true"></i></a>
                                     {% endif %}
 
-                                    {% if s.status.pk == 4 %}
+                                    {% if s.status.pk == 3 %}
                                         <a href="javascript:void(0)" s_pk="{{s.pk}}" onclick="deleteSale(this)"><i class="fa fa-trash" aria-hidden="true"></i></a>
-                                    {% elif s.status.pk == 5 %}
+                                    {% elif s.status.pk == 4 %}
                                     <a href="javascript:void(0)" s_pk="{{s.pk}}" class="text-danger"><i class="fa fa-trash" aria-hidden="true"></i></a>
                                     {% else %}
                                         <a href="javascript:void(0)" data-url="{% url 'cancel_sale' s.pk %}" data-csrf="{{csrf_token}}" onclick="cancelSale(this)"><i class="fa fa-trash" aria-hidden="true"></i></a>

@@ -164,7 +164,7 @@
       <p class="c3"><span class="c5 c4">PLANO</span></p>
       <p class="c3"><span class="c5 c4">Plano Descrição do Plano Validade</span></p>
       <p class="c3"><span class="c5 c4">Convênio &ndash; {{sale.service.name}}</span></p>
-      <p class="c3"><span class="c5 c4">Procedimentos disponíveis: Fotodepilação (1 área) | Drenagem Linfática |Peeling Químico | Radiofrequência (Facial) | Protocolo íntimo (1 área) | Fototerapia (1área) | Strill (1 área)</span></p>
+      <p class="c3"><span class="c5 c4">Procedimentos disponíveis: {% for service in service_list %}| {{service}} |{% endfor %}</span></p>
       <p class="c3 c10"><span class="c5 c4"></span></p>
       <p class="c3 c10"><span class="c5 c4"></span></p>
       <p class="c3 c10"><span class="c5 c4"></span></p>

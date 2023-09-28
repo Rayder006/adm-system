@@ -3,35 +3,28 @@
         "model": "main.salestatus",
         "pk": 1,
         "fields":{
-            "name": "Novo"
+            "name": "Contrato Pendente"
         }
     },
     {
         "model": "main.salestatus",
         "pk": 2,
         "fields":{
-            "name": "Em Aberto"
+            "name": "Ativa"
         }
     },
     {
         "model": "main.salestatus",
         "pk": 3,
         "fields":{
-            "name": "Agendado"
+            "name": "Cancelada"
         }
     },
     {
         "model": "main.salestatus",
         "pk": 4,
         "fields":{
-            "name": "Cancelado"
-        }
-    },
-    {
-        "model": "main.salestatus",
-        "pk": 5,
-        "fields":{
-            "name": "Concluído"
+            "name": "Concluída"
         }
     }
 ]

@@ -111,7 +111,7 @@ function contract(e){
     console.log(e.getAttribute("data-url"));
     if(confirm("Tem certeza que deseja emitir este Contrato?\nApós a emissão, esta venda não poderá mais ser editada!")==true){
         window.open(e.getAttribute("data-url"), "_blank");
-        return window.location.reload();
+        window.location.reload();
     }
 }
 

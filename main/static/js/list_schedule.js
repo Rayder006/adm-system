@@ -1,46 +1,43 @@
 window.onload = (e) => {
   const radios = document.querySelectorAll('input[name="viewRadio"]')
-  const creationModal = new bootstrap.Modal(document.getElementById('creationModal'), {backdrop:'static'})
+  const creationModal = new bootstrap.Modal(document.getElementById('creationModal'))
   const Calendar = tui.Calendar;
   const container = document.getElementById('calendar');
   const events = JSON.parse(document.getElementById('event_list').textContent); 
   const services = JSON.parse(document.getElementById('service_list').textContent); 
+  const employeeChecks = $('#checkbox-group input[type="checkbox"]');
   const events_map = new Map();
   const service_map = new Map();
   const eventList = [];
-  const serviceSelect2 = $("#service").select2({dropdownParent: $('#creationModal')});
+  const calendarList = []
+  const serviceSelect2 = $("#service")
+  const clientSelect2 = $("#client")
   const meses = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho" , "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
   const confirmModal = new bootstrap.Modal(document.getElementById('confirmModal'))
   const calendar = new Calendar(container, {
     defaultView: 'week',
-    week:{
-        startDayOfWeek: 0,
-        dayNames: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'],
-        narrowWeekend: false,
-        workweek: false,
-        showNowIndicator: true,
-        showTimezoneCollapseButton: false,
-        timezonesCollapsed: false,
-        hourStart: 6,
-        hourEnd: 22,
-        eventView: ['time'],
-        taskView: false,
-        collapseDuplicateEvents: false,
-        allDay:false
-      },
-    month:{
-      dayNames: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
-      visibleWeeksCount: 0,
-      workweek: false,
-      narrowWeekend: false,
-      startDayOfWeek: 0,
-      isAlways6Weeks: true,
-      visibleEventCount: 6,
-    },
+    week:{ startDayOfWeek: 0, dayNames: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'], narrowWeekend: false, workweek: false, showNowIndicator: true, showTimezoneCollapseButton: false, timezonesCollapsed: false, hourStart: 6, hourEnd: 22, eventView: ['time'], taskView: false, collapseDuplicateEvents: false, allDay:false},
+    month:{ dayNames: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'], visibleWeeksCount: 0, workweek: false, narrowWeekend: false, startDayOfWeek: 0, isAlways6Weeks: true, visibleEventCount: 6,},
     useCreationPopup: false,
     useDetailPopup: false,
   });
-  var lastEdit;
+  calendar.setTheme({
+    month: {
+      moreView: {
+        border: '2px solid grey',
+        boxShadow: '0 2px 6px 0 grey',
+        backgroundColor: '#F0F0F0',
+        width: 640,
+        height: 320,
+      },
+    },
+  });
+
+  let lastEdit;
+
+    //Inicializa os Select2
+  serviceSelect2.select2({dropdownParent: $('#creationModal')});
+  clientSelect2.select2({dropdownParent: $('#creationModal')});
 
     //Inicializa a datatable de confirmação 
   let table = $('#confirmTable').DataTable({
@@ -52,10 +49,21 @@ window.onload = (e) => {
   });
   if(table.rows().data().length > 0)confirmModal.show();
 
+    //Cria as divisões de calendário por Funcionário
+  employeeChecks.each( function(index) {
+    calendarList.push({
+      id:$(this).attr("id"),
+      name:$(this).data("name"),
+      isVisible:true
+    })
+    console.log(calendarList[index])
+  });
+  calendar.setCalendars(calendarList);
+
+
     //carrega os eventos do Banco de Dados
   for (const event of events) {
     events_map.set(event.id, event)
-    console.log(event);
     var color;
     switch(event.title){
       case "Pilates":
@@ -82,7 +90,8 @@ window.onload = (e) => {
 
     const eventObject = {
       id: event.id,
-      title: event.client,
+      calendarId: event.professional_id,
+      title: `${event.client} - ${event.professional_name}`,
       start: `${event.date}T${event.start}`,
       end: `${event.date}T${event.end}`,
       backgroundColor:color
@@ -90,13 +99,11 @@ window.onload = (e) => {
     eventList.push(eventObject);
   }
   calendar.createEvents(eventList);
-  console.table(eventList);
     //inicializa a mascara de celular
   $('#phone').inputmask();
 
     //Popula o map de serviços
   for (i=0;i<services.length;i++) {
-    console.log(services[i])
     service_map.set(services[i].pk, services[i].name)
   }
 
@@ -105,18 +112,44 @@ window.onload = (e) => {
 
 
     //Event Handlers
+  employeeChecks.each(function(){
+    $(this).on('change', function(){
+      calendar.setCalendarVisibility(Number($(this).attr('id')), $(this).is(":checked"));
+    })
+  })
+
+  $("#unconfirmButton").on(
+    "click", function(e){
+      var dados = table.rows({ selected: true }).data();
+      var ids= []
+      dados.each(function (data) {
+        ids.push(data[0]);
+      });
+      
+      $.ajax({
+        url:"unconfirm/",
+        method:"POST",
+        headers: {
+          "X-CSRFToken": csrf_token // Inclui o token CSRF no cabeçalho
+        },  
+        data: {
+          ids:ids
+        },
+        dataType:"json",
+        success: function(data){
+          window.location.reload();
+        },
+      })
+    }
+  )
+
   $("#confirmButton").on(
     "click", function (e){
       var dados = table.rows({ selected: true }).data();
       var ids= []
-      console.log(dados)
       dados.each(function (data) {
         ids.push(data[0]);
       });
-      if(ids.length==0) {
-        confirmModal.hide();
-        return;
-      }
 
       $.ajax({
         url:"confirm/",
@@ -135,17 +168,16 @@ window.onload = (e) => {
     }
   )
 
-  document.getElementById("client").addEventListener(
+  clientSelect2.on(
     "change", (e) => {
-      console.log("carregando vendas do cliente: " + e.target.options[e.target.selectedIndex].textContent)
       $.ajax({
         url:"service_filter/" + e.target.value,
         method:"GET",
         dataType:"json",
         success: function(data){
-          console.log(data)
           $("#service").empty()
-          data.forEach(item => {
+          $("#phone").val(data[0])
+          data[1].forEach(item => {
             option = new Option(item.service, item.service_id, false, false);
             $(option).attr('data-sale-id', item.sale_id);
             $('#service').append(option);
@@ -155,16 +187,14 @@ window.onload = (e) => {
           $('#service').append(new Option("Cortesia", -2));
         },
          error: function (data) {
-          console.log("Erro" + data);
 
           $("#service").empty()
           $('#service').append(new Option("Avaliação", -1));
           $('#service').append(new Option("Cortesia", -2));
          }
       })
-      console.log(e.target.options[e.target.selectedIndex])
       $("#_client").val(e.target.options[e.target.selectedIndex].textContent)
-      $("#phone").val(e.target.options[e.target.selectedIndex].getAttribute("data-phone"))
+      // $("#phone").val(e.target.options[e.target.selectedIndex].getAttribute("data-phone"))
     }
    )
 
@@ -172,7 +202,8 @@ window.onload = (e) => {
     "change", (e) => {
       if(e.target.checked){
         document.getElementById("_client-div").hidden=false;
-        document.getElementById("client-div").hidden=true;
+        $("#client-div").hide();
+        $("#client-div").removeClass('d-flex');
         document.getElementById("_client").required= true;
         document.getElementById("client").required= false;
         document.getElementById("client").value= null;
@@ -183,7 +214,8 @@ window.onload = (e) => {
       } else {
         document.getElementById("phone").readOnly=true;
         document.getElementById("_client-div").hidden=true;
-        document.getElementById("client-div").hidden=false;
+        $("#client-div").show();
+        $("#client-div").addClass('d-flex');
         document.getElementById("_client").required= false;
         document.getElementById("_client").value = null;
         document.getElementById("client").required= true;
@@ -215,8 +247,6 @@ window.onload = (e) => {
 
   for(let i=0;i<radios.length;i++){
     radios[i].addEventListener("change", (e) =>{
-      console.log(e.target.value)
-      console.log(document.getElementById("month"))
       calendar.changeView(e.target.value)
       document.getElementById("month").textContent=`${meses[calendar.getDate().getMonth()]}/${calendar.getDate().getFullYear()}`;
     })
@@ -233,7 +263,6 @@ window.onload = (e) => {
 
   document.getElementById("submitCreation").addEventListener(
     "click", (e) => {
-      console.log(document.getElementById("modalForm").getAttribute("action"))
       const requiredInputs = document.getElementById("modalForm").querySelectorAll("input[required], select[required]");
 
       // Verifique se todos os campos required estão preenchidos
@@ -257,14 +286,16 @@ window.onload = (e) => {
 
   calendar.on({
     'selectDateTime': function teste(e) {  
-      console.log(Date(e.start))  
+      calendar.clearGridSelections();
       openCreationModal(e, "create");
     },
     'clickEvent': (event) => {
+        calendar.clearGridSelections();
+        console.log(event.event)
         openCreationModal(event, "edit");
     },
     'beforeUpdateEvent': function(e) {
-        console.log('beforeUpdateEvent', e);
+      calendar.clearGridSelections();
         if(confirm("Tem certeza que deseja alterar o agendamento?")==true){
           (e.changes.start) ? e.event.start = e.changes.start : {};
           (e.changes.end) ? e.event.end = e.changes.end : {};
@@ -273,13 +304,14 @@ window.onload = (e) => {
         }
     },
     'beforeDeleteSchedule': function(e) {
-        console.log('beforeDeleteSchedule', e);
+        calendar.clearGridSelections();
         calendar.deleteSchedule(e.schedule.id, e.schedule.calendarId);
     }
   });
 
   document.getElementById("creationModal").addEventListener(
     "hidden.bs.modal", function (event) {
+      calendar.clearGridSelections();
       document.getElementById("modalForm").reset();
     }
   )
@@ -293,6 +325,7 @@ window.onload = (e) => {
 
       document.getElementById("primaryFooter").hidden=false;
       document.getElementById("secondaryFooter").hidden=true;
+      $("#obs").val(null);
 
       document.getElementById("date").readOnly = false;
       document.getElementById("start").readOnly = false;
@@ -301,7 +334,8 @@ window.onload = (e) => {
       document.getElementById("room").readOnly = false;
       document.getElementById("_client").readOnly = false;
       document.getElementById("_client-div").hidden = true;
-      document.getElementById("client-div").hidden = false;
+      $("#client-div").addClass('d-flex');
+      $("#client-div").removeClass('d-none');
       document.getElementById("clientCheck").removeAttribute("disabled", '');
       document.getElementById("equipment").removeAttribute("disabled");
       document.getElementById("status").removeAttribute("disabled");
@@ -336,30 +370,32 @@ window.onload = (e) => {
       $("#status").empty()
       lastEdit = e.event.id;
       e = events_map.get(e.event.id);
-      console.log(e)
       document.getElementById("primaryFooter").hidden=true;
       document.getElementById("secondaryFooter").hidden=false;
 
-      document.getElementById("equipment").value = e.equipment_id;
+      document.getElementById("equipment").value = (e.equipment_id ? e.equipment_id : null);
       if(e.status=="1"){
         document.getElementById("status").append(new Option("Novo", 1, true, true))
         document.getElementById("status").value = 1;
-      } else {
+      } else if(e.status=="3"){
+        document.getElementById("status").append(new Option("Cancelado", 3, true, true))
+        document.getElementById("status").value = 3;
+      } 
+      else {
         document.getElementById("status").append(new Option("Confirmado", 2, true, true))
         document.getElementById("status").value = 2;
       }
       
       document.getElementById("professional").value= e.professional_id;
-      document.getElementById("client-div").hidden= true;
+      $("#client-div").removeClass('d-flex');
+      $("#client-div").addClass('d-none');
       document.getElementById("_client-div").hidden= false;
       document.getElementById("_client").readOnly= true;
       document.getElementById("_client").value= e.client;
       document.getElementById("service").value= e.service_id;
-      console.log(service_map.get(e.sale_id))
       if(service_map.get(e.sale_id)) {
         $('#service').append(new Option(service_map.get(e.sale_id), null, true, true));
       } else {
-        console.log(e.is_courtesy);
         (e.is_courtesy) ? $('#service').append(new Option("Cortesia", -2, true, true)) : $('#service').append(new Option("Avaliação", -1, true, true)); 
       }
       document.getElementById("date").setAttribute("value", e.date);

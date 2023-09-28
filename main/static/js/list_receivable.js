@@ -1,7 +1,5 @@
 $(document).ready( function () {
     let table = $('#table').DataTable({
-        scrollX:true,
-        scrollx:true,
         scroller:true,
         responsive:true,
         scrollY:400,
@@ -73,36 +71,37 @@ $(document).ready( function () {
             { "type": "string" }, //Tipo
             {                     //Valor
                 "render": function(data, type, row) {
-                    if (type === 'display' || type === 'filter') {
+                    if (type === 'display') {
+                        console.log(data)
                         const formCurrency = new Intl.NumberFormat('pt-BR', {
                             style: 'currency',
                             currency: 'BRL',
                             minimumFractionDigits: 2
                         })
-                        return formCurrency.format(data);
+                        return formCurrency.format(data.replace(",", "."));
                     }
-                    return data;
+                    return parseFloat(data.replace(",", "."));
                 }
             },
             { "type": "string" },   //Fornecedor                  
             {                       //Lançamento
                 "type":"date",
                 "render": function(data,type,row){
-                    if(type==="display" || type ==="filter"){
+                    if(type==="display"){
                         return data;
                     }
                     let date = new Date(data);
-                    return date;
+                    return date.valueOf();
                 }
             }, 
             {                   //Vencimento
                 "type":"date",
                 "render": function(data,type,row){
-                    if(type==="display" || type ==="filter"){
+                    if(type==="display"){
                         return data;
                     }
                     let date = new Date(data);
-                    return date;
+                    return date.valueOf();
                 }
             },  
             {                  //Pagamento
@@ -112,7 +111,7 @@ $(document).ready( function () {
                         return data;
                     }
                     let date = new Date(data);
-                    return date;
+                    return date.valueOf();
                 }
             },  
             { "type": "string" }, //A Pagar?

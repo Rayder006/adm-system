@@ -1,5 +1,6 @@
 from django.core.validators import MaxValueValidator
 from django.utils import timezone
+from django.db.models import Q
 from django.db import models
 import datetime
 # Create your models here.
@@ -94,11 +95,12 @@ class SaleService(models.Model):
     price = models.DecimalField(max_digits=8, decimal_places=2, verbose_name="Preço")
     sessions = models.IntegerField(null=True, blank=True, verbose_name="Qtd. de Sessões")
     account = models.ForeignKey("Account", null=True, blank=True, on_delete=models.SET_NULL)
+    services_offered = models.ManyToManyField('self', through='ServiceRelationship', symmetrical=False)
 
 
     class Meta:
-        verbose_name="Tipo de Venda"
-        verbose_name_plural="Tipos de Venda"
+        verbose_name="Serviço"
+        verbose_name_plural="Serviços Oferecidos"
 
     def __str__(self):
         return self.name
@@ -161,12 +163,6 @@ class Tax(models.Model):
         verbose_name = 'Taxa'
         verbose_name_plural = 'Taxas'
 
-class Service(models.Model):
-    name = models.CharField(max_length=30)
-
-    def __str__(self):
-        return self.name
-
 class Supplier(models.Model):
     name = models.CharField(max_length=40, verbose_name="Nome Fantasia", default="")
     cnpj = models.CharField(max_length=40, verbose_name="CNPJ", default="")
@@ -203,7 +199,7 @@ class ScheduleEvent(models.Model):
     status = models.IntegerField()
     room = models.CharField(max_length=20, null=True, blank=True)
     equipment = models.ForeignKey("Equipment", on_delete=models.CASCADE, null=True, blank=True)
-    obs = models.CharField(max_length=50, null=True, blank=True)
+    obs = models.CharField(max_length=200, null=True, blank=True)
     is_courtesy = models.BooleanField(default=False)
 
 class ScheduleStatus(models.Model):
@@ -219,3 +215,7 @@ class Meta(models.Model):
 
     def __str__(self):
         return f"{self.mes}/{self.ano} - R$" + '{:.2f}'.format(self.valor)
+
+class ServiceRelationship(models.Model):
+    from_service = models.ForeignKey(SaleService, on_delete=models.CASCADE, unique=True, related_name='Plano', limit_choices_to=Q(service_type__pk=1))
+    to_services = models.ManyToManyField(SaleService, related_name='Serviços', limit_choices_to=~Q(service_type__pk__in=[1, 4]))

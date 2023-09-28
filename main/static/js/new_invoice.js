@@ -1,4 +1,6 @@
 $(document).ready(function() {
+    const saleTypeSelect = $("#TipoConta").select2();
+    
     $('#cost').inputmask("numeric", {
       radixPoint: ",",
       groupSeparator: ",",

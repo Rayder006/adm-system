@@ -1,5 +1,6 @@
 $(document).ready(function() {
     const serviceSelect = $("#service").select2();
+    const clientSelect = $("#client").select2();
     const taxes = JSON.parse(document.getElementById('tax_list').textContent); 
     for(const tax of taxes){
         console.log(tax)

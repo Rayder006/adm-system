@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required, permission_required, 
 from django.contrib.auth import authenticate, login, logout, get_backends
 from django.shortcuts import get_object_or_404, render, redirect
 from django.http import HttpResponse, JsonResponse
+from dateutil.relativedelta import relativedelta
 from django.template.loader import get_template
 from django.contrib.auth.models import User
 from django.core import serializers
@@ -51,8 +52,8 @@ def createRecurringInvoice(inv_pk):
         inv_.pk = None
         inv_.recurring_qtd -= 1
         print(inv_.release_date)
-        inv_.release_date = inv_.release_date + datetime.timedelta(days=inv_.recurring_time)
-        inv_.due_date = inv_.due_date + datetime.timedelta(days=inv_.recurring_time)
+        inv_.release_date = inv_.release_date + datetime.timedelta(days=inv_.recurring_time) if inv_.recurring_time!=30 else inv_.release_date + relativedelta(months=1)
+        inv_.due_date = inv_.due_date + datetime.timedelta(days=inv_.recurring_time) if inv_.recurring_time!=30 else inv_.due_date + relativedelta(months=1)
 
         inv_.save()
         inv=inv_
@@ -70,6 +71,7 @@ def user_is_staff(user):
 
 def SaleContract(request, sale_id):
     sale=Sale.objects.get(pk=sale_id)
+    service_list=[]
     if sale.status.pk == 1:
         sale.status = SaleStatus.objects.get(pk=2)
         sale.contract_date = datetime.datetime.today()
@@ -78,6 +80,15 @@ def SaleContract(request, sale_id):
     if sale.contract_date is None:
         sale.contract_date = datetime.datetime.today()
         sale.save()
+
+    if sale.service.service_type.pk==1: #plano
+        try:
+            services = ServiceRelationship.objects.get(from_service__pk=sale.pk)
+            for service in services.to_services:
+                service_list.append(service.name)
+        except Exception as e:
+            service_list.append("Nenhum Serviço Cadastrado")
+            pass
 
     due_date = (sale.release_date + datetime.timedelta(days=365)).strftime("%d/%m/%Y")
     parcela1 = Decimal(sale.price1 / sale.installments1)
@@ -96,7 +107,8 @@ def SaleContract(request, sale_id):
         "parcela1":'{:.2f}'.format(parcela1),
         "parcela2":'{:.2f}'.format(parcela2),
         "qtd_parcelas1":qtd_parcelas1,
-        "today":today
+        "today":today,
+        "service_list":service_list
     }
     if sale.service.service_type.pk==1: #plano
         return render(request, 'contracts/plano.html', context)
@@ -692,6 +704,10 @@ def ScheduleList(request):
             "name":sale.service.name
         })
 
+    for event in event_list:
+        event['professional_name'] = Employee.objects.get(pk=event['professional_id']).name
+            
+
     context = {
         "status_list" : status_list,
         "professional_list" : professional_list,
@@ -734,11 +750,10 @@ def CreateSchedule(request):
         )
         print(request.POST.get("service"))
         schedule.save()
-        try: 
+        if sale is not None: 
             sale.status=SaleStatus.objects.get(pk=3)
+            sale.counter+=1
             sale.save()
-        except Exception as e:
-            pass
 
     return redirect(reverse('schedule_list'))
 
@@ -795,19 +810,23 @@ def PayInvoiceGroup(request):
     return JsonResponse(response_data, status=405)
 
 def ServiceAjax(request, person_id):
+    response = []
     service_list = []
-    sale_list = Sale.objects.filter(Q(client__pk=person_id) & Q(status__id=2) & Q(service__isnull=False))
+    sale_list = Sale.objects.filter(Q(client__pk=person_id) & (Q(status__id=2) & Q(status__id=3)) & Q(service__isnull=False))
     for sale in sale_list:
         print(f"ID da Venda: {sale.id}")
         print(f"Serviço: {sale.service.name}")
         print(f"ID do Serviço: {sale.service.id}")
-        service_list.append({
-            "sale_id":sale.id,
-            "service":sale.service.name,
-            "service_id":sale.service.id
-        })
+        if sale.counter < sale.sessions:
+            service_list.append({
+                "sale_id":sale.id,
+                "service": sale.service.name + " - " + sale.sessions - sale.counter + " disponíveis",
+                "service_id":sale.service.id
+            })
+    response.append(Person.objects.get(pk=person_id).cellphone)
+    response.append(service_list)
 
-    return JsonResponse(service_list, safe=False)
+    return JsonResponse(response, safe=False)
 
 
 def ConfirmScheduleAjax(request):
@@ -820,15 +839,28 @@ def ConfirmScheduleAjax(request):
             s.status = 2
             confirmed_list.append(s.id)
             if s.sale is not None:
-                s.sale.counter+=1
                 if s.sale.counter == s.sale.sessions:
-                    s.sale.status = SaleStatus.objects.get(pk=5) #pk==5 é o status Concluído
-                else:
-                    s.sale.status = SaleStatus.objects.get(pk=2)
+                    s.sale.status = SaleStatus.objects.get(pk=4) #pk==4 é o status Concluído
                 s.sale.save()
             s.save()
 
         return JsonResponse(confirmed_list, safe=False)
+
+def UnconfirmScheduleAjax(request):
+    if request.method == "POST":
+        ids = request.POST.getlist("ids[]")
+        unconfirmed_list = []
+        print(ids)
+        for i in ids:
+            s = ScheduleEvent.objects.get(pk=i)
+            s.status = 3
+            unconfirmed_list.append(s.id)
+            if s.sale is not None:
+                s.sale.counter -= 1
+                s.sale.save()
+            s.save()
+
+        return JsonResponse(unconfirmed_list, safe=False)
 
 
 @login_required(login_url="/login/")
