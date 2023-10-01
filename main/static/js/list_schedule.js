@@ -34,6 +34,7 @@ window.onload = (e) => {
   });
 
   let lastEdit;
+  let lastSelectedService;
 
     //Inicializa os Select2
   serviceSelect2.select2({dropdownParent: $('#creationModal')});
@@ -185,6 +186,8 @@ window.onload = (e) => {
 
           $('#service').append(new Option("Avaliação", -1));
           $('#service').append(new Option("Cortesia", -2));
+
+          $("#service").val(lastSelectedService).trigger('change');
         },
          error: function (data) {
 
@@ -252,10 +255,42 @@ window.onload = (e) => {
     })
   }
 
+
+  document.getElementById("editButton").addEventListener(
+    "click", (e) => {
+      $("#editButton").attr('hidden', true);
+      $("#confirmEditButton").attr('hidden', false);
+      
+
+      $("#date").attr("readOnly",false);
+      $("#start").attr("readOnly",false);
+      $("#end").attr("readOnly",false);
+      $("#clientCheck").attr("disabled",false);
+      document.getElementById("_client-div").hidden= true;
+      $("#client-div").show();
+      $("#client-div").removeClass('d-none');
+      $("#client-div").addClass('d-flex');
+      $("#client").attr("disabled",false);
+      $("#service").attr("disabled",false);
+      $("#professional").attr("disabled",false);
+      $("#room").attr("readOnly",false);
+      $("#equipment").attr("disabled",false);
+      $("#obs").attr("readOnly",false);
+      $("#phone").attr("readOnly",false);
+    }
+  )
+
+  document.getElementById("confirmEditButton").addEventListener(
+    "click", (e) => {
+      document.getElementById("modalForm").setAttribute("action", `edit/${lastEdit}/`);
+      document.getElementById("modalForm").submit();
+    }
+  )
+
   document.getElementById("deleteButton").addEventListener(
     "click", (e) => {
       if(confirm("Tem certeza que deseja deletar o agendamento?")==true){
-        document.getElementById("modalForm").setAttribute("action", `${document.getElementById("modalForm").getAttribute("edit-url")}${lastEdit}/`);
+        document.getElementById("modalForm").setAttribute("action", `delete/${lastEdit}/`);
         document.getElementById("modalForm").submit();
       }
     }
@@ -291,7 +326,6 @@ window.onload = (e) => {
     },
     'clickEvent': (event) => {
         calendar.clearGridSelections();
-        console.log(event.event)
         openCreationModal(event, "edit");
     },
     'beforeUpdateEvent': function(e) {
@@ -368,8 +402,12 @@ window.onload = (e) => {
     } 
     else if (isCreation==="edit"){
       $("#status").empty()
+      $("#editButton").attr('hidden', false);
+      $("#confirmEditButton").attr("hidden", true);
       lastEdit = e.event.id;
       e = events_map.get(e.event.id);
+      if(e.status!=1) $("#editButton").attr('hidden', true)
+      console.log(e)
       document.getElementById("primaryFooter").hidden=true;
       document.getElementById("secondaryFooter").hidden=false;
 
@@ -387,16 +425,24 @@ window.onload = (e) => {
       }
       
       document.getElementById("professional").value= e.professional_id;
+      clientSelect2.val(e.client_id).trigger('change')
       $("#client-div").removeClass('d-flex');
       $("#client-div").addClass('d-none');
       document.getElementById("_client-div").hidden= false;
       document.getElementById("_client").readOnly= true;
       document.getElementById("_client").value= e.client;
-      document.getElementById("service").value= e.service_id;
-      if(service_map.get(e.sale_id)) {
-        $('#service').append(new Option(service_map.get(e.sale_id), null, true, true));
+      if(e.sale_id) {
+        serviceSelect2.val(e.sale_id).trigger('change')
+        lastSelectedService = e.sale_id
       } else {
-        (e.is_courtesy) ? $('#service').append(new Option("Cortesia", -2, true, true)) : $('#service').append(new Option("Avaliação", -1, true, true)); 
+        if (e.is_courtesy){
+          console.log("cortesia")
+          $("#service").val(-2).trigger('change');
+          lastSelectedService = -2;
+        } else {
+          $("#service").val(-1).trigger('change');
+          lastSelectedService = -1;
+        } 
       }
       document.getElementById("date").setAttribute("value", e.date);
       document.getElementById("start").setAttribute("value", e.start);
@@ -416,7 +462,7 @@ window.onload = (e) => {
       document.getElementById("client").setAttribute("disabled", '');
       document.getElementById("service").setAttribute("disabled", '');
       document.getElementById("phone").value=e.phone
-      }
+    }
     creationModal.show()
   }
 }

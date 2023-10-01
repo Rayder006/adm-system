@@ -65,7 +65,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="container-fluid">
-                        <form id="modalForm" create-url="{% url 'new_schedule' %}" edit-url="{% url 'schedule_list' %}" action="{% url 'new_schedule' %}" method="post">
+                        <form id="modalForm" create-url="{% url 'new_schedule' %}" action="{% url 'new_schedule' %}" method="post">
                             {% csrf_token %}
                             <div class="row">
                                 <div class="col-md-3 form-group">
@@ -82,7 +82,7 @@
                                 </div>
                                 <div class="col-md-3 form-group">
                                     <label class="col-form-label" for="status">Status*</label>
-                                    <select class="form-select" required id="status" name="status">
+                                    <select class="form-select" readonly id="status" name="status">
                                         <option value="1" disabled selected>Novo</option>
                                     </select>
                                 </div>
@@ -108,8 +108,8 @@
                                 <div class="col-md-4 form-group d-flex flex-column">
                                     <label class="col-form-label" for="service">Serviço*</label>
                                     <select required id="service" required name="service">
-                                        <option value="-1" selected>Avaliação</option>
                                         <option value="-2">Cortesia</option>
+                                        <option value="-1">Avaliação</option>
                                     </select>
                                 </div>
                                 <div class="col-md-4 form-group">
@@ -153,7 +153,8 @@
                     <button type="button" class="btn btn-primary" id="submitCreation">Salvar</button>
                 </div>
                 <div class="modal-footer" id="secondaryFooter" hidden>
-                    <!-- <button type="button" class="btn btn-primary" id="editButton">Editar</button> -->
+                    <button type="button" class="btn btn-primary" id="editButton">Editar</button>
+                    <button type="button" class="btn btn-success" id="confirmEditButton" hidden>Confirmar</button>
                     <button type="button" class="btn btn-danger" id="deleteButton">Apagar</button>
                 </div>
             </div>

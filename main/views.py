@@ -395,7 +395,7 @@ def EditInvoice(request, invoice_id):
         invoice.description = request.POST.get("description")
         invoice.release_date = request.POST.get("release_date")
         invoice.due_date = request.POST.get("due_date")
-        invoice.cost = request.POST.get("cost")
+        invoice.cost = request.POST.get("cost")[3:].replace(".", "").replace(",", ".")
         invoice.recurring = eval(request.POST.get("recurring"))
         invoice.recurring_qtd = int(request.POST.get("recurring_qtd"))
         invoice.recurring_time = int(request.POST.get("recurring_time")) if request.POST.get("recurring_time") else None
@@ -709,7 +709,10 @@ def ScheduleList(request):
 
     for event in event_list:
         event['professional_name'] = Employee.objects.get(pk=event['professional_id']).name
-            
+        try:
+            event['client_id'] = Person.objects.get(name=event['client']).pk
+        except Exception as e:
+            event['client_id'] = None
 
     context = {
         "status_list" : status_list,
@@ -759,6 +762,46 @@ def CreateSchedule(request):
             sale.save()
 
     return redirect(reverse('schedule_list'))
+
+def EditSchedule(request, schedule_id):
+    if request.method == "POST":
+        schedule=ScheduleEvent.objects.get(pk=schedule_id)
+        if schedule.status!=1:
+            return redirect(reverse("schedule_list"))
+        sale = get_or_none(Sale, request.POST.get("sale"))
+        category = ""
+        is_courtesy = True if request.POST.get("service")=="-2" else False
+        if sale is not None:
+            category=sale.service.service_type.name
+            sale.counter-=1
+            sale.save()
+        else:
+            category = "Cortesia" if is_courtesy else "Avaliação"
+
+        schedule.title = category
+        schedule.professional = get_or_none(Employee, request.POST.get("professional"))
+        schedule.client = request.POST.get("_client")
+        schedule.phone = sale.client.cellphone if sale is not None  else request.POST.get("phone")
+        schedule.category = category
+        schedule.date = request.POST.get("date")
+        schedule.start = request.POST.get("start")
+        schedule.end = request.POST.get("end")
+        schedule.status = 1
+        schedule.sale = sale
+        schedule.room = request.POST.get("room")
+        schedule.equipment = get_or_none(Equipment, request.POST.get("equipment"))
+        schedule.obs = request.POST.get("obs")
+        schedule.is_courtesy = is_courtesy
+        
+        print(request.POST.get("service"))
+        schedule.save()
+        if schedule.sale is not None: 
+            sale.status=SaleStatus.objects.get(pk=3)
+            sale.counter+=1
+            schedule.sale.save()
+
+    return redirect(reverse('schedule_list'))
+
 
 def DeleteSchedule(request, schedule_id):
     if request.method=="POST":
