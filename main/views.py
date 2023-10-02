@@ -392,6 +392,7 @@ def EditInvoice(request, invoice_id):
         print("\n\n")
         invoice.invoice_type = get_or_none(Account, request.POST.get("invoice_type"))
         invoice.payment_type = get_or_none(PaymentType, request.POST.get("payment_type"))
+        invoice.supplier = get_or_none(Supplier, request.POST.get("supplier"))
         invoice.description = request.POST.get("description")
         invoice.release_date = request.POST.get("release_date")
         invoice.due_date = request.POST.get("due_date")
