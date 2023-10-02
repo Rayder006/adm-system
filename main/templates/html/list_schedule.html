@@ -153,8 +153,8 @@
                     <button type="button" class="btn btn-primary" id="submitCreation">Salvar</button>
                 </div>
                 <div class="modal-footer" id="secondaryFooter" hidden>
-                    <button type="button" class="btn btn-primary" id="editButton">Editar</button>
-                    <button type="button" class="btn btn-success" id="confirmEditButton" hidden>Confirmar</button>
+                    <button type="button" class="btn btn-primary" id="editButton">Habilitar Edição</button>
+                    <button type="button" class="btn btn-success" id="confirmEditButton" hidden>Confirmar Edição</button>
                     <button type="button" class="btn btn-danger" id="deleteButton">Apagar</button>
                 </div>
             </div>
@@ -214,15 +214,21 @@
             </div>
             <div class="col-4 py-1"> 
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="viewRadio" id="viewRadio2" value="month">
-                    <label class="form-check-label" for="viewRadio2">
+                    <input class="form-check-input" type="radio" name="viewRadio" id="viewRadio1" value="month">
+                    <label class="form-check-label" for="viewRadio1">
                         Mensal
                     </label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="viewRadio" id="viewRadio1" value="week" checked>
-                    <label class="form-check-label" for="viewRadio1">
+                    <input class="form-check-input" type="radio" name="viewRadio" id="viewRadio2" value="week" checked>
+                    <label class="form-check-label" for="viewRadio2">
                         Semanal
+                    </label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="viewRadio" id="viewRadio3" value="day">
+                    <label class="form-check-label" for="viewRadio3">
+                        Diário
                     </label>
                 </div>
             </div>
