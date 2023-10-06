@@ -710,8 +710,9 @@ def ScheduleList(request):
 
     for event in event_list:
         event['professional_name'] = Employee.objects.get(pk=event['professional_id']).name
-        if Sale.objects.get(pk=event['sale_id']) is not None:
-            event['service_name'] = Sale.objects.get(pk=event['sale_id']).service.name
+        sale = get_or_none(Sale, event['sale_id'])
+        if sale is not None:
+            event['service_name'] = sale.service.name
         else:
             event['service_name'] = "Cortesia" if event['is_courtesy'] else "Avaliação"
 
