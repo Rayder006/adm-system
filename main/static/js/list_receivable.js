@@ -89,7 +89,7 @@ $(document).ready( function () {
                 "render": function(data,type,row){
                     let date = new Date(`${data}T00:00:00`);
                     if(type=="display"){
-                        return `${String(date.getDate()).padStart(2, '0')}/${date.getMonth()+1}/${date.getFullYear()}`;
+                        return `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth()+1).padStart(2, '0')}/${date.getFullYear()}`;
                     }
                     return data;
                 }
@@ -99,7 +99,7 @@ $(document).ready( function () {
                 "render": function(data,type){
                     let date = new Date(`${data}T00:00:00`);
                     if(type=="display"){
-                        return `${String(date.getDate()).padStart(2, '0')}/${date.getMonth()+1}/${date.getFullYear()}`;
+                        return `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth()+1).padStart(2, '0')}/${date.getFullYear()}`;
                     }
                     return data;
                 }
@@ -109,7 +109,7 @@ $(document).ready( function () {
                 "render": function(data,type){
                     let date = new Date(`${data}T00:00:00`);
                     if(type=="display"){
-                        return `${String(date.getDate()).padStart(2, '0')}/${date.getMonth()+1}/${date.getFullYear()}`;
+                        return `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth()+1).padStart(2, '0')}/${date.getFullYear()}`;
                     }
                     return data;
                 }

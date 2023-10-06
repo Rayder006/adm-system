@@ -145,7 +145,7 @@ window.onload = (e) => {
           }
           var tr = $("<tr>")
           var date_obj = new Date(item.date+'T00:00:00')
-          var dateBtn = $("<a>").text(`${String(date_obj.getDate()).padStart(2, '0')}/${date_obj.getMonth()+1}/${date_obj.getFullYear()}`).addClass('date-btn').css('cursor', 'pointer');
+          var dateBtn = $("<a>").text(`${String(date_obj.getDate()).padStart(2, '0')}/${String(date_obj.getMonth()+1).padStart(2, '0')}/${date_obj.getFullYear()}`).addClass('date-btn').css('cursor', 'pointer');
           dateBtn.on('click', function(){
             console.log(date_obj)
             calendar.setDate(date_obj);
