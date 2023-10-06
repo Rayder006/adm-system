@@ -748,7 +748,7 @@ def CreateSchedule(request):
         professional = get_or_none(Employee, request.POST.get("professional"))
 
         schedule = ScheduleEvent(
-            title = f"{request.POST.get('_client')} - {professional.name} - {sale.service.name}",
+            title = f"{request.POST.get('_client')} - {professional.name} - {category}",
             professional = professional,
             client = request.POST.get("_client"),
             phone = sale.client.cellphone if sale is not None  else request.POST.get("phone"),
