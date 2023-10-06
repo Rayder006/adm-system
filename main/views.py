@@ -710,7 +710,11 @@ def ScheduleList(request):
 
     for event in event_list:
         event['professional_name'] = Employee.objects.get(pk=event['professional_id']).name
-        event['service_name'] = Sale.objects.get(pk=event['sale_id']).service.name
+        if Sale.objects.get(pk=event['sale_id']) is not None:
+            event['service_name'] = Sale.objects.get(pk=event['sale_id']).service.name
+        else:
+            event['service_name'] = "Cortesia" if event['is_courtesy'] else "Avaliação"
+
         try:
             event['client_id'] = Person.objects.get(name=event['client']).pk
         except Exception as e:
