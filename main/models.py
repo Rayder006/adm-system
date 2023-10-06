@@ -187,7 +187,7 @@ class SaleOrigin(models.Model):
         verbose_name_plural = 'Origens de Venda'
 
 class ScheduleEvent(models.Model): 
-    title = models.CharField(max_length=20)
+    title = models.CharField(max_length=150)
     professional = models.ForeignKey("Employee", on_delete=models.CASCADE, null=True, blank=True)
     client = models.CharField(max_length=50, null=True, blank=True)
     category = models.CharField(max_length=10, default="time")
@@ -197,7 +197,7 @@ class ScheduleEvent(models.Model):
     end = models.TimeField(null=True, blank=True)
     sale = models.ForeignKey("Sale", on_delete=models.SET_NULL, blank=True, null=True)
     status = models.IntegerField()
-    room = models.CharField(max_length=20, null=True, blank=True)
+    room = models.CharField(max_length=50, null=True, blank=True)
     equipment = models.ForeignKey("Equipment", on_delete=models.CASCADE, null=True, blank=True)
     obs = models.CharField(max_length=200, null=True, blank=True)
     is_courtesy = models.BooleanField(default=False)
