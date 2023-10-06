@@ -6,7 +6,7 @@ $(document).ready( function () {
         select: {
             style: 'multi+shift'
         },
-        colReorder: true,
+        colReorder: false,
         searchBuilder: {
             depthLimit: 2
         },
@@ -23,15 +23,15 @@ $(document).ready( function () {
                     altKey:true
                 },
                 exportOptions: {
-                    columns: ':not(.acoes)' // Ignora as colunas com a classe "acoes"
+                    columns: ':not(.class="export-hidden")' // Ignora as colunas com a classe "class="export-hidden""
                 }
             },
             {
                 extend: "excelHtml5",
                 text: "Excel",
-                title:"Teste",
+                title:"Receita",
                 exportOptions: {
-                    columns: ':not(.acoes)' // Ignora as colunas com a classe "acoes"
+                    columns: ':not(.class="export-hidden")' // Ignora as colunas com a classe "class="export-hidden""
                 }
             },
             {
@@ -87,36 +87,37 @@ $(document).ready( function () {
             {                       //Lançamento
                 "type":"date",
                 "render": function(data,type,row){
-                    if(type==="display"){
-                        return data;
+                    let date = new Date(`${data}T00:00:00`);
+                    if(type=="display"){
+                        return `${String(date.getDate()).padStart(2, '0')}/${date.getMonth()+1}/${date.getFullYear()}`;
                     }
-                    let date = new Date(data);
-                    return date.valueOf();
+                    return data;
                 }
             }, 
             {                   //Vencimento
                 "type":"date",
-                "render": function(data,type,row){
-                    if(type==="display"){
-                        return data;
+                "render": function(data,type){
+                    let date = new Date(`${data}T00:00:00`);
+                    if(type=="display"){
+                        return `${String(date.getDate()).padStart(2, '0')}/${date.getMonth()+1}/${date.getFullYear()}`;
                     }
-                    let date = new Date(data);
-                    return date.valueOf();
+                    return data;
                 }
             },  
-            {                  //Pagamento
+            {                  //Recebimento
                 "type":"date",
-                "render": function(data,type,row){
-                    if(type==="display" || type ==="filter"){
-                        return data;
+                "render": function(data,type){
+                    let date = new Date(`${data}T00:00:00`);
+                    if(type=="display"){
+                        return `${String(date.getDate()).padStart(2, '0')}/${date.getMonth()+1}/${date.getFullYear()}`;
                     }
-                    let date = new Date(data);
-                    return date.valueOf();
+                    return data;
                 }
             },  
             { "type": "string" }, //A Pagar?
             { "orderable":false }, //Ações
-            null
+            null,
+            { "type": "string" }
         ],
         stateSave: true,
         language: {

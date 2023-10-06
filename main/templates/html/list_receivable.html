@@ -37,8 +37,9 @@
                             <th scope="col">Vencimento</th>
                             <th scope="col">Recebimento</th>
                             <th>A Receber?</th>
-                            <th scope="col" class="acoes">Ações</th>
-                            <th hidden>pk</th>
+                            <th scope="col" class="export-hidden">Ações</th>
+                            <th class="export-hidden" hidden>pk</th>
+                            <th hidden>Observações</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -48,9 +49,9 @@
                             <td>{{i.invoice_type.name}}</td>
                             <td>{{i.cost}}</td>
                             <td><a href="{%url 'view_sale' i.generator_sale.id %}">Venda - {{i.generator_sale.id}}</a></td>
-                            <td>{{i.release_date|date:'d/m/Y'}}</td>
-                            <td>{{i.due_date|date:'d/m/Y'}}</td>
-                            <td>{{i.payment_date|date:'d/m/Y'}}</td>
+                            <td>{{i.release_date|date:'Y-m-d'}}</td>
+                            <td>{{i.due_date|date:'Y-m-d'}}</td>
+                            <td>{{i.payment_date|date:'Y-m-d'}}</td>
                             <td>{% if i.paid %} Não {%else %} Sim {% endif %}</td>
                             <td>
                                 <a href="{% url 'view_invoice' i.pk %}"><i class="fa-solid fa-eye"></i></a>
@@ -61,6 +62,7 @@
                                 </form>
                             </td>
                             <td hidden>{{i.pk}}</td>
+                            <td hidden>{{i.obs}}</td>
                         </tr>
                         {% endfor %}
                     </tbody>

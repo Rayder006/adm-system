@@ -28,9 +28,10 @@ urlpatterns = [
     path("schedule/new", views.CreateSchedule, name="new_schedule"),
     path("schedule/edit/<int:schedule_id>/", views.EditSchedule, name="edit_schedule"),
     path("schedule/delete/<int:schedule_id>/", views.DeleteSchedule, name="delete_schedule"),
-    path("schedule/service_filter/<person_id>", views.ServiceAjax, name="schedule_service_ajax"),
+    path("schedule/service_filter/<int:person_id>", views.ServiceAjax, name="schedule_service_ajax"),
     path("schedule/confirm/", views.ConfirmScheduleAjax, name="confirm_ajax"),
     path("schedule/unconfirm/", views.UnconfirmScheduleAjax, name="unconfirm_ajax"),
     path("receivable/", views.ListReceivable, name="list_receivable"),
     path("receivable/pay", views.ReceiveInvoiceGroup, name="receive_invoice"),
+    path("schedule/ajax/<int:person_id>", views.PersonScheduleAjax, name="person_schedule_ajax"),
 ]

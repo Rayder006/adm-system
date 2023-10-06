@@ -1,15 +1,20 @@
 $(document).ready( function () {
     let table = $('#table').DataTable({
-        scrollX: true,
-        scroller:true,
         responsive:true,
         scrollY:400,
         select: {
             style: 'multi+shift'
         },
-        colReorder: true,
+        colReorder: false,
         searchBuilder: {
-            depthLimit: 2
+            depthLimit: 2,
+            conditions: {
+                num:{
+                    '>': {
+                        conditionName: 'Above'
+                    }
+                }
+            }
         },
         dom: 'Bfrtip',
         buttons:[
@@ -24,15 +29,15 @@ $(document).ready( function () {
                     altKey:true
                 },
                 exportOptions: {
-                    columns: ':not(.acoes)' // Ignora as colunas com a classe "acoes"
+                    columns: ':not(.export-hidden)' // Ignora as colunas com a classe "acoes"
                 }
             },
             {
                 extend: "excelHtml5",
                 text: "Excel",
-                title:"Teste",
+                title:"Despesas",
                 exportOptions: {
-                    columns: ':not(.acoes)' // Ignora as colunas com a classe "acoes"
+                    columns: ':not(.export-hidden)' // Ignora as colunas com a classe "acoes"
                 }
             },
             {
@@ -80,42 +85,44 @@ $(document).ready( function () {
                         })
                         return formCurrency.format(parseFloat(data.replace(',', '.')));
                     }
-                    return data;
+                    return Number(data.replace(',', '.'));
                 }
             },
             { "type": "string" },   //Fornecedor                  
             {                       //Lançamento
                 "type":"date",
                 "render": function(data,type,row){
-                    if(type==="display"){
-                        return data;
-                    };
-                    return new Date(data);
+                    let date = new Date(`${data}T00:00:00`);
+                    if(type=="display"){
+                        return `${String(date.getDate()).padStart(2, '0')}/${date.getMonth()+1}/${date.getFullYear()}`;
+                    }
+                    return data;
                 }
             }, 
             {                   //Vencimento
                 "type":"date",
                 "render": function(data,type,row){
-                    if(type==="display" || type ==="filter"){
-                        return data;
+                    let date = new Date(`${data}T00:00:00`);
+                    if(type=="display"){
+                        return `${String(date.getDate()).padStart(2, '0')}/${date.getMonth()+1}/${date.getFullYear()}`;
                     }
-                    let date = new Date(data);
-                    return date;
+                    return data;
                 }
             },  
             {                  //Pagamento
                 "type":"date",
                 "render": function(data,type,row){
-                    if(type==="display" || type ==="filter"){
-                        return data;
+                    let date = new Date(`${data}T00:00:00`);
+                    if(type=="display"){
+                        return `${String(date.getDate()).padStart(2, '0')}/${date.getMonth()+1}/${date.getFullYear()}`;
                     }
-                    let date = new Date(data);
-                    return date;
+                    return data;
                 }
             },  
             { "type": "string" }, //A Pagar?
             { "orderable":false }, //Ações
-            null
+            null,
+            { "type": "string" }
         ],
         stateSave: true,
         language: {

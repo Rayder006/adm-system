@@ -1,6 +1,8 @@
 window.onload = (e) => {
   const radios = document.querySelectorAll('input[name="viewRadio"]')
-  const creationModal = new bootstrap.Modal(document.getElementById('creationModal'))
+  const creationModal = $("#creationModal").modal();
+  const dateModal = $("#dateModal").modal();
+  const clientModal = $("#personSearchModal").modal();
   const Calendar = tui.Calendar;
   const container = document.getElementById('calendar');
   const events = JSON.parse(document.getElementById('event_list').textContent); 
@@ -10,8 +12,9 @@ window.onload = (e) => {
   const service_map = new Map();
   const eventList = [];
   const calendarList = [];
-  const serviceSelect2 = $("#service")
-  const clientSelect2 = $("#client")
+  const serviceSelect2 = $("#service").select2();
+  const clientSelect2 = $("#client").select2();
+  const clientSearchSelect2 = $("#clientSearch").select2({dropdownParent: $('#personSearchModal')});
   const meses = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho" , "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
   const confirmModal = new bootstrap.Modal(document.getElementById('confirmModal'))
   const calendar = new Calendar(container, {
@@ -62,44 +65,6 @@ window.onload = (e) => {
   calendar.setCalendars(calendarList);
 
 
-    //carrega os eventos do Banco de Dados
-  for (const event of events) {
-    events_map.set(event.id, event)
-    var color;
-    switch(event.title){
-      case "Pilates":
-        color="#fce8a5"
-        break;
-      case "Facial":
-        color="#a5e1e9"
-        break;
-      case "Corporal":
-        color="#d5edb9"
-        break;
-      case "Injetáveis":
-        color="#ffc296"
-        break;
-      case "Cortesia":
-        color="#c4bdf3"
-        break;
-      case "Avaliação":
-        color="#f8cadc"
-        break;
-      default:
-        color="#ff8ad2"
-    }
-
-    const eventObject = {
-      id: event.id,
-      calendarId: event.professional_id,
-      title: `${event.client} - ${event.professional_name}`,
-      start: `${event.date}T${event.start}`,
-      end: `${event.date}T${event.end}`,
-      backgroundColor:color
-    };
-    eventList.push(eventObject);
-  }
-  calendar.createEvents(eventList);
     //inicializa a mascara de celular
   $('#phone').inputmask();
 
@@ -111,13 +76,118 @@ window.onload = (e) => {
     //Adiciona o nome do mês na página
   document.getElementById("month").textContent=`${meses[calendar.getDate().getMonth()]}/${calendar.getDate().getFullYear()}`;
 
+    //carrega os eventos do Banco de Dados
+    for (const event of events) {
+      events_map.set(event.id, event)
+      var color;
+      switch(event.title){
+        case "Pilates":
+          color="#fce8a5"
+          break;
+        case "Facial":
+          color="#a5e1e9"
+          break;
+        case "Corporal":
+          color="#d5edb9"
+          break;
+        case "Injetáveis":
+          color="#ffc296"
+          break;
+        case "Cortesia":
+          color="#c4bdf3"
+          break;
+        case "Avaliação":
+          color="#f8cadc"
+          break;
+        default:
+          color="#ff8ad2"
+      }
+
+      let title;
+
+      if(event.title == event.category){
+        title = `${event.client} - ${event.professional_name} - ${event.service_name}`
+      } else {
+        title=event.title;
+      }
+  
+      const eventObject = {
+        id: event.id,
+        calendarId: event.professional_id,
+        title: title,
+        start: `${event.date}T${event.start}`,
+        end: `${event.date}T${event.end}`,
+        backgroundColor:color
+      };
+      eventList.push(eventObject);
+    }
+    calendar.createEvents(eventList);
+
 
     //Event Handlers
+  clientModal.on("hidden.bs.modal", function(){
+    $("#hiddenMsg").hide();
+    $("#clientTable tbody").empty();
+    clientSearchSelect2.val(null).trigger('change');
+  });
+
+  $("#clientSearch").on('change', function(){
+    $.ajax({
+      url:$(this).find(":selected").data('url'),
+      method:"GET",  
+      dataType:"json",
+      success: function(data){
+        console.log(data)
+        data.forEach(item => {
+          if(!($("#"+item.professional_id).is(":checked"))){
+            $("#hiddenMsg").show();
+            return;
+          }
+          var tr = $("<tr>")
+          var date_obj = new Date(item.date+'T00:00:00')
+          var dateBtn = $("<a>").text(`${String(date_obj.getDate()).padStart(2, '0')}/${date_obj.getMonth()+1}/${date_obj.getFullYear()}`).addClass('date-btn').css('cursor', 'pointer');
+          dateBtn.on('click', function(){
+            console.log(date_obj)
+            calendar.setDate(date_obj);
+            clientModal.modal('hide');
+          });
+
+          var service = $("<td>").text(item.service)
+          var professional = $("<td>").text(item.professional)
+          var equipment = $("<td>").text(item.equipment)
+          var date = $("<td>").append(dateBtn);
+          var start = $("<td>").text(item.start)
+          var end = $("<td>").text(item.end)
+
+          tr.append(service, professional, equipment, date, start, end)
+          $("#clientTable").append(tr);
+        });
+      },
+    })
+  });
+
+  $("#personSearchBtn").on('click', function(){
+    clientModal.modal('show');
+  });
+
+  $("#searchDate").on("click", function(){
+    if($("#dateInput").val()!=null) calendar.setDate(new Date($("#dateInput").val()));
+    dateModal.modal('hide')
+  }); 
+
+  $("#dateBtn").on("click", function(){
+    dateModal.modal('show');
+  });
+
+  dateModal.on('hidden.bs.modal', function(){
+      $("#dateInput").val(null)
+  })
+  
   employeeChecks.each(function(){
     $(this).on('change', function(){
       calendar.setCalendarVisibility(Number($(this).attr('id')), $(this).is(":checked"));
     })
-  })
+  });
 
   $("#unconfirmButton").on(
     "click", function(e){
@@ -343,12 +413,12 @@ window.onload = (e) => {
     }
   });
 
-  document.getElementById("creationModal").addEventListener(
-    "hidden.bs.modal", function (event) {
+  creationModal.on("hidden.bs.modal", function (event) {
       calendar.clearGridSelections();
-      document.getElementById("modalForm").reset();
-    }
-  )
+      $("#client").val(null).trigger('change');
+      $("#service").val(null).trigger('change');
+      $("#ModalForm").trigger('reset');
+    }); 
 
   //Funções
   function openCreationModal(e, isCreation){
@@ -463,6 +533,6 @@ window.onload = (e) => {
       document.getElementById("service").setAttribute("disabled", '');
       document.getElementById("phone").value=e.phone
     }
-    creationModal.show()
+    creationModal.modal('show')
   }
 }

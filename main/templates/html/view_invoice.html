@@ -19,8 +19,9 @@
     <div class="container-fluid">
         <form id="deleteForm" action="{% url 'view_invoice' invoice.pk%}" method="post" class="box bg-secondary"> 
             {% csrf_token %}
-            <div class="col row">
+            <div class="col row d-flex flex-column">
                 <h1 class="col align-self-center">Despesa (Visualização)</h1>
+                
             </div>
             <hr width="100" class="w-100">
             <div class="col row justify-content-lg-around justify-content-lg-between py-2">
@@ -81,13 +82,18 @@
                 <div class="col-6"></div>
             </div>
             <hr width="100" class="w-100">
+            {% if not invoice.supplier %}
+                <div class="text-danger">Esta Despesa foi gerada automaticamente e não pode ser editada</div>
+            {% endif %}
             <div class="d-flex justify-content-end">
+                {% if invoice.supplier %}
                 <div class="ml-auto p-2">
                     <a class="btn btn-light" href="{% url 'edit_invoice' invoice.pk %}">Editar</a>
                 </div>
                 <div class="ml-auto p-2">
                     <button type="button" class="btn btn-danger" id="cancelButton" onclick="deleteInvoice(event)">Apagar</button>
                 </div>
+                {% endif %}
             </div>
         </form>
       </div>

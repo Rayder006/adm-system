@@ -2,42 +2,53 @@ $(document).ready( function () {
     $('#table').DataTable({
         scroller:true,
         scrollY:400,
-        scrollX:true,
-        scrollx:true,
         responsive:true,
         select: {
             style: 'multi+shift'
         },
-        colReorder: true,
+        colReorder: false,
         searchBuilder: {
             depthLimit: 2
         },
         dom: 'Bfrtip',
         columnDefs: [
             {
-                targets: [1,2,3,5,6,7], // Índice da coluna de data (começando em 0)
-                type: 'string', // Define o tipo de dados como "datetime"
+                targets: [1,2,3,7,8,9], // Índice da coluna de data (começando em 0)
+                type: 'string', // Define o tipo de dados como "string"
             },
             {
-                targets:[8],
+                targets: [4,5], // Índice da coluna de data (começando em 0)
+                type: 'number', // Define o tipo de dados como "string"
+            },
+            {
+                targets:[6],
+                type : "number",
+                render: function(data, type) {
+                    console.log(data)
+                    if (type === 'display') {
+                        const formCurrency = new Intl.NumberFormat('pt-BR', {
+                            style: 'currency',
+                            currency: 'BRL',
+                            minimumFractionDigits: 2
+                        })
+                        return formCurrency.format(parseFloat(data.replace(',', '.')));
+                    }
+                    return data;
+                }
+            },
+            {
+                targets:[10],
                 orderable:false
             },
             {
                 targets:[0],
                 type:'date',
                 render: function(data, type){
-                    let partes = data.split('-');
-                    let fusoHorarioLocal = new Date().getTimezoneOffset() / 60;
-
-                    let date = new Date(Date.UTC(parseInt(partes[0]), parseInt(partes[1]) - 1, parseInt(partes[2]), fusoHorarioLocal));
+                    let date = new Date(`${data}T00:00:00`);
                     if(type=="display"){
-                        console.log("String: " + data + "\nObjeto Date: " + date);
-                        const day = String(date.getDate()).padStart(2, '0');
-                        const month = String(date.getMonth() + 1).padStart(2, '0'); // Mês é base 0
-                        const year = date.getFullYear();
-                        return `${day}/${month}/${year}`;
+                        return `${String(date.getDate()).padStart(2, '0')}/${date.getMonth()+1}/${date.getFullYear()}`;
                     }
-                    return date.getTime();
+                    return data;
                 }
             }
         ],
@@ -48,10 +59,13 @@ $(document).ready( function () {
             {
                 extend: "excelHtml5",
                 text: "Excel",
-                title:"Teste",
+                title:"Vendas",
                 key: {
                     key:'c',
                     altKey:true
+                },
+                exportOptions: {
+                    columns: ':not(.export-hidden)' // Ignora as colunas com a classe "class="export-hidden""
                 }
             }
         ],

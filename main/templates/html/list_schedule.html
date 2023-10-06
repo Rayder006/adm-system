@@ -42,10 +42,13 @@
                 </ul>
                 <ul class="navbar-nav navbar-brand">
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle text-danger" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             {% if username.first_name %} {{username.first_name}} {{username.last_name}} {% else %} {{username}} {% endif %}
                         </a>
                         <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            {% if request.user.is_authenticated %}
+                            <a class="dropdown-item" href="{% url 'admin:index' %}">Painel de Administrador</a>
+                            {% endif %}
                             <a class="dropdown-item" href="{% url 'logout' %}">Log Out</a>  
                         </div>
                     </li>
@@ -54,7 +57,81 @@
         </div>
     </nav>
 
+    <div class="modal fade" id="personSearchModal" tabindex="-1" aria-labelledby="personSearchModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="personSearchModalLabel">Pesquisar Cliente</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <form id="form" method="post" action="" novalidate class="needs-validation">
+                            <div class="row">
+                                <div class="col-12 d-flex flex-column">
+                                    <label class ="form-label" for="clientSearch">Cliente</label>
+                                    <select class="form-select" name="" id="clientSearch">
+                                        <option value="" selected disabled>Selecione...</option>
+                                    {% for client in client_list %}
+                                        <option value="{{client.pk}}" data-url="{% url 'person_schedule_ajax' client.pk %}">{{client.name}}</option>
+                                    {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </form>
+                        <hr class="my-4">
+                        <h3>Agendamentos</h3>
+                        <div class="text-danger" id="hiddenMsg" style="display: none;">
+                            Este cliente tem agendamentos com profissionais que não estão selecionados!
+                        </div>
+                        <hr class="my-4">
+                        <div class="row">
+                            <table id="clientTable" class="table table-striped">
+                                <thead>
+                                    <th>Serviço</th>
+                                    <th>Profissional</th>
+                                    <th>Equipamento</th>
+                                    <th>Data</th>
+                                    <th>Início</th>
+                                    <th>Fim</th>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>  
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" id="concludeBtn">Concluir</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <div class="modal fade" id="dateModal" tabindex="-1" aria-labelledby="dateModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="dateModalLabel">Pesquisar Data</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-12">
+                                <form action="">
+                                    <label class="form-label" for="dateInput">Selecione a Data:</label>
+                                    <input class="form-control" type="date" name="" id="dateInput">
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="searchDate">Pesquisar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="modal fade" id="creationModal" tabindex="-1" aria-labelledby="creationModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl">
@@ -231,6 +308,10 @@
                         Diário
                     </label>
                 </div>
+            </div>
+            <div class="col-5 py-1 m-lg-auto d-flex justify-content-end">
+                <button type="button" class="mx-2 btn btn-secondary" id="personSearchBtn">Pesquisar Cliente</button>
+                <button type="button" class="mx-2 btn btn-secondary" id="dateBtn">Pesquisar Data</button>
             </div>
         </div>
     </div>

@@ -41,8 +41,9 @@
                             <th scope="col">Vencimento</th>
                             <th scope="col">Pagamento</th>
                             <th>A pagar?</th>
-                            <th scope="col" class="acoes">Ações</th>
-                            <th hidden>pk</th>
+                            <th scope="col" class="export-hidden">Ações</th>
+                            <th class="export-hidden" hidden>pk</th>
+                            <th hidden>Observações</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -52,13 +53,15 @@
                             <td>{{i.invoice_type.name}}</td>
                             <td>{{i.cost}}</td>
                             <td>{% if i.supplier %} {{i.supplier}} {% else %} Automático {% endif %}</td>
-                            <td>{{i.release_date|date:'d/m/Y'}}</td>
-                            <td>{{i.due_date|date:'d/m/Y'}}</td>
-                            <td>{{i.payment_date|date:'d/m/Y'}}</td>
+                            <td>{{i.release_date|date:'Y-m-d'}}</td>
+                            <td>{{i.due_date|date:'Y-m-d'}}</td>
+                            <td>{{i.payment_date|date:'Y-m-d'}}</td>
                             <td>{% if i.paid %} Não {%else %} Sim {% endif %}</td>
                             <td>
                                 <a href="{% url 'view_invoice' i.pk %}"><i class="fa-solid fa-eye"></i></a>
+                                {% if i.supplier %}
                                 <a href="{% url 'edit_invoice' i.pk %}"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                {% endif %}
                                 <a href="#" i_pk="{{i.pk}}" onclick="deleteInvoice(this)"><i class="fa fa-trash" aria-hidden="true"></i></a>
                                 <form hidden id="deleteForm-{{i.pk}}" action="{% url 'view_invoice' i.pk %}" method="post"> 
                                     {% csrf_token %}
@@ -66,6 +69,7 @@
                                 </form>
                             </td>
                             <td hidden>{{i.pk}}</td>
+                            <td hidden>{{i.obs}}</td>
                         </tr>
                         {% endfor %}
                     </tbody>

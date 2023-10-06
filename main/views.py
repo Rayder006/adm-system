@@ -710,6 +710,7 @@ def ScheduleList(request):
 
     for event in event_list:
         event['professional_name'] = Employee.objects.get(pk=event['professional_id']).name
+        event['service_name'] = Sale.objects.get(pk=event['sale_id']).service.name
         try:
             event['client_id'] = Person.objects.get(name=event['client']).pk
         except Exception as e:
@@ -739,9 +740,11 @@ def CreateSchedule(request):
         else:
             category = "Cortesia" if is_courtesy else "Avaliação"
 
+        professional = get_or_none(Employee, request.POST.get("professional"))
+
         schedule = ScheduleEvent(
-            title = category,
-            professional = get_or_none(Employee, request.POST.get("professional")),
+            title = f"{request.POST.get('_client')} - {professional.name} - {sale.service.name}",
+            professional = professional,
             client = request.POST.get("_client"),
             phone = sale.client.cellphone if sale is not None  else request.POST.get("phone"),
             category = category,
@@ -758,7 +761,6 @@ def CreateSchedule(request):
         print(request.POST.get("service"))
         schedule.save()
         if sale is not None: 
-            sale.status=SaleStatus.objects.get(pk=3)
             sale.counter+=1
             sale.save()
 
@@ -811,12 +813,9 @@ def DeleteSchedule(request, schedule_id):
         print("\n\n\n")
 
         schedule=ScheduleEvent.objects.get(pk=schedule_id)
-        try:
-            schedule.sale.status=SaleStatus.objects.get(pk=2)
+        if schedule.sale is not None and schedule.status==1:
+            schedule.sale.counter-=1
             schedule.sale.save()
-        except Exception as e:
-            print(e)
-            pass
 
         schedule.delete()
 
@@ -859,7 +858,7 @@ def PayInvoiceGroup(request):
 def ServiceAjax(request, person_id):
     response = []
     service_list = []
-    sale_list = Sale.objects.filter(Q(client__pk=person_id) & (Q(status__id=2) & Q(status__id=3)) & Q(service__isnull=False))
+    sale_list = Sale.objects.filter(client__id=person_id, status__id=2)
     for sale in sale_list:
         print(f"ID da Venda: {sale.id}")
         print(f"Serviço: {sale.service.name}")
@@ -867,7 +866,7 @@ def ServiceAjax(request, person_id):
         if sale.counter < sale.sessions:
             service_list.append({
                 "sale_id":sale.id,
-                "service": sale.service.name + " - " + sale.sessions - sale.counter + " disponíveis",
+                "service": f"{sale.service.name} - {sale.sessions - sale.counter} Disponíveis",
                 "service_id":sale.service.id
             })
     response.append(Person.objects.get(pk=person_id).cellphone)
@@ -993,3 +992,22 @@ def ReceiveInvoiceGroup(request):
         'error': 'Método não permitido'
     }
     return JsonResponse(response_data, status=405)
+
+def PersonScheduleAjax(request, person_id):
+    if not request.user.is_authenticated:
+        return HttpResponse("Please, log in :P")
+
+    response = []
+    schedule_list = ScheduleEvent.objects.filter(sale__client__pk=person_id)
+    for schedule in schedule_list:
+        print(schedule)
+        response.append({
+            "service": schedule.sale.service.name,
+            "professional":schedule.professional.name,
+            "professional_id":schedule.professional.pk,
+            "equipment":schedule.equipment.name if schedule.equipment else None,
+            "date":schedule.date,
+            "start":schedule.start.strftime("%Hh%Mm"),
+            "end":schedule.end.strftime("%Hh%Mm")
+        })
+    return JsonResponse(response, safe=False)

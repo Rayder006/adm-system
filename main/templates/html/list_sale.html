@@ -51,7 +51,8 @@
                                 <th scope="col">Tipo</th>
                                 <th scope="col">Origem</th>
                                 <th scope="col">Forma de Pag.</th>
-                                <th scope="col">Ações</th>
+                                <th class="export-hidden" scope="col">Ações</th>
+                                <th scope="col" hidden>Observações</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -63,7 +64,7 @@
                                 <td>{{s.status}}</td>
                                 <td>{{s.sessions}}</td>
                                 <td>{{s.available}}</td>
-                                <td>R${{s.final_price}}</td>
+                                <td>{{s.final_price}}</td>
                                 <td>{{s.service.service_type.name}}</td>
                                 <td>{{s.origin.name}}</td>
                                 <td>{{s.payment_type.name}}</td>
@@ -89,6 +90,7 @@
                                         {% csrf_token %}
                                         <input type="text" name="pk" id="pk" value="{{s.pk}}">
                                     </form>
+                                    <td hidden>{{s.obs}}</td>
                                 </td>
                             </tr>
                             {% endfor %}
