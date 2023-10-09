@@ -143,3 +143,5 @@ GitHub.sublime-settings
 .history
 staticfiles/
 mysite/settings.py
+main/__pycache__/views.cpython-311.pyc
+main/__pycache__/models.cpython-311.pyc
