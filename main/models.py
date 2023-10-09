@@ -223,9 +223,6 @@ class ServiceRelationship(models.Model):
     from_service = models.ForeignKey(SaleService, on_delete=models.CASCADE, unique=True, related_name='Plano', verbose_name="Plano", limit_choices_to=Q(service_type__pk=1))
     to_services = models.ManyToManyField(SaleService, related_name='Serviços', verbose_name="Serviços Oferecidos", limit_choices_to=~Q(service_type__pk__in=[1, 4]))
 
-    def __str__(self):
-        return f"{self.from_service.name}"
-
     class Meta:
         verbose_name="Relação Plano-Serviços"
         verbose_name_plural="Relações Plano-Serviços"
