@@ -92,7 +92,7 @@ def SaleContract(request, sale_id):
 
     due_date = (sale.release_date + relativedelta(years=1)).strftime("%d/%m/%Y")
     parcela1 = Decimal(sale.price1 / sale.installments1)
-    parcela2 = sale.price2 / sale.installments2
+    parcela2 = sale.price2 / sale.installments2 if sale.price2 else 0
     today = sale.contract_date
 
     qtd_parcelas1 = []
