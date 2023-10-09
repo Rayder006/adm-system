@@ -2,6 +2,7 @@ $(document).ready( function () {
     let table = $('#table').DataTable({
         responsive:true,
         scrollY:400,
+        scrollX:200,
         select: {
             style: 'multi+shift'
         },
@@ -114,7 +115,9 @@ $(document).ready( function () {
                 "render": function(data,type,row){
                     let date = new Date(`${data}T00:00:00`);
                     if(type=="display"){
-                        return `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth()+1).padStart(2, '0')}/${date.getFullYear()}`;
+                        if(data)
+                            return `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth()+1).padStart(2, '0')}/${date.getFullYear()}`;
+                        else return "";
                     }
                     return data;
                 }

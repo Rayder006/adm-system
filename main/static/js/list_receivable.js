@@ -3,6 +3,7 @@ $(document).ready( function () {
         scroller:true,
         responsive:true,
         scrollY:400,
+        scrollX:100,
         select: {
             style: 'multi+shift'
         },
@@ -109,7 +110,9 @@ $(document).ready( function () {
                 "render": function(data,type){
                     let date = new Date(`${data}T00:00:00`);
                     if(type=="display"){
-                        return `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth()+1).padStart(2, '0')}/${date.getFullYear()}`;
+                        if(data)
+                            return `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth()+1).padStart(2, '0')}/${date.getFullYear()}`;
+                        else return "";
                     }
                     return data;
                 }

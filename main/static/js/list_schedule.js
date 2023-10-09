@@ -106,7 +106,12 @@ window.onload = (e) => {
       let title;
 
       if(event.title == event.category){
-        title = `${event.client} - ${event.professional_name} - ${event.service_name}`
+        if(event.sale_id){
+          event.is_courtesy? title = `${event.client} - ${event.professional_name} - ${event.service_name}` : title = `${event.client} - ${event.professional_name} - ${event.service_name}`
+        }
+        else {
+          title = `${event.client} - ${event.professional_name} - ${event.service_name}`
+        }
       } else {
         title=event.title;
       }

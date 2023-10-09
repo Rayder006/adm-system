@@ -112,13 +112,6 @@ $(document).ready( function () {
             }
         }
     });
-
-    // $(".cancelButton").on(
-    //     "click", function (e) {
-    //         console.log(e);
-    //         cancelSale()
-    //     }
-    // )
 });
 
 function contract(e){

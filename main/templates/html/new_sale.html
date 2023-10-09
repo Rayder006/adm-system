@@ -19,7 +19,6 @@
 </head>
 <body>
     {% block body %}
-    {{ tax_list|json_script:"tax_list" }}
     <div class="container-fluid">
         <form action="{% url 'new_sale' %}" method="post" id="form" class="box bg-secondary"> 
             {% csrf_token %}
@@ -58,8 +57,8 @@
                     </select>
                 </div>
                 <div class="col-6  form-group">
-                    <label for="sale_origin">Origem da Venda*</label>
-                    <select class="custom-select" required name="sale_origin" id="sale_origin">
+                    <label for="origin">Origem da Venda*</label>
+                    <select class="custom-select" required name="origin" id="origin">
                         <option value="" selected hidden>Selecione</option>
                         {% for o in origin_list %}
                         <option value="{{o.pk}}">{{o.name}}</option>
@@ -68,10 +67,13 @@
                 </div>
             </div>
             <div class="col row py-2">
-                <div id="service_div" class="col-6 flex-column form-group">
+                <div class="col-6 flex-column form-group">
                     <label for="service" id="service_label">Plano*</label>
                     <select class="custom-select" required id="service" name="service">
                         <option value="" selected hidden>Selecione o Tipo de Venda</option>
+                        {% for service in service_list %}
+                        <option data-type="{{service.service_type.pk}}" data-price="{{service.price}}" data-sessions="{{service.sessions}}" value="{{service.pk}}" style="display: none;">{{service.name}}</option>
+                        {% endfor %}
                     </select>
                 </div>
                 <div class="col-3  form-group">
@@ -116,24 +118,24 @@
                 </div>
                 <div class="col-3 form-group">
                     <label for="price1">Valor*</label>
-                    <input class="form-control" readonly name="price1" id="price1" type="number" min="0" required>
+                    <input class="form-control" readonly name="price1" id="price1" type="number" min="0" step="0.01" required>
                 </div>
-                <div class="col-3 form-check form-group taxDiv" hidden>
+                <div class="col-3 form-check form-group taxDiv" style="display: none;">
                     <label for="tax">Tipo de Cartão*</label>
                     <select class="custom-select taxInput" id="tax" name="tax">
                         <option value="" disabled selected>Selecione...</option>
                         {% for tax in tax_list %}
-                        <option data-id="{{tax.payment_type.pk}}" value="{{tax.pk}}">{{tax.name}}</option>
+                        <option data-type="{{tax.payment_type.pk}}" value="{{tax.pk}}">{{tax.name}}</option>
                         {% endfor %} 
                     </select>
                 </div>
-                <div class="col-3 form-group taxDiv" hidden>
+                <div class="col-3 form-group taxDiv" style="display: none;">
                     <label for="installments">Parcelas*</label>
-                    <input class="form-control taxInput" type="number" id="installments1" name="installments1" min="1" max="12" default="1">
+                    <input class="form-control taxInput" type="number" id="installments" name="installments1" min="1" max="12" value="1">
                 </div>
             </div>
             <div class="col row py-2"> 
-                <div class="col-3 form-check form-group payment2" hidden>
+                <div class="col-3 form-check form-group payment2" style="display: none;">
                     <label for="payment_type2">2ª Forma de Pagamento*</label>
                     <select class="custom-select paymentInput2" id="payment_type2" name="payment_type2">
                         <option value="" disabled hidden selected>Selecione...</option>
@@ -142,22 +144,22 @@
                         {% endfor %} 
                     </select>
                 </div>
-                <div class="col-3 form-group payment2" hidden>
+                <div class="col-3 form-group payment2" style="display: none;">
                     <label for="price2">2º Valor*</label>
                     <input class="form-control paymentInput2" readonly name="price2" id="price2" type="number" min="0">
                 </div>
-                <div class="col-3 form-check form-group taxDiv2" hidden>
+                <div class="col-3 form-check form-group taxDiv2" style="display: none;">
                     <label for="tax2">Tipo de Cartão*</label>
                     <select class="custom-select taxInput2" id="tax2" name="tax2">
                         <option value="" disabled selected>Selecione...</option>
                         {% for tax in tax_list %}
-                        <option data-id="{{tax.payment_type.pk}}" value="{{tax.pk}}">{{tax.name}}</option>
+                        <option data-type="{{tax.payment_type.pk}}" value="{{tax.pk}}">{{tax.name}}</option>
                         {% endfor %} 
                     </select>
                 </div>
-                <div class="col-3 form-group taxDiv2"  hidden>
+                <div class="col-3 form-group taxDiv2"  style="display: none;">
                     <label for="installments2">Parcelas*</label>
-                    <input class="form-control taxInput2" type="number" id="installments2" name="installments2" min="1" max="12" default="1">
+                    <input class="form-control taxInput2" type="number" id="installments2" name="installments2" min="1" max="12" value="1">
                 </div>
             </div>
             <div class="col row py-2">
@@ -171,7 +173,7 @@
                 </div>
                 <div class="col-4  form-group">
                     <label for="final_price">Preço Final</label>
-                    <input class="form-control" step="0.01" readonly id="final_price" name="final_price">
+                    <input class="form-control" type="number" step="0.01" readonly id="final_price" name="final_price">
                 </div>
             </div>
             <hr width="100" class="w-100">

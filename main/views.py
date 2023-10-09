@@ -9,6 +9,7 @@ from django.core import serializers
 from django.utils import timezone
 from django.urls import reverse
 from django.db.models import Q
+from datetime import datetime
 from .forms import MetaForm
 from decimal import Decimal
 from .functions import *
@@ -43,11 +44,10 @@ def WorkDays(ano, mes):
             
     return dias_uteis
 
-def createRecurringInvoice(inv_pk):
-    inv = Invoice.objects.get(pk=inv_pk)
-    recurring_time = Invoice.objects.get(pk=inv_pk).recurring_time
+def createRecurringInvoice(invoice_pk):
+    inv = Invoice.objects.get(pk=invoice_pk)
     
-    for i in range(0, inv.recurring_qtd):
+    for i in range(1, inv.recurring_qtd):
         inv_ = inv
         inv_.pk = None
         inv_.recurring_qtd -= 1
@@ -83,22 +83,26 @@ def SaleContract(request, sale_id):
 
     if sale.service.service_type.pk==1: #plano
         try:
-            services = ServiceRelationship.objects.get(from_service__pk=sale.pk)
-            for service in services.to_services:
+            services = ServiceRelationship.objects.get(from_service__pk=sale.service.pk)
+            print(services.__dict__)
+            for service in services.to_services.all():
                 service_list.append(service.name)
-        except Exception as e:
-            service_list.append("Nenhum Serviço Cadastrado")
-            pass
+        except DoesNotExist:
+            return HttpResponse("DoesNotExists!")
 
     due_date = (sale.release_date + datetime.timedelta(days=365)).strftime("%d/%m/%Y")
     parcela1 = Decimal(sale.price1 / sale.installments1)
-    parcela2 = sale.price2 / sale.installments2 if sale.price2 else 0
+    parcela2 = sale.price2 / sale.installments2
     today = sale.contract_date
 
     qtd_parcelas1 = []
+    qtd_parcelas2 = []
 
     for i in range(1, sale.installments1+1):
         qtd_parcelas1.append(i)
+    
+    for i in range(1, sale.installments2+1):
+        qtd_parcelas2.append(i)
 
     context = {
         "sale":sale,
@@ -107,6 +111,7 @@ def SaleContract(request, sale_id):
         "parcela1":'{:.2f}'.format(parcela1),
         "parcela2":'{:.2f}'.format(parcela2),
         "qtd_parcelas1":qtd_parcelas1,
+        "qtd_parcelas2":qtd_parcelas2,
         "today":today,
         "service_list":service_list
     }
@@ -460,97 +465,132 @@ def ListSale(request):
 @user_passes_test(user_is_staff, login_url="login")
 def NewSale(request):
     if request.method == "POST":
+        print("\n\n")
         print(request.POST)
-
-        service = SaleService.objects.get(pk=request.POST.get("service"))
-        final_price = Decimal(request.POST.get("final_price"))
-        discount = service.price * service.sessions
-        discount -= final_price
-        payment_type = get_or_none(PaymentType, request.POST.get("payment_type"))
-        payment_type2 = None if request.POST.get("mixed") == 0 else get_or_none(PaymentType, request.POST.get("payment_type"))
-        installments1=int(request.POST.get("installments1")) if request.POST.get("installments1") else 1
-        installments2=int(request.POST.get("installments2")) if request.POST.get("installments2") else 0
-        mixed = request.POST.get("mixed")==1
-        price1 = Decimal(request.POST.get("price1"))
-        price2 = Decimal(request.POST.get("price2")) if mixed==1 else None
-
-
-        s = Sale(
+        print("\n\n")
+        
+        sale = Sale(
             client = get_or_none(Person, request.POST.get("client")),
             seller = get_or_none(Employee, request.POST.get("seller")),
-            status = SaleStatus.objects.get(pk=1), # novo
-            origin = get_or_none(SaleOrigin, request.POST.get("sale_origin")),
-            service = service,
-            payment_type = payment_type,
-            payment_type2 = payment_type2,
-            discount = discount if discount>0 else discount * (-1),
+            status = SaleStatus.objects.get(pk=1),
+            origin = get_or_none(SaleOrigin, request.POST.get("origin")),
+            service = get_or_none(SaleService, request.POST.get("service")),
+            payment_type = get_or_none(PaymentType, request.POST.get("payment_type")),
+            payment_type2 = get_or_none(PaymentType, request.POST.get("payment_type2")),
             sessions = request.POST.get("sessions"),
             obs = request.POST.get("obs"),
             release_date = request.POST.get("date"),
+            contract_date = None,
             counter = 0,
-            price1 = price1,
-            price2 = 0 if request.POST.get("mixed") == 0 else price2,
-            installments1 = installments1,
-            installments2 = 0 if request.POST.get("mixed") == 0 else installments2,
-            final_price = final_price
+            price1 = request.POST.get("price1"),
+            price2 = request.POST.get("price2"),
+            installments1 = request.POST.get("installments1"),
+            installments2 = request.POST.get("installments2"),
+            final_price = request.POST.get("final_price")
         )
 
-        s.save()
-        s=Sale.objects.get(pk=s.id)
-        print(s.__dict__)
+        sale.discount = (sale.service.price * int(sale.sessions)) - Decimal(sale.final_price)
+        sale.save()
 
-        price1 /= installments1
-        if mixed:
-            price2 /= installments2
+        type_pk=None
 
-
-        if payment_type.has_tax:
-            tax = Tax.objects.get(pk=request.POST.get("tax"))
-            cost = (Decimal(request.POST.get("price1"))*(tax.tax/100))/installments1
-            i = Invoice(
-                invoice_type = Account.objects.get(pk=117) if payment_type.pk==1 else Account.objects.get(pk=118), # 117 == crédito; 118 == débito
-                supplier = None,
-                payment_type = payment_type,
-                generator_sale = s,
-                description = "Despesa Gerada Automáticamente",
-                release_date = datetime.datetime.today(),
-                due_date = datetime.datetime.today() + datetime.timedelta(days=int(30)),
-                payment_date = None,
-                cost = cost,
-                paid = False,
-                recurring = True,
-                recurring_qtd = installments1-1,
-                recurring_time = 30,
-                obs = "Despesa Gerada Automáticamente"
-            )
-
-            i.save()
-            price1-=cost
-            createRecurringInvoice(i.pk)
-
-        i = Invoice(
-            invoice_type = s.service.account,
-            supplier = None,
-            payment_type = payment_type,
-            generator_sale = s,
-            description = "Receita Gerada Automáticamente",
-            release_date = datetime.datetime.today(),
-            due_date = datetime.datetime.today()+datetime.timedelta(days=30),
-            payment_date = None,
-            cost = price1,
-            paid = False,
-            recurring = True,
-            recurring_qtd = installments1-1,
-            recurring_time = 30,
-            obs = "Receita Gerada Automáticamente"
-        ) 
-        i.save()
-
-        createRecurringInvoice(i.pk)
-
+        if sale.service.service_type.pk == 1:
+            type_pk=4
+        elif sale.service.service_type.pk == 2:
+            type_pk=8
+        elif sale.service.service_type.pk == 7:
+            type_pk=3
+        elif sale.service.service_type.pk == 4:
+            type_pk=7
+        elif sale.service.service_type.pk == 5:
+            type_pk=2
+        elif sale.service.service_type.pk == 6:
+            type_pk=1
         
+        if type_pk is not None:
+            receivable = Invoice(
+                invoice_type = Account.objects.get(pk=type_pk),
+                supplier = None,
+                payment_type = sale.payment_type,
+                release_date = sale.release_date,
+                due_date = datetime.datetime.strptime(sale.release_date, '%Y-%m-%d') + relativedelta(months=1),
+                generator_sale=sale,
+                payment_date = None,
+                cost = Decimal(sale.price1) / Decimal(sale.installments1),
+                paid = False,
+                recurring = False if sale.installments1 == 1 else True,
+                recurring_qtd = sale.installments1,
+                recurring_time = 30,
+                obs = "Receita Gerada Automaticamente"
+            )
+            receivable.description = receivable.invoice_type.commentary
+            receivable.save()
+            createRecurringInvoice(receivable.pk)
 
-        return redirect(reverse("list_sale"))
+            if sale.payment_type.has_tax:
+                tax = get_or_none(Tax, request.POST.get("tax")).tax
+                invoice = Invoice(
+                    invoice_type = Account.objects.get(pk=117) if sale.payment_type.pk == 1 else Account.objects.get(pk=118),
+                    supplier = None,
+                    payment_type = sale.payment_type,
+                    generator_sale = sale,
+                    release_date = sale.release_date,
+                    due_date = datetime.datetime.strptime(sale.release_date, '%Y-%m-%d') + relativedelta(months=1),
+                    payment_date = None,
+                    cost = Decimal(sale.price1) * (tax/100) / Decimal(sale.installments1),
+                    paid = False,
+                    recurring = False if sale.installments1 == 1 else True,
+                    recurring_qtd = sale.installments1,
+                    recurring_time = 30,
+                    obs = "Despesa Gerada Automaticamente"
+                )
+                invoice.description = invoice.invoice_type.commentary
+                invoice.save()
+                createRecurringInvoice(invoice.pk)
+
+        if request.POST.get("mixed") == "1":
+            if type_pk is not None:
+                receivable = Invoice(
+                    invoice_type = Account.objects.get(pk=type_pk),
+                    supplier = None,
+                    payment_type = sale.payment_type2,
+                    release_date = sale.release_date,
+                    due_date = datetime.datetime.strptime(sale.release_date, '%Y-%m-%d') + relativedelta(months=1),
+                    generator_sale=sale,
+                    payment_date = None,
+                    cost = Decimal(sale.price2) / Decimal(sale.installments2),
+                    paid = False,
+                    recurring = False if sale.installments2 == 1 else True,
+                    recurring_qtd = sale.installments2,
+                    recurring_time = 30,
+                    obs = "Receita Gerada Automaticamente"
+                )
+                receivable.description = receivable.invoice_type.commentary
+                receivable.save()
+                createRecurringInvoice(receivable.pk)
+
+                if sale.payment_type2.has_tax:
+                    tax = get_or_none(Tax, request.POST.get("tax2")).tax
+                    invoice = Invoice(
+                        invoice_type = Account.objects.get(pk=117) if sale.payment_type2.pk == 1 else Account.objects.get(pk=118),
+                        supplier = None,
+                        payment_type = sale.payment_type2,
+                        generator_sale = sale,
+                        release_date = sale.release_date,
+                        due_date = datetime.datetime.strptime(sale.release_date, '%Y-%m-%d') + relativedelta(months=1),
+                        payment_date = None,
+                        cost = Decimal(sale.price2) * (tax/100) / Decimal(sale.installments2),
+                        paid = False,
+                        recurring = False if sale.installments2 == 1 else True,
+                        recurring_qtd = sale.installments2,
+                        recurring_time = 30,
+                        obs = "Despesa Gerada Automaticamente"
+                    )
+                    invoice.description = invoice.invoice_type.commentary
+                    invoice.save()
+                    createRecurringInvoice(invoice.pk)
+
+        return redirect(reverse('list_sale'))
 
 
     client_list = Person.objects.all()
@@ -558,11 +598,9 @@ def NewSale(request):
     seller_list = Employee.objects.all()
     status_list = SaleStatus.objects.all()
     payment_type_list = PaymentType.objects.all()
-    plan_list = SaleService.objects.filter(service_type__pk=1)
-    service_list = SaleService.objects.filter(service_type__pk=2)
-    product_list = SaleService.objects.filter(service_type__pk=3)
+    service_list = SaleService.objects.all()
     origin_list = SaleOrigin.objects.all()
-    tax_list = list(Tax.objects.all().values())
+    tax_list = Tax.objects.all()
 
     context = {
         "perms":request.user.get_all_permissions(),
@@ -572,8 +610,6 @@ def NewSale(request):
         "seller_list" : seller_list,
         "status_list" : status_list,
         "payment_type_list" : payment_type_list,
-        "plan_list" : plan_list,
-        "product_list" : product_list,
         "service_list" : service_list,
         "payment_type_list" : payment_type_list,
         "tax_list":tax_list,
@@ -933,7 +969,7 @@ def ListReceivable(request):
 def CancelSale(request, sale_id):
     if request.method=="POST":
         sale = Sale.objects.get(pk=sale_id)
-        sale.status=SaleStatus.objects.get(pk=4)
+        sale.status=SaleStatus.objects.get(pk=3)
         sale.save()
         return JsonResponse({"success": "FUNCIONOU"})
 

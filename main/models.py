@@ -51,7 +51,7 @@ class Invoice(models.Model):
     generator_sale = models.ForeignKey("Sale", null=True, blank=True, on_delete=models.CASCADE)
     description = models.CharField(max_length=200)
     release_date = models.DateField()
-    due_date = models.DateField(default=timezone.now)
+    due_date = models.DateField()
     payment_date = models.DateField(blank=True, null=True)
     cost = models.DecimalField(max_digits=8, decimal_places=2)
     paid = models.BooleanField(default=False)
@@ -217,5 +217,12 @@ class Meta(models.Model):
         return f"{self.mes}/{self.ano} - R$" + '{:.2f}'.format(self.valor)
 
 class ServiceRelationship(models.Model):
-    from_service = models.ForeignKey(SaleService, on_delete=models.CASCADE, unique=True, related_name='Plano', limit_choices_to=Q(service_type__pk=1))
-    to_services = models.ManyToManyField(SaleService, related_name='Serviços', limit_choices_to=~Q(service_type__pk__in=[1, 4]))
+    from_service = models.ForeignKey(SaleService, on_delete=models.CASCADE, unique=True, related_name='Plano', verbose_name="Plano", limit_choices_to=Q(service_type__pk=1))
+    to_services = models.ManyToManyField(SaleService, related_name='Serviços', verbose_name="Serviços Oferecidos", limit_choices_to=~Q(service_type__pk__in=[1, 4]))
+
+    def __str__(self):
+        return f"{self.from_service.name}"
+
+    class Meta:
+        verbose_name="Relação Plano-Serviços"
+        verbose_name_plural="Relações Plano-Serviços"
