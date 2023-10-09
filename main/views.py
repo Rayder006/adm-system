@@ -82,13 +82,7 @@ def SaleContract(request, sale_id):
         sale.save()
 
     if sale.service.service_type.pk==1: #plano
-        try:
-            services = ServiceRelationship.objects.get(from_service__pk=sale.service.pk)
-            print(services.__dict__)
-            for service in services.to_services.all():
-                service_list.append(service.name)
-        except DoesNotExist:
-            return HttpResponse("Cadastre a relação plano-serviços!")
+        service_list = sale.service.plan_service_relation.all()
 
     due_date = (sale.release_date + relativedelta(years=1)).strftime("%d/%m/%Y")
     parcela1 = Decimal(sale.price1 / sale.installments1)

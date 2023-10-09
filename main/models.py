@@ -99,6 +99,7 @@ class SaleService(models.Model):
     sessions = models.IntegerField(null=True, blank=True, verbose_name="Qtd. de Sessões")
     account = models.ForeignKey("Account", null=True, blank=True, on_delete=models.SET_NULL)
     services_offered = models.ManyToManyField('self', through='ServiceRelationship', symmetrical=False)
+    plan_service_relation = models.ManyToManyField('self', limit_choices_to=~Q(service_type__pk__in=[1, 4]))
 
 
     class Meta:
