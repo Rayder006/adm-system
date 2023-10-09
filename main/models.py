@@ -83,6 +83,9 @@ class Sale(models.Model):
     installments2 = models.IntegerField(blank=True, null=True)
     final_price = models.DecimalField(max_digits=8, null=True, blank=True, decimal_places=2)
 
+    def __str__(self):
+        return f"{self.client.name} - {self.release_date}"
+
 class SaleType(models.Model): #plano, produto ou serviço 
     name = models.CharField(max_length=80, verbose_name="Nome")
 

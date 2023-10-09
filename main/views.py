@@ -88,9 +88,9 @@ def SaleContract(request, sale_id):
             for service in services.to_services.all():
                 service_list.append(service.name)
         except DoesNotExist:
-            return HttpResponse("DoesNotExists!")
+            return HttpResponse("Cadastre a relação plano-serviços!")
 
-    due_date = (sale.release_date + datetime.timedelta(days=365)).strftime("%d/%m/%Y")
+    due_date = (sale.release_date + relativedelta(years=1)).strftime("%d/%m/%Y")
     parcela1 = Decimal(sale.price1 / sale.installments1)
     parcela2 = sale.price2 / sale.installments2
     today = sale.contract_date
