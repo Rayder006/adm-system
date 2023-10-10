@@ -13,6 +13,8 @@
     {% block scripts %}
     <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/path/to/select2.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@ttskch/select2-bootstrap4-theme@x.x.x/dist/select2-bootstrap4.min.css">
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="{% static 'js/new_sale.js' %}"></script>
     {% endblock %}
@@ -29,7 +31,7 @@
             <div class="col row py-2">
                 <div class="col-6  form-group">
                     <label for="client">Cliente*</label>
-                    <select class="custom-select" required id="client" name="client">
+                    <select class="form-control select2 select2-hidden-accessible" required id="client" name="client" style="width: 100%;" tabindex="-1" aria-hidden="true">
                         <option value="" selected hidden>Selecione</option>
                         {% for client in client_list %}
                         <option value="{{client.pk}}">{{client.name}}</option>

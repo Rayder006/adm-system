@@ -1,6 +1,6 @@
 $(document).ready(function() {
-    $("#client").select2();
-    $("#service").select2();
+    $("#client").select2({theme: "bootstrap4"});
+    $("#service").select2({theme: "bootstrap4"});
 
     $("#installments2").on('change', function(){
         if($(this).val()>12) $(this).val(12);
