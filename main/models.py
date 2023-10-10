@@ -97,8 +97,8 @@ class SaleService(models.Model):
     name = models.CharField(max_length=100, verbose_name="Nome")
     price = models.DecimalField(max_digits=8, decimal_places=2, verbose_name="Preço")
     sessions = models.IntegerField(null=True, blank=True, verbose_name="Qtd. de Sessões")
-    account = models.ForeignKey("Account", null=True, blank=True, on_delete=models.SET_NULL)
-    services_offered = models.ManyToManyField('self', through='ServiceRelationship', symmetrical=False)
+    account = models.ForeignKey("Account", null=True, blank=True, verbose_name="Conta", on_delete=models.SET_NULL)
+    services_offered = models.ManyToManyField('self', through='ServiceRelationship', symmetrical=False, verbose_name="Serviços Oferecidos (Caso Plano)")
     plan_service_relation = models.ManyToManyField('self', limit_choices_to=~Q(service_type__pk__in=[1, 4]))
 
 
