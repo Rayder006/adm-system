@@ -1,4 +1,6 @@
 $(document).ready(function() {
+    $("#client").select2();
+    $("#service").select2();
 
     $("#installments2").on('change', function(){
         if($(this).val()>12) $(this).val(12);
@@ -104,7 +106,7 @@ $(document).ready(function() {
             else $(this).hide();
         });
         $("#price").val(null);
-        $("#service").val(null);
+        $("#service").val(null).trigger('change');
         $("#sessions").val(null).trigger('change');        
     });
 });
