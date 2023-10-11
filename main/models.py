@@ -191,19 +191,19 @@ class SaleOrigin(models.Model):
         verbose_name_plural = 'Origens de Venda'
 
 class ScheduleEvent(models.Model): 
-    title = models.CharField(max_length=150)
+    title = models.CharField(max_length=250)
     professional = models.ForeignKey("Employee", on_delete=models.CASCADE, null=True, blank=True)
-    client = models.CharField(max_length=50, null=True, blank=True)
-    category = models.CharField(max_length=10, default="time")
+    client = models.CharField(max_length=100, null=True, blank=True)
+    category = models.CharField(max_length=100, default="time")
     date = models.DateField(null=True, blank=True)
-    phone = models.CharField(max_length=14, blank=True, null=True)
+    phone = models.CharField(max_length=20, blank=True, null=True)
     start = models.TimeField(null=True, blank=True)
     end = models.TimeField(null=True, blank=True)
     sale = models.ForeignKey("Sale", on_delete=models.SET_NULL, blank=True, null=True)
     status = models.IntegerField()
-    room = models.CharField(max_length=50, null=True, blank=True)
+    room = models.CharField(max_length=80, null=True, blank=True)
     equipment = models.ForeignKey("Equipment", on_delete=models.CASCADE, null=True, blank=True)
-    obs = models.CharField(max_length=200, null=True, blank=True)
+    obs = models.CharField(max_length=350, null=True, blank=True)
     is_courtesy = models.BooleanField(default=False)
 
 class ScheduleStatus(models.Model):
