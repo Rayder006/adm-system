@@ -1,4 +1,6 @@
 $(document).ready(function() {
+    const supplierSelect = $("#supplier").select2();
+
     $('#cost').inputmask("numeric", {
       radixPoint: ",",
       groupSeparator: ",",
