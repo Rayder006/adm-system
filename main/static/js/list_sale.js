@@ -2,7 +2,6 @@ $(document).ready( function () {
     $('#table').DataTable({
         scroller:true,
         scrollY:400,
-        responsive:true,
         select: {
             style: 'multi+shift'
         },

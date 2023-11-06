@@ -5,7 +5,6 @@ $(document).ready( function () {
         scrollX:true,
         scrollx:true,
         select: true,
-        responsive:true,
         colReorder: true,
         searchBuilder: {
             depthLimit: 2

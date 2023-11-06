@@ -1,6 +1,5 @@
 $(document).ready( function () {
     let table = $('#table').DataTable({
-        responsive:true,
         scrollY:400,
         scrollX:200,
         select: {
