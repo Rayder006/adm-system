@@ -1,11 +1,9 @@
 $(document).ready( function () {
     $('#table').DataTable({
-        scroller:true,
-        scrollY:400,
-        scrollX:true,
-        scrollx:true,
-        select: true,
-        colReorder: true,
+        responsive:false,
+        select: {
+            style: 'multi+shift'
+        },
         searchBuilder: {
             depthLimit: 2
         },

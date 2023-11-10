@@ -1,11 +1,9 @@
 $(document).ready( function () {
     let table = $('#table').DataTable({
-        scrollY:400,
-        scrollX:200,
+        responsive:false,
         select: {
             style: 'multi+shift'
         },
-        colReorder: false,
         searchBuilder: {
             depthLimit: 2,
             conditions: {
