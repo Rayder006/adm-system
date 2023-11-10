@@ -9,16 +9,18 @@ $(document).ready(function() {
       prefix: 'R$ ',
       placeholder: "0"
     });
-});
 
-window.onload = (event) => {
-    if(document.getElementById("Recorrencia").getAttribute("value")=="True"){
+    if($("#Recorrencia").val()=="True"){
         document.getElementById("qtd_div").style.visibility = "visible";
         document.getElementById("rec_div").style.visibility = "visible";
 
         document.getElementById("Prazo").setAttribute("required", true);
         document.getElementById("Qtd").setAttribute("required", true);
     }
+});
+
+window.onload = (event) => {
+    
 }
 
 function cancelCreation(e){  

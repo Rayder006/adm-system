@@ -13,6 +13,7 @@
     {% block scripts %}
     <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="select2-bootstrap.css">
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.min.js"></script>
     <script src="{% static 'js/new_invoice.js' %}"></script>
@@ -30,7 +31,7 @@
             <div class="col row justify-content-lg-around justify-content-lg-between py-2">
                 <div class="col-6 d-flex flex-column form-group">
                     <label for="TipoConta">Tipo*</label>
-                    <select class="custom-select" required  id="TipoConta" name="invoice_type">
+                    <select class="form-control" required  id="TipoConta" name="invoice_type">
                         <option value="" disabled selected hidden>Selecione</option>
                         {% for type in invoice_type_list %}
                         <option value="{{type.pk}}">{{type.number}} - {{type.name}}</option>
