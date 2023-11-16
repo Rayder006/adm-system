@@ -335,23 +335,25 @@ window.onload = (e) => {
     "click", (e) => {
       $("#editButton").attr('hidden', true);
       $("#confirmEditButton").attr('hidden', false);
-      
+      console.log(e)
 
       $("#date").attr("readOnly",false);
       $("#start").attr("readOnly",false);
       $("#end").attr("readOnly",false);
       $("#clientCheck").attr("disabled",false);
-      document.getElementById("_client-div").hidden= true;
-      $("#client-div").show();
-      $("#client-div").removeClass('d-none');
-      $("#client-div").addClass('d-flex');
-      $("#client").attr("disabled",false);
-      $("#service").attr("disabled",false);
-      $("#professional").attr("disabled",false);
-      $("#room").attr("readOnly",false);
-      $("#equipment").attr("disabled",false);
-      $("#obs").attr("readOnly",false);
-      $("#phone").attr("readOnly",false);
+      if($("#clientCheck").is(':checked')){
+        $("#client_div").hide();
+      } else {
+        $("#_client-div").hide();
+      }
+      $("#_client").attr('disabled', false).attr('readonly', false);
+      $("#client").attr("disabled", false);
+      $("#service").attr("disabled", false);
+      $("#professional").attr("disabled", false);
+      $("#room").attr("readOnly", false);
+      $("#equipment").attr("disabled", false);
+      $("#obs").attr("readOnly", false);
+      $("#phone").attr("readOnly", false);
     }
   )
 
@@ -478,6 +480,7 @@ window.onload = (e) => {
     else if (isCreation==="edit"){
       $("#status").empty()
       $("#editButton").attr('hidden', false);
+      $("#clientCheck").attr('checked', !e.client_id)
       $("#confirmEditButton").attr("hidden", true);
       lastEdit = e.event.id;
       e = events_map.get(e.event.id);
