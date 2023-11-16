@@ -342,9 +342,11 @@ window.onload = (e) => {
       $("#end").attr("readOnly",false);
       $("#clientCheck").attr("disabled",false);
       if($("#clientCheck").is(':checked')){
-        $("#client_div").hide();
+        $("#client_div").removeClass('d-flex').hide();
+        document.getElementById("_client-div").hidden=false;
       } else {
-        $("#_client-div").hide();
+        document.getElementById("_client-div").hidden=true;
+        $("#client-div").addClass('d-flex').show();
       }
       $("#_client").attr('disabled', false).attr('readonly', false);
       $("#client").attr("disabled", false);
@@ -445,8 +447,7 @@ window.onload = (e) => {
       document.getElementById("room").readOnly = false;
       document.getElementById("_client").readOnly = false;
       document.getElementById("_client-div").hidden = true;
-      $("#client-div").addClass('d-flex');
-      $("#client-div").removeClass('d-none');
+      $("#client-div").addClass('d-flex').show();
       document.getElementById("clientCheck").removeAttribute("disabled", '');
       document.getElementById("equipment").removeAttribute("disabled");
       document.getElementById("status").removeAttribute("disabled");
@@ -504,8 +505,7 @@ window.onload = (e) => {
       
       document.getElementById("professional").value= e.professional_id;
       clientSelect2.val(e.client_id).trigger('change')
-      $("#client-div").removeClass('d-flex');
-      $("#client-div").addClass('d-none');
+      $("#client-div").removeClass('d-flex').hide();
       document.getElementById("_client-div").hidden= false;
       document.getElementById("_client").readOnly= true;
       document.getElementById("_client").value= e.client;
