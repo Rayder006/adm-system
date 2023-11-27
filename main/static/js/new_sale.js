@@ -60,20 +60,20 @@ $(document).ready(function() {
     });
 
     $("#discount_type").on('change', function(){
-        if($(this).val()=="2"){
-            $("#discount").attr('max', 100);
-        } else {
-            $("#discount").attr('max', ($("#price").val() * $("#sessions").val()));
-        }
+        // if($(this).val()=="2"){
+        //     $("#discount").attr('max', 100);
+        // } else {
+        //     $("#discount").attr('max', (($("#price").val()) * $("#sessions").val()));
+        // }
         console.log("Max: " + $("#discount").attr('max'));
         $("#discount").trigger('change');
     });
 
     $("#discount").on('change', function(){
         if($(this).val() < 0 || !($(this).val())) $(this).val(0);
-        if($(this).val() > Number($(this).attr('max'))){
-            $(this).val($(this).attr('max'));
-        }
+        // if($(this).val() > Number($(this).attr('max'))){
+        //     $(this).val($(this).attr('max'));
+        // }
         
         $("#sessions").trigger('change');
     });
