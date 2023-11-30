@@ -72,7 +72,7 @@ $(document).ready( function () {
                                 dados.each(function(data) {
                                     ids.push(data[9])
                                 });
-                                unpayInvoiceFunction(ids, payment_date);
+                                unpayInvoiceFunction(ids);
                             }
                         }
                     }
