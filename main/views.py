@@ -858,7 +858,7 @@ def DeleteSchedule(request, schedule_id):
 
 def PayInvoiceGroup(request):
     if request.method == 'POST':
-        ids = request.POST.getlist('ids[]')  # Recebe o array de IDs
+        ids = request.POST.getlist('ids[]')
         payment_date=request.POST.get("payment_date")
         if payment_date !="":
             dia, mes, ano = payment_date.split('/')
@@ -876,11 +876,37 @@ def PayInvoiceGroup(request):
 
                 i.save()
             except Invoice.DoesNotExist:
-                pass  # Lidar com o caso de ID inválido
+                pass
             
         response_data = {
             'success': True,
             'message': 'Contas marcadas como pagas com sucesso.'
+        }
+        return JsonResponse(response_data)
+
+        
+    response_data = {
+        'error': 'Método não permitido'
+    }
+    return JsonResponse(response_data, status=405)
+
+def UnpayInvoiceGroup(request):
+    if request.method == 'POST':
+        ids = request.POST.getlist('ids[]')
+        
+        for idx in ids:
+            try:
+                i = Invoice.objects.get(pk=idx)
+                i.paid = False
+                i.payment_date = None
+
+                i.save()
+            except Invoice.DoesNotExist:
+                pass
+            
+        response_data = {
+            'success': True,
+            'message': 'Pagamentos desfeitos com sucesso.'
         }
         return JsonResponse(response_data)
 

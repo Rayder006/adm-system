@@ -61,6 +61,20 @@ $(document).ready( function () {
                                 payInvoiceFunction(ids, payment_date);
                             }
                         }
+                    },
+                    {
+                        text: 'Excluir Pagamento',
+                        action: function ( e, dt, node, config ) { 
+                            var dados = table.rows({ selected: true });
+                            if(window.confirm('Tem certeza que deseja marcar estas contas como "A Pagar"?')==true){
+                                dados = dados.data();
+                                ids = []
+                                dados.each(function(data) {
+                                    ids.push(data[9])
+                                });
+                                unpayInvoiceFunction(ids, payment_date);
+                            }
+                        }
                     }
                 ]
             }
@@ -168,6 +182,29 @@ $(document).ready( function () {
 function payInvoiceFunction(ids, payment_date) {
     $.ajax({
         url: payInvoices, // Substitua pela URL correta
+        type: 'POST',
+        headers: {
+            "X-CSRFToken": csrfToken // Inclui o token CSRF no cabeçalho
+        },
+        data: {
+            ids: ids,
+            payment_date: payment_date
+        },
+        dataType: "json", // Especifica o tipo de dados esperado na resposta
+        success: function(data) {
+            console.log(data); // Exibe a resposta da view
+            // Atualize a tabela ou realize outras ações após marcar as contas como pagas
+            window.location.reload();
+        },
+        error: function(xhr, status, error) {
+            console.error(xhr.responseText); // Exibe detalhes do erro
+        }
+    });
+}
+
+function unpayInvoiceFunction(ids, payment_date) {
+    $.ajax({
+        url: payInvoices.replace('/pay', '/unpay'), // Substitua pela URL correta
         type: 'POST',
         headers: {
             "X-CSRFToken": csrfToken // Inclui o token CSRF no cabeçalho
