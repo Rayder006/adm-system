@@ -50,6 +50,8 @@ def createRecurringInvoice(invoice_pk):
     for i in range(1, inv.recurring_qtd):
         inv_ = inv
         inv_.pk = None
+        inv_.paid=False
+        inv_.payment_date = None
         inv_.recurring_qtd -= 1
         print(inv_.release_date)
         inv_.release_date = inv_.release_date + datetime.timedelta(days=inv_.recurring_time) if inv_.recurring_time!=30 else inv_.release_date + relativedelta(months=1)
