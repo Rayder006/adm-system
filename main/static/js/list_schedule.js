@@ -509,10 +509,11 @@ window.onload = (e) => {
       document.getElementById("_client-div").hidden= false;
       document.getElementById("_client").readOnly= true;
       document.getElementById("_client").value= e.client;
-      if(e.sale_id) {
-        serviceSelect2.val(e.sale_id).trigger('change')
+      if(e.service_id) {
+        $("#service").val(e.service_id).trigger('change');
         lastSelectedService = e.sale_id
-      } else {
+      } 
+      else {
         if (e.is_courtesy){
           console.log("cortesia")
           $("#service").val(-2).trigger('change');

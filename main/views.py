@@ -745,6 +745,7 @@ def ScheduleList(request):
         sale = get_or_none(Sale, event['sale_id'])
         if sale is not None:
             event['service_name'] = sale.service.name
+            event['service_id'] = sale.service.id
         else:
             event['service_name'] = "Cortesia" if event['is_courtesy'] else "Avaliação"
 
@@ -1061,11 +1062,20 @@ def PersonScheduleAjax(request, person_id):
         return HttpResponse("Please, log in :P")
 
     response = []
-    schedule_list = ScheduleEvent.objects.filter(sale__client__pk=person_id)
+    schedule_list = ScheduleEvent.objects.filter(client__name=Person.objects.get(pk=person_id).name)
+    print("\n\n")
+    print(schedule_list.__dict__)
+    print("\n\n")
     for schedule in schedule_list:
         print(schedule)
+        service = ""
+        if schedule.sale:
+            service = schedule.sale.service.name 
+        else:
+            service = "Cortesia" if schedule.is_courtesy else "Avaliação"
+
         response.append({
-            "service": schedule.sale.service.name,
+            "service": service,
             "professional":schedule.professional.name,
             "professional_id":schedule.professional.pk,
             "equipment":schedule.equipment.name if schedule.equipment else None,
@@ -1073,4 +1083,5 @@ def PersonScheduleAjax(request, person_id):
             "start":schedule.start.strftime("%Hh%Mm"),
             "end":schedule.end.strftime("%Hh%Mm")
         })
+    print(response)
     return JsonResponse(response, safe=False)
