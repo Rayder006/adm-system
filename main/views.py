@@ -1062,7 +1062,7 @@ def PersonScheduleAjax(request, person_id):
         return HttpResponse("Please, log in :P")
 
     response = []
-    schedule_list = ScheduleEvent.objects.filter(client__name=Person.objects.get(pk=person_id).name)
+    schedule_list = ScheduleEvent.objects.filter(client=Person.objects.get(pk=person_id).name)
     print("\n\n")
     print(schedule_list.__dict__)
     print("\n\n")
