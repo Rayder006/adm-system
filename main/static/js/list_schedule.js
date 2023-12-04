@@ -541,6 +541,8 @@ window.onload = (e) => {
       document.getElementById("client").setAttribute("disabled", '');
       document.getElementById("service").setAttribute("disabled", '');
       document.getElementById("phone").value=e.phone
+
+      $("#clientCheck").prop('checked', e.client_id==null)
     }
     creationModal.modal('show')
   }
